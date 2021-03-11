@@ -1,6 +1,7 @@
 import React from 'react';
 
 import '../assets/css/editor.css';
+import mante from '../assets/img/mante.jpeg';
 
 
 class Editor extends React.Component{
@@ -9,7 +10,8 @@ class Editor extends React.Component{
         return(
             <div className='editor'>
                 <div className='canvas'>
-                    
+                    CANVAS
+                    <img src={mante}></img>
                 </div>
                 <nav id="sidetoolbar">
                     <ul class="list-unstyled components mb-5">
@@ -30,7 +32,9 @@ class Editor extends React.Component{
                         </li>
                     </ul>
                 </nav>
-                <div className='bottomtoolbar'></div>
+                <div className='bottomtoolbar'>
+                    more options over here
+                </div>
             </div>
         );
     }
