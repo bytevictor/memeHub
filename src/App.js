@@ -1,15 +1,17 @@
 import logo from './assets/img/logo.svg';
 import './assets/css/App.css';
 
+import Editor from './components/editor';
+
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Hola Mundo!
-        </p>
+        
       </header>
+
+      <Editor /> 
+
     </div>
   );
 }
