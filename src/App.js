@@ -1,18 +1,27 @@
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
 import logo from './assets/img/logo.svg';
 import './assets/css/App.css';
 
-import Editor from './components/editor';
+
+import Editor from './components/Editor';
+import Home from './components/Home';
+import NoMatch from './components/NoMatch';
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        
-      </header>
+    <React.Fragment>
+      <Router>
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route exact path="/editor" component={Editor} />
+          <Route component={NoMatch} />
+        </Switch>
+      </Router>
 
-      <Editor /> 
-
-    </div>
+    </React.Fragment>
   );
 }
 
