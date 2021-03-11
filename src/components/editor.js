@@ -1,20 +1,24 @@
 import React from 'react';
 
+import DragandDrop from './DragandDrop';
+
 import '../assets/css/editor.css';
 import mante from '../assets/img/mante.jpeg';
 
 
 class Editor extends React.Component{
-
     render(){
         return(
             <div className='editor'>
                 <div className='canvas'>
                     CANVAS
+
+                    <DragandDrop/>
+
                     <img src={mante}></img>
                 </div>
                 <nav id="sidetoolbar">
-                    <ul class="list-unstyled components mb-5">
+                    <ul className="list-unstyled components mb-5">
                         <li>
                             <a href="#">Action 1</a>
                         </li>
