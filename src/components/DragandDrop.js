@@ -8,10 +8,12 @@ const dragOver = (e) => {
 
 const dragEnter = (e) => {
     e.preventDefault();
+    e.target.classList.toggle('shake');
 }
 
 const dragLeave = (e) => {
     e.preventDefault();
+    e.target.classList.toggle('shake');
 }
 
 //* FILE MANIPULATION */
@@ -37,6 +39,7 @@ const handleFiles = (files) => {
 
 const fileDrop = (e) => {
     e.preventDefault();
+    e.target.classList.toggle('shake');
     const files = e.dataTransfer.files;
     if (files.length) {
         handleFiles(files);
