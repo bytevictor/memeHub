@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom'
 
 import '../assets/css/draganddrop.css';
 
@@ -27,11 +28,17 @@ const validateFile = (file) => {
     return true;
 }
 
-const handleFiles = (files) => {
+const loadAndInject = (files, parent) => {
     //Nos quedamos solo con el primer archivo
     //Cambiar por un for si queremos tratar con multiselecciones
     if (validateFile(files[0])) {
-        
+        const reader = new FileReader();
+        reader.readAsDataURL(files[0]);
+        reader.onload = function(e) {
+            const image = <img src={e.target.result}></img>
+
+            ReactDOM.render(image, document.getElementById('canvas'));
+        }
     } else {
 
     }
@@ -42,7 +49,7 @@ const fileDrop = (e) => {
     e.target.classList.toggle('shake');
     const files = e.dataTransfer.files;
     if (files.length) {
-        handleFiles(files);
+        loadAndInject(files, e.target);
     }
 }
 

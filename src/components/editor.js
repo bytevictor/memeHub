@@ -10,12 +10,12 @@ class Editor extends React.Component{
     render(){
         return(
             <div className='editor'>
-                <div className='canvas'>
+                <div id='canvas' className='canvas'>
                     CANVAS
 
                     <DragandDrop/>
 
-                    <img src={mante}></img>
+                    <img id='canvas-img' src={mante}></img>
                 </div>
                 <nav id="sidetoolbar">
                     <ul className="list-unstyled components mb-5">
