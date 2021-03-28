@@ -86,17 +86,15 @@ class DragandDrop extends React.Component{
 
     render(){
         return(
-            <div className="container">
-                <div className="drop-container"
-                    onDragOver={dragOver}
-                    onDragEnter={dragEnter}
-                    onDragLeave={dragLeave}
-                    onDrop={this.fileDrop.bind(this)}
-                >
-                    <div className="drop-message">
-                        <div className="upload-icon"></div>
-                        Drag & Drop to start editing!
-                    </div>
+            <div className="drop-container "
+                onDragOver={dragOver}
+                onDragEnter={dragEnter}
+                onDragLeave={dragLeave}
+                onDrop={this.fileDrop.bind(this)}
+            >
+                <div className="drop-message">
+                    <div className="upload-icon"></div>
+                    Drag & Drop to start editing!
                 </div>
             </div>
         );

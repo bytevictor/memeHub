@@ -22,14 +22,14 @@ class Editor extends React.Component{
     render(){
         return( 
             <div className='editor'>
-                <div id='canvas-container'>
+                <div className='d-flex justify-content-center align-items-center' id='canvas-container'>
 
                     {//If there is no image, show draganddrop input
                     ( this.state.imageData == null ) ?
                         <DragandDrop imgLoader={this.imageLoader.bind(this)}/> : null
                     }
                     
-                    <canvas id='canvas' width='0' height='0'></canvas>
+                    <canvas className='' id='canvas' width='0' height='0'></canvas>
 
                 </div>
                 <nav id="sidetoolbar">
