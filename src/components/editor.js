@@ -7,15 +7,30 @@ import mante from '../assets/img/mante.jpeg';
 
 
 class Editor extends React.Component{
+    constructor(props){
+        super(props);
+
+        this.state = {
+            imageData: null
+        }
+    }
+
+    imageLoader(data){
+        this.setState({imageData: data});
+    }
+
     render(){
-        return(
+        return( 
             <div className='editor'>
-                <div id='canvas' className='canvas'>
-                    CANVAS
+                <div id='canvas-container'>
 
-                    <DragandDrop/>
+                    {//If there is no image, show draganddrop input
+                    ( this.state.imageData == null ) ?
+                        <DragandDrop imgLoader={this.imageLoader.bind(this)}/> : null
+                    }
+                    
+                    <canvas id='canvas' width='0' height='0'></canvas>
 
-                    <img id='canvas-img' src={mante}></img>
                 </div>
                 <nav id="sidetoolbar">
                     <ul className="list-unstyled components mb-5">

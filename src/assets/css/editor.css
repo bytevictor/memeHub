@@ -10,11 +10,11 @@
     width: 100vw;
 }
 
-.canvas{
+#canvas-container{
     background-color: #1e1e1e;
     padding: 4px;
 }
 
-.canvas img{
+#canvas img{
     width: 500px;
 }
