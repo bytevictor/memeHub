@@ -29,7 +29,7 @@ class Editor extends React.Component{
                         <DragandDrop imgLoader={this.imageLoader.bind(this)}/> : null
                     }
                     
-                    <canvas className='' id='canvas' width='0' height='0'></canvas>
+                    <canvas id='canvas' width='0' height='0'></canvas>
 
                 </div>
                 <nav id="sidetoolbar">
