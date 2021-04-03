@@ -8,9 +8,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 50%;
+    height: 50%;
     margin: 0;
-    width: 800px;
-    height: 200px;
     border: 2px dashed #4aa1f3;
     color: snow;
 }

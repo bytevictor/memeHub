@@ -19,6 +19,17 @@ class Editor extends React.Component{
         this.setState({imageData: data});
     }
 
+    imageUnloader(){
+        this.setState({imageData: null})
+
+        let canvas = document.getElementById('canvas');
+        let canvas_context = canvas.getContext("2d");
+
+        canvas_context.putImageData(canvas_context.createImageData(canvas.width,canvas.height), 0, 0);
+        canvas.width = 0;
+        canvas.height = 0;
+    }
+
     render(){
         return( 
             <div className='editor'>
@@ -26,7 +37,7 @@ class Editor extends React.Component{
 
                     {//If there is no image, show draganddrop input
                     ( this.state.imageData == null ) ?
-                        <DragandDrop imgLoader={this.imageLoader.bind(this)}/> : null
+                        <DragandDrop imgLoader={this.imageLoader.bind(this)}/> : <button onClick={this.imageUnloader.bind(this)} className='btn btn-danger'>Eliminar</button>
                     }
                     
                     <canvas id='canvas' width='0' height='0'></canvas>
