@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createRef } from 'react';
 
 import DragandDrop from './DragandDrop';
 
@@ -10,9 +10,26 @@ class Editor extends React.Component{
     constructor(props){
         super(props);
 
+        this.canvasRef = createRef();
+        this.contextRef = createRef();
+
         this.state = {
-            imageData: null
+            imageData: null,
+            isDrawing: false
         }
+    }
+
+    componentDidMount(){
+        //context from canvas
+        let context = this.canvasRef.current.getContext("2d");
+        
+        //settings for the stroke
+        context.lineWidth = 4;
+        context.lineCap = "round";
+        context.strokeStyle = "black";
+
+        //assing context to reference to use it later
+        this.contextRef.current = context;
     }
 
     imageLoader(data){
@@ -30,6 +47,33 @@ class Editor extends React.Component{
         canvas.height = 0;
     }
 
+    startDraw({nativeEvent}){
+        let context = this.contextRef.current;
+
+        this.setState({isDrawing: true});
+
+        //start path on click
+        context.beginPath();
+        context.moveTo(nativeEvent.offsetX, nativeEvent.offsetY);
+    }
+
+    endDraw(){
+        let context = this.contextRef.current;
+
+        this.setState({isDrawing: false});
+
+        context.closePath();
+    }
+
+    movingDraw({nativeEvent}){
+        let context = this.contextRef.current;
+
+        if(this.state.isDrawing){
+            context.lineTo(nativeEvent.offsetX, nativeEvent.offsetY);
+            context.stroke();
+        }
+    }
+
     render(){
         return( 
             <div className='editor'>
@@ -40,7 +84,12 @@ class Editor extends React.Component{
                         <DragandDrop imgLoader={this.imageLoader.bind(this)}/> : <button onClick={this.imageUnloader.bind(this)} className='btn btn-danger'>Eliminar</button>
                     }
                     
-                    <canvas id='canvas' width='0' height='0'></canvas>
+                    <canvas id='canvas' width='0' height='0'
+                        ref={this.canvasRef}
+                        onMouseDown={this.startDraw.bind(this)}
+                        onMouseUp={this.endDraw.bind(this)}
+                        onMouseMove={this.movingDraw.bind(this)}
+                    />
 
                 </div>
                 <nav id="sidetoolbar">
