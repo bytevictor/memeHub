@@ -5,6 +5,9 @@ import DragandDrop from './DragandDrop';
 import '../assets/css/editor.css';
 import mante from '../assets/img/mante.jpeg';
 
+import Toolbar from './Toolbar';
+import { ThemeProvider } from 'styled-components';
+
 
 class Editor extends React.Component{
     constructor(props){
@@ -22,11 +25,6 @@ class Editor extends React.Component{
     componentDidMount(){
         //context from canvas
         let context = this.canvasRef.current.getContext("2d");
-        
-        //settings for the stroke
-        context.lineWidth = 4;
-        context.lineCap = "round";
-        context.strokeStyle = "black";
 
         //assing context to reference to use it later
         this.contextRef.current = context;
@@ -52,6 +50,11 @@ class Editor extends React.Component{
 
         this.setState({isDrawing: true});
 
+        //settings for the stroke
+        context.lineWidth = 5;
+        context.lineCap = "round";
+        context.strokeStyle = "red";
+
         //start path on click
         context.beginPath();
         context.moveTo(nativeEvent.offsetX, nativeEvent.offsetY);
@@ -69,10 +72,13 @@ class Editor extends React.Component{
         let context = this.contextRef.current;
 
         if(this.state.isDrawing){
+
             context.lineTo(nativeEvent.offsetX, nativeEvent.offsetY);
             context.stroke();
         }
     }
+
+    
 
     render(){
         return( 
@@ -93,23 +99,7 @@ class Editor extends React.Component{
 
                 </div>
                 <nav id="sidetoolbar">
-                    <ul className="list-unstyled components mb-5">
-                        <li>
-                            <a href="#">Action 1</a>
-                        </li>
-                        <li>
-                            <a href="#">Action 2</a>
-                        </li>
-                        <li>
-                            <a href="#">Action 3</a>
-                        </li>
-                        <li>
-                            <a href="#">Action 4</a>
-                        </li>
-                        <li>
-                            <a href="#">Action 5</a>
-                        </li>
-                    </ul>
+                    <Toolbar></Toolbar>
                 </nav>
                 <div className='bottomtoolbar'>
                     more options over here
