@@ -5,7 +5,7 @@ import DragandDrop from './DragandDrop';
 import '../assets/css/editor.css';
 import mante from '../assets/img/mante.jpeg';
 
-import Toolbar from './Toolbar';
+import Toolbar from './EditorComponents/Toolbar';
 import { ThemeProvider } from 'styled-components';
 
 

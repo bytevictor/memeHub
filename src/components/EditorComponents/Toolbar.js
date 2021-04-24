@@ -16,7 +16,9 @@ export default function ToggleButtons() {
   const [alignment, setAlignment] = React.useState('freehand');
 
   const handleAlignment = (event, newAlignment) => {
-    setAlignment(newAlignment);
+    if (newAlignment !== null) {
+      setAlignment(newAlignment);
+    }
   };
 
   const darkTheme = createMuiTheme({
@@ -34,6 +36,7 @@ export default function ToggleButtons() {
       aria-label="text alignment"
       orientation="vertical"
       className="menuherramientas"
+      
     >
       <ToggleButton value="freehand" aria-label="freehand">
         <GestureIcon />
