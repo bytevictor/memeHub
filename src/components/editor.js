@@ -1,6 +1,6 @@
 import React, { createRef } from 'react';
 
-import DragandDrop from './DragandDrop';
+import DragandDrop from './EditorComponents/DragandDrop';
 
 import '../assets/css/editor.css';
 import mante from '../assets/img/mante.jpeg';
@@ -18,14 +18,15 @@ class Editor extends React.Component{
 
         this.state = {
             imageData: null,
-            isDrawing: false
+            isDrawing: false,
+            startOffsetX: null,
+            startOffsetY: null,
         }
     }
 
     componentDidMount(){
         //context from canvas
         let context = this.canvasRef.current.getContext("2d");
-
         //assing context to reference to use it later
         this.contextRef.current = context;
     }
@@ -37,14 +38,84 @@ class Editor extends React.Component{
     imageUnloader(){
         this.setState({imageData: null})
 
-        let canvas = document.getElementById('canvas');
-        let canvas_context = canvas.getContext("2d");
+        let canvas = this.canvasRef.current
+        let canvas_context = this.contextRef.current
 
-        canvas_context.putImageData(canvas_context.createImageData(canvas.width,canvas.height), 0, 0);
+        canvas_context.putImageData(canvas_context.createImageData(canvas.width,canvas.height), 0, 0)
         canvas.width = 0;
         canvas.height = 0;
     }
 
+    repaint(){
+        let canvas = this.canvasRef.current
+        let canvas_context = this.contextRef.current
+
+        //clear the whole canvas
+        canvas_context.clearRect(0,0, canvas.width, canvas.height)
+
+        let image = new Image()
+        image.src = this.state.imageData
+
+        canvas_context.drawImage(image, 0,0, image.width,  image.height,
+                                        0,0, canvas.width, canvas.height)
+    }
+
+    //Square drawing events
+    //
+    startRectangleDraw({nativeEvent}){
+        let context = this.contextRef.current;
+
+        this.setState({isDrawing: true});
+
+        //settings for the stroke
+        context.lineWidth = 5;
+        context.lineCap = "round";
+        context.strokeStyle = "red";
+
+        //start path on click
+        context.beginPath();
+        
+        this.setState({startOffsetX: nativeEvent.offsetX,
+                       startOffsetY: nativeEvent.offsetY} )
+    }
+
+    movingRectangleDraw({nativeEvent}){
+        let context = this.contextRef.current;
+
+        if(this.state.isDrawing){
+            this.repaint()
+
+            context.beginPath()
+
+            context.rect(this.state.startOffsetX,this.state.startOffsetY, 
+                nativeEvent.offsetX - this.state.startOffsetX ,  nativeEvent.offsetY - this.state.startOffsetY);
+
+            context.stroke()
+        }
+
+        context.closePath()
+    }
+
+    endRectangleDraw({nativeEvent}){
+        let context = this.contextRef.current;
+
+        console.log(nativeEvent)
+        console.log()
+
+        context.rect(this.state.startOffsetX,this.state.startOffsetY, 
+                     nativeEvent.offsetX - this.state.startOffsetX ,  nativeEvent.offsetY - this.state.startOffsetY);
+
+        context.stroke();
+
+        this.setState({isDrawing: false});
+
+        context.closePath();
+    }
+    //
+
+
+    //Free drawing events
+    //
     startDraw({nativeEvent}){
         let context = this.contextRef.current;
 
@@ -77,8 +148,9 @@ class Editor extends React.Component{
             context.stroke();
         }
     }
+    //
 
-    
+
 
     render(){
         return( 
@@ -92,9 +164,9 @@ class Editor extends React.Component{
                     
                     <canvas id='canvas' width='0' height='0'
                         ref={this.canvasRef}
-                        onMouseDown={this.startDraw.bind(this)}
-                        onMouseUp={this.endDraw.bind(this)}
-                        onMouseMove={this.movingDraw.bind(this)}
+                        onMouseDown={this.startRectangleDraw.bind(this)}
+                        onMouseMove={this.movingRectangleDraw.bind(this)}
+                        onMouseUp={this.endRectangleDraw.bind(this)}
                     />
 
                 </div>

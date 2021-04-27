@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom'
 import { renderToStaticMarkup } from "react-dom/server"
 
-import '../assets/css/draganddrop.css';
+import '../../assets/css/draganddrop.css';
 
 const dragOver = (e) => {
     e.preventDefault();
