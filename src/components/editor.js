@@ -8,6 +8,9 @@ import mante from '../assets/img/mante.jpeg';
 import Toolbar from './EditorComponents/Toolbar';
 import { ThemeProvider } from 'styled-components';
 
+//shapes
+import cvRectangle from './EditorComponents/ToolShapes/rectangle'
+
 
 class Editor extends React.Component{
     constructor(props){
@@ -18,6 +21,8 @@ class Editor extends React.Component{
 
         this.state = {
             imageData: null,
+            shapeArray: [],
+
             isDrawing: false,
             startOffsetX: null,
             startOffsetY: null,
@@ -58,6 +63,13 @@ class Editor extends React.Component{
 
         canvas_context.drawImage(image, 0,0, image.width,  image.height,
                                         0,0, canvas.width, canvas.height)
+
+        console.log(this.state.shapeArray)
+
+        this.state.shapeArray.forEach(element => {
+            element.draw()
+        });
+
     }
 
     //Square drawing events
@@ -72,44 +84,27 @@ class Editor extends React.Component{
         context.lineCap = "round";
         context.strokeStyle = "red";
 
-        //start path on click
-        context.beginPath();
-        
-        this.setState({startOffsetX: nativeEvent.offsetX,
-                       startOffsetY: nativeEvent.offsetY} )
+        let rect = new cvRectangle(context, nativeEvent.offsetX, nativeEvent.offsetY,0,0)
+
+        this.state.shapeArray.push(rect)
     }
 
     movingRectangleDraw({nativeEvent}){
         let context = this.contextRef.current;
 
         if(this.state.isDrawing){
+            let rect = this.state.shapeArray[this.state.shapeArray.length - 1]
+
+            rect.update(nativeEvent.offsetX - rect.startX ,
+                        nativeEvent.offsetY - rect.startY )
+
+                
             this.repaint()
-
-            context.beginPath()
-
-            context.rect(this.state.startOffsetX,this.state.startOffsetY, 
-                nativeEvent.offsetX - this.state.startOffsetX ,  nativeEvent.offsetY - this.state.startOffsetY);
-
-            context.stroke()
         }
-
-        context.closePath()
     }
 
     endRectangleDraw({nativeEvent}){
-        let context = this.contextRef.current;
-
-        console.log(nativeEvent)
-        console.log()
-
-        context.rect(this.state.startOffsetX,this.state.startOffsetY, 
-                     nativeEvent.offsetX - this.state.startOffsetX ,  nativeEvent.offsetY - this.state.startOffsetY);
-
-        context.stroke();
-
-        this.setState({isDrawing: false});
-
-        context.closePath();
+        this.state.isDrawing = false
     }
     //
 
@@ -149,7 +144,6 @@ class Editor extends React.Component{
         }
     }
     //
-
 
 
     render(){

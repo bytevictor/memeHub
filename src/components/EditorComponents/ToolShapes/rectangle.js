@@ -9,9 +9,14 @@ class cvRectangle{
         this.width = width
     }
 
+    get startX(){ return this.x }
+    get startY(){ return this.y }
+
     draw() {
         this.context.beginPath()
         this.context.rect(this.x, this.y, this.height, this.width)
+        this.context.closePath()
+        this.context.stroke()
     }
 
     update( x, y, height, width) {
@@ -20,8 +25,11 @@ class cvRectangle{
         this.height = height
         this.width = width
     }
+
+    update(height, width) {
+        this.height = height
+        this.width = width
+    }
 }
 
-addEventListener( 'click', (event) => {
-    console.log("click")
-})
+export default cvRectangle
