@@ -3,13 +3,15 @@ import React, { createRef } from 'react';
 import DragandDrop from './EditorComponents/DragandDrop';
 
 import '../assets/css/editor.css';
-import mante from '../assets/img/mante.jpeg';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import Toolbar from './EditorComponents/Toolbar';
 import { ThemeProvider } from 'styled-components';
 
 //shapes
 import cvRectangle from './EditorComponents/ToolShapes/rectangle'
+import { Button } from '@material-ui/core';
 
 
 class Editor extends React.Component{
@@ -63,8 +65,6 @@ class Editor extends React.Component{
 
         canvas_context.drawImage(image, 0,0, image.width,  image.height,
                                         0,0, canvas.width, canvas.height)
-
-        console.log(this.state.shapeArray)
 
         this.state.shapeArray.forEach(element => {
             element.draw()
@@ -153,7 +153,7 @@ class Editor extends React.Component{
 
                     {//If there is no image, show draganddrop input
                     ( this.state.imageData == null ) ?
-                        <DragandDrop imgLoader={this.imageLoader.bind(this)}/> : <button onClick={this.imageUnloader.bind(this)} className='btn btn-danger'>Eliminar</button>
+                        <DragandDrop imgLoader={this.imageLoader.bind(this)}/> : null
                     }
                     
                     <canvas id='canvas' width='0' height='0'
@@ -164,8 +164,19 @@ class Editor extends React.Component{
                     />
 
                 </div>
-                <nav id="sidetoolbar">
+                <nav id="sidetoolbar" className="d-flex flex-column p-0">
+                    
+                    <button type='button' className='btn btn-danger my-1'
+                        onClick={this.imageUnloader.bind(this)} 
+                        variant="contained"
+                        color="secondary"
+                        disabled={ (this.state.imageData == null) ? true : false }
+                    >
+                        <DeleteIcon/>
+                    </button>
+
                     <Toolbar></Toolbar>
+                    
                 </nav>
                 <div className='bottomtoolbar'>
                     more options over here
