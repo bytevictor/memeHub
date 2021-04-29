@@ -25,11 +25,6 @@ class cvRectangle{
         this.height = height
         this.width = width
     }
-
-    update(height, width) {
-        this.height = height
-        this.width = width
-    }
 }
 
 export default cvRectangle

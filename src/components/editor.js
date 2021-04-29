@@ -48,6 +48,8 @@ class Editor extends React.Component{
         let canvas = this.canvasRef.current
         let canvas_context = this.contextRef.current
 
+        this.setState({shapeArray: []})
+
         canvas_context.putImageData(canvas_context.createImageData(canvas.width,canvas.height), 0, 0)
         canvas.width = 0;
         canvas.height = 0;
@@ -95,7 +97,8 @@ class Editor extends React.Component{
         if(this.state.isDrawing){
             let rect = this.state.shapeArray[this.state.shapeArray.length - 1]
 
-            rect.update(nativeEvent.offsetX - rect.startX ,
+            rect.update(rect.startX,rect.startY, 
+                        nativeEvent.offsetX - rect.startX ,
                         nativeEvent.offsetY - rect.startY )
 
                 
@@ -104,7 +107,7 @@ class Editor extends React.Component{
     }
 
     endRectangleDraw({nativeEvent}){
-        this.state.isDrawing = false
+        this.setState({isDrawing: false})
     }
     //
 
