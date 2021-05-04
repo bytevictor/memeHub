@@ -15,8 +15,9 @@ class Editor extends React.Component{
     constructor(props){
         super(props)
 
-        this.canvasRef = createRef()
-        this.contextRef = createRef()
+        this.stageRef = createRef()
+        this.mainLayerRef = createRef()
+        this.kvMainImageRef = createRef()
 
         this.state = {
             image: null,
@@ -28,10 +29,6 @@ class Editor extends React.Component{
         }
 
         //
-        this.stageRef = createRef()
-        this.layerRef = createRef()
-        this.kvImageRef = createRef()
-
         this.shapeRef = createRef()
         this.trRef = createRef()
         this.textRef = createRef()
@@ -39,11 +36,6 @@ class Editor extends React.Component{
     }
 
     componentDidMount(){
-        //context from canvas
-        let context = this.canvasRef.current.getContext("2d");
-        //assing context to reference to use it later
-        this.contextRef.current = context;
-        
         //
         this.trRef.current.nodes([this.textRef.current]);
         this.trRef.current.getLayer().batchDraw();
@@ -96,7 +88,7 @@ class Editor extends React.Component{
 
         console.log("canvas width: "+width+" canvas heigth: "+height)
 
-        this.kvImageRef.current.setAttrs({
+        this.kvMainImageRef.current.setAttrs({
             image: image,
             width: width,
             height: height,
@@ -113,34 +105,16 @@ class Editor extends React.Component{
 
     imageUnloader(){
         this.setState({image: null})
-
-        let canvas = this.canvasRef.current
-        let canvas_context = this.contextRef.current
-
         this.setState({shapeArray: []})
 
-        canvas_context.putImageData(canvas_context.createImageData(canvas.width,canvas.height), 0, 0)
-        canvas.width = 0;
-        canvas.height = 0;
-    }
+        let canvas_stage = this.stageRef.current
 
-    repaint(){
-        let canvas = this.canvasRef.current
-        let canvas_context = this.contextRef.current
-
-        //clear the whole canvas
-        canvas_context.clearRect(0,0, canvas.width, canvas.height)
-
-        let image = new Image()
-        image.src = this.state.imageData
-
-        canvas_context.drawImage(image, 0,0, image.width,  image.height,
-                                        0,0, canvas.width, canvas.height)
-
-        this.state.shapeArray.forEach(element => {
-            element.draw()
-        });
-
+        canvas_stage.clear()
+        canvas_stage.setAttrs({
+            width: 0,
+            height: 0
+        }) 
+        
     }
 
     //Square drawing events
@@ -235,9 +209,9 @@ class Editor extends React.Component{
                     />
                     
                     <Stage width={0} height={0} ref={this.stageRef}>
-                        <Layer ref={this.layerRef}>
+                        <Layer ref={this.mainLayerRef}>
                             <KonvaImage
-                                ref={this.kvImageRef}
+                                ref={this.kvMainImageRef}
                                 x={500}
                                 y={500}>
                             </KonvaImage>
@@ -280,7 +254,7 @@ class Editor extends React.Component{
                         onClick={this.imageUnloader.bind(this)} 
                         variant="contained"
                         color="secondary"
-                        disabled={ (this.state.imageData == null) ? true : false }
+                        disabled={ (this.state.image == null) ? true : false }
                     >
                         <DeleteIcon/>
                     </button>
