@@ -68,11 +68,11 @@ class Editor extends React.Component{
         //wide photo
         if( correlation <= 1 ){
             //image too small, dont correct
-            width =(width > 400 ? width - 100 : width)
+            width = (width > 400 ? width - 100 : width)
             //
             if( correlation * width < height ){
-                //width = width
-                height = correlation * width
+                height = (correlation * width) - 100
+                width = width - 100
             } else {
                 width = height * (1/correlation) - 100
                 height = height - 100
