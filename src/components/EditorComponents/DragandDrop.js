@@ -1,6 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom'
-import { renderToStaticMarkup } from "react-dom/server"
 
 import '../../assets/css/draganddrop.css';
 
@@ -57,27 +55,13 @@ class DragandDrop extends React.Component{
                     let image = new Image();
                     image.src = e.target.result;
 
-                    //send imagedata to editor
-                    this.imgLoader(e.target.result);
-
-                    image.onload = function() {
-
-                        let canvas = document.getElementById('canvas');
-
-                        //For scaling the image to the canvas width
-                        let correlation = image.height / image.width;
-
-                        canvas.width  = 500;
-                        canvas.height = correlation * 500;
-                        let canvas_draw = canvas.getContext("2d");
-
-                        console.log("cor " + correlation);
-
-                        canvas_draw.drawImage(image, 0,0, image.width,  image.height,
-                                                     0,0, canvas.width, canvas.height);
+                    image.onload = () => {
+                        //send image to editor
+                        this.imgLoader(image);
                     }
+                    
                 }
-
+            //File not valid
             } else {
         
             }

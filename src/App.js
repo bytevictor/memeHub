@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@material-ui/core';
 
-import logo from './assets/img/logo.svg';
 import './assets/css/App.css';
 
 import Editor from './components/Editor';

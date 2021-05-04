@@ -1,34 +1,41 @@
-import React, { createRef } from 'react';
+import React, { createRef } from 'react'
 
-import DragandDrop from './EditorComponents/DragandDrop';
+import DragandDrop from './EditorComponents/DragandDrop'
 
-import '../assets/css/editor.css';
-import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
+import '../assets/css/editor.css'
+import DeleteIcon from '@material-ui/icons/Delete'
 
-import Toolbar from './EditorComponents/Toolbar';
-import { ThemeProvider } from 'styled-components';
-
+import Toolbar from './EditorComponents/Toolbar'
+import { Stage, Layer, Transformer, Text, Rect, Image as KonvaImage} from 'react-konva'
 //shapes
 import cvRectangle from './EditorComponents/ToolShapes/rectangle'
-import { Button } from '@material-ui/core';
 
 
 class Editor extends React.Component{
     constructor(props){
-        super(props);
+        super(props)
 
-        this.canvasRef = createRef();
-        this.contextRef = createRef();
+        this.canvasRef = createRef()
+        this.contextRef = createRef()
 
         this.state = {
-            imageData: null,
+            image: null,
             shapeArray: [],
 
             isDrawing: false,
             startOffsetX: null,
             startOffsetY: null,
         }
+
+        //
+        this.stageRef = createRef()
+        this.layerRef = createRef()
+        this.kvImageRef = createRef()
+
+        this.shapeRef = createRef()
+        this.trRef = createRef()
+        this.textRef = createRef()
+        //
     }
 
     componentDidMount(){
@@ -36,14 +43,76 @@ class Editor extends React.Component{
         let context = this.canvasRef.current.getContext("2d");
         //assing context to reference to use it later
         this.contextRef.current = context;
+        
+        //
+        this.trRef.current.nodes([this.textRef.current]);
+        this.trRef.current.getLayer().batchDraw();
+        //
     }
 
-    imageLoader(data){
-        this.setState({imageData: data});
+    imageLoader(image){
+
+        this.setState({image: image});
+
+        //For scaling the image to the canvas width
+        //
+        let correlation = image.height / image.width;
+        console.log("correlation: " + correlation);
+
+        let canvas_container = document.getElementById('canvas-container');
+        console.log("width:" + canvas_container.clientWidth + " height: " + canvas_container.clientHeight)
+
+        let width = canvas_container.clientWidth
+        let height = canvas_container.clientHeight
+
+        //wide photo
+        if( correlation <= 1 ){
+            //image too small, dont correct
+            width =(width > 400 ? width - 100 : width)
+            //
+            if( correlation * width < height ){
+                //width = width
+                height = correlation * width
+            } else {
+                width = height * (1/correlation) - 100
+                height = height - 100
+            }
+
+        //long photo
+        } else {
+            //image too small
+            height = (height > 400 ? height - 100 : height)
+            //
+            if( height * (1/correlation) < width ){
+                width = height * (1/correlation)
+                //height = height
+            } else {
+                width = width - 100
+                height = correlation * width - 100
+            }
+        }
+        //
+        //
+
+        console.log("canvas width: "+width+" canvas heigth: "+height)
+
+        this.kvImageRef.current.setAttrs({
+            image: image,
+            width: width,
+            height: height,
+            x: 0,
+            y: 0
+        })
+
+        this.stageRef.current.setAttrs({
+            width: width,
+            height: height
+        })
+        
     }
 
     imageUnloader(){
-        this.setState({imageData: null})
+        this.setState({image: null})
 
         let canvas = this.canvasRef.current
         let canvas_context = this.contextRef.current
@@ -92,7 +161,6 @@ class Editor extends React.Component{
     }
 
     movingRectangleDraw({nativeEvent}){
-        let context = this.contextRef.current;
 
         if(this.state.isDrawing){
             let rect = this.state.shapeArray[this.state.shapeArray.length - 1]
@@ -155,7 +223,7 @@ class Editor extends React.Component{
                 <div className='d-flex justify-content-center align-items-center' id='canvas-container'>
 
                     {//If there is no image, show draganddrop input
-                    ( this.state.imageData == null ) ?
+                    ( this.state.image == null ) ?
                         <DragandDrop imgLoader={this.imageLoader.bind(this)}/> : null
                     }
                     
@@ -165,6 +233,45 @@ class Editor extends React.Component{
                         onMouseMove={this.movingRectangleDraw.bind(this)}
                         onMouseUp={this.endRectangleDraw.bind(this)}
                     />
+                    
+                    <Stage width={0} height={0} ref={this.stageRef}>
+                        <Layer ref={this.layerRef}>
+                            <KonvaImage
+                                ref={this.kvImageRef}
+                                x={500}
+                                y={500}>
+                            </KonvaImage>
+                            <Rect
+                                ref={this.shapeRef}
+                                width={50}
+                                height={50}
+                                fill="red"
+                                isSelected={true}
+                            />
+                            <Text
+                                ref={this.textRef}
+                                x={150}
+                                y={150}
+                                text='Simple Text'
+                                fontSize={30}
+                                fontFamily='Calibri'
+                                fill='green'
+                                onTransformEnd={
+                                    (e) => {
+                                        let texto = this.textRef.current
+                                        console.log(texto)
+                                        texto.text("cambio")
+                                    }
+                                }
+                            />
+                            <Transformer
+                                ref={this.trRef}
+                                rotateEnabled={false}
+                                keepRatio={false}
+                            />
+
+                        </Layer>
+                    </Stage>
 
                 </div>
                 <nav id="sidetoolbar" className="d-flex flex-column p-0">
