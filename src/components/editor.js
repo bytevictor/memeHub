@@ -100,7 +100,6 @@ class Editor extends React.Component{
             width: width,
             height: height
         })
-        
     }
 
     imageUnloader(){
@@ -114,7 +113,6 @@ class Editor extends React.Component{
             width: 0,
             height: 0
         }) 
-        
     }
 
     //Square drawing events
@@ -230,13 +228,7 @@ class Editor extends React.Component{
                                 fontSize={30}
                                 fontFamily='Calibri'
                                 fill='green'
-                                onTransformEnd={
-                                    (e) => {
-                                        let texto = this.textRef.current
-                                        console.log(texto)
-                                        texto.text("cambio")
-                                    }
-                                }
+                                draggable
                             />
                             <Transformer
                                 ref={this.trRef}
