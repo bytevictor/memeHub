@@ -57,12 +57,18 @@ function CvText(props) {
         editarea.style.left = (stageBox.left  + abs_pos.x) + 'px'
         editarea.style.width = text.width() + 'px'
         editarea.style.height = text.height() + 'px'
+        editarea.style.fontSize = text.fontSize() + 'px';
         editarea.style.background = 'none'
-        /*let rotation = text.rotation()
+        editarea.style.border = 'none'
+        editarea.style.outline = 'none';
+        editarea.style.resize = 'none';
+        editarea.style.lineHeight = text.lineHeight();
+        editarea.style.fontFamily = text.fontFamily();
+        editarea.style.transformOrigin = 'left top';
+        let rotation = text.rotation()
         let rot_transformation = ''
         if( rotation ){ rot_transformation += 'rotateZ('+rotation+'deg)'}
-        editarea.style.transform = rot_transformation*/
-        //
+        editarea.style.transform = rot_transformation
 
         //Hide original text set focus on the editable area
         text.hide()
