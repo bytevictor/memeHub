@@ -1,6 +1,6 @@
 
 import React, {useEffect, useState, createRef} from 'react';
-import {Stage, Text, Transformer} from 'react-konva'
+import {Text, Transformer} from 'react-konva'
 
 function CvText(props) {
 
@@ -23,6 +23,25 @@ function CvText(props) {
         //
     })
 
+    //by default the transformer only changes the scale
+    //in this case we don't want the text to reescale so this method
+    //recalculates width and resets scale to change the real width
+    //so the text doesn't get distorted
+    const scaleReset = () => {
+        let text = textRef.current
+
+        console.log(text)
+        console.log(text.width)
+        console.log(text.scaleX)
+
+        text.setAttrs({
+            width: text.width() * text.scaleX(),
+            scaleX: 1,
+            height: text.height() * text.scaleY(),
+            scaleY: 1
+        })
+    }
+
     const editText = () => {
         let text = textRef.current
 
@@ -30,16 +49,24 @@ function CvText(props) {
         document.body.appendChild(editarea)
 
         //Making editarea look like the konva text
-        var stageBox = stageRef.current.container().getBoundingClientRect();
+        let stageBox = stageRef.current.container().getBoundingClientRect();
         editarea.value = text.getAttr('text')
         editarea.style.position = 'absolute'
         let abs_pos = text.getAbsolutePosition()
-        console.log(abs_pos)
-        console.log(stageBox)
         editarea.style.top  = (stageBox.top + abs_pos.y) + 'px'
         editarea.style.left = (stageBox.left  + abs_pos.x) + 'px'
-        console.log(editarea.style.top)
+        editarea.style.width = text.width() + 'px'
+        editarea.style.height = text.height() + 'px'
+        
         editarea.focus()
+
+        console.log("ancho" + text.width())
+
+        console.log("EDITAREA")
+        console.dir(editarea)
+        
+        console.log("TEXTO")
+        console.log(text)
 
         editarea.addEventListener('focusout', (e) => {
             text.setAttrs({text: editarea.value})
@@ -47,16 +74,21 @@ function CvText(props) {
         } )
     }
 
+
     return(
       <React.Fragment>
         <Text
             ref={textRef}
             x={100}
             y={100}
+            width={ props.fontSize * 32 }
+            height={100}
             text={props.text}
             fontSize={props.fontSize}
             fontFamily={props.fontFamily}
             draggable={props.draggable}
+
+            onTransform={scaleReset}
 
             onClick={select}
 

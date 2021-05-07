@@ -6,7 +6,7 @@ import '../assets/css/editor.css'
 import DeleteIcon from '@material-ui/icons/Delete'
 
 import Toolbar from './EditorComponents/Toolbar'
-import { Stage, Layer, Transformer, Text, Rect, Image as KonvaImage} from 'react-konva'
+import { Stage, Layer, Rect, Image as KonvaImage} from 'react-konva'
 //shapes
 import cvRectangle from './EditorComponents/ToolShapes/rectangle'
 import CvText from './EditorComponents/canvas_text'
@@ -32,14 +32,13 @@ class Editor extends React.Component{
         //
         this.shapeRef = createRef()
         this.trRef = createRef()
-        this.textRef = createRef()
         //
     }
 
     componentDidMount(){
         //
-        this.trRef.current.nodes([this.textRef.current]);
-        this.trRef.current.getLayer().batchDraw();
+        //this.trRef.current.nodes([this.textRef.current]);
+        //this.trRef.current.getLayer().batchDraw();
         //
     }
 
@@ -217,6 +216,7 @@ class Editor extends React.Component{
                             <CvText 
                                 text='sample text asjfdjasif'
                                 stage={this.stageRef}
+                                fontSize={20}
                                 draggable
                             />
                             <Rect
@@ -225,21 +225,6 @@ class Editor extends React.Component{
                                 height={50}
                                 fill="red"
                                 isSelected={true}
-                            />
-                            <Text
-                                ref={this.textRef}
-                                x={150}
-                                y={150}
-                                text='Simple Text'
-                                fontSize={30}
-                                fontFamily='Calibri'
-                                fill='green'
-                                draggable
-                            />
-                            <Transformer
-                                ref={this.trRef}
-                                rotateEnabled={false}
-                                keepRatio={false}
                             />
 
                         </Layer>
