@@ -57,7 +57,15 @@ function CvText(props) {
         editarea.style.left = (stageBox.left  + abs_pos.x) + 'px'
         editarea.style.width = text.width() + 'px'
         editarea.style.height = text.height() + 'px'
-        
+        editarea.style.background = 'none'
+        /*let rotation = text.rotation()
+        let rot_transformation = ''
+        if( rotation ){ rot_transformation += 'rotateZ('+rotation+'deg)'}
+        editarea.style.transform = rot_transformation*/
+        //
+
+        //Hide original text set focus on the editable area
+        text.hide()
         editarea.focus()
 
         console.log("ancho" + text.width())
@@ -69,7 +77,10 @@ function CvText(props) {
         console.log(text)
 
         editarea.addEventListener('focusout', (e) => {
+            //apply changes, show text again(repaint), delete textarea
             text.setAttrs({text: editarea.value})
+            text.show()
+            stageRef.current.batchDraw()
             document.body.removeChild(editarea)
         } )
     }
