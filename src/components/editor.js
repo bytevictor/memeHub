@@ -9,6 +9,7 @@ import Toolbar from './EditorComponents/Toolbar'
 import { Stage, Layer, Transformer, Text, Rect, Image as KonvaImage} from 'react-konva'
 //shapes
 import cvRectangle from './EditorComponents/ToolShapes/rectangle'
+import CvText from './EditorComponents/canvas_text'
 
 
 class Editor extends React.Component{
@@ -213,6 +214,10 @@ class Editor extends React.Component{
                                 x={500}
                                 y={500}>
                             </KonvaImage>
+                            <CvText 
+                                text='sample text asjfdjasif'
+                                draggable
+                            />
                             <Rect
                                 ref={this.shapeRef}
                                 width={50}
