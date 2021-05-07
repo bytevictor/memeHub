@@ -1,9 +1,10 @@
 
 import React, {useEffect, useState, createRef} from 'react';
-import {Text, Transformer} from 'react-konva'
+import {Stage, Text, Transformer} from 'react-konva'
 
 function CvText(props) {
 
+    const stageRef = props.stage
     const transRef = createRef()
     const textRef = createRef()
 
@@ -25,24 +26,25 @@ function CvText(props) {
     const editText = () => {
         let text = textRef.current
 
-        console.log(text.getAbsolutePosition())
-
         let editarea = document.createElement('textarea')
         document.body.appendChild(editarea)
 
-        //Area should look like the konva text
-        editarea.value = text.text
+        //Making editarea look like the konva text
+        var stageBox = stageRef.current.container().getBoundingClientRect();
+        editarea.value = text.getAttr('text')
         editarea.style.position = 'absolute'
-        editarea.style.top = text.x + 'px'
-        editarea.style.left = text.x + 'px'
+        let abs_pos = text.getAbsolutePosition()
+        console.log(abs_pos)
+        console.log(stageBox)
+        editarea.style.top  = (stageBox.top + abs_pos.y) + 'px'
+        editarea.style.left = (stageBox.left  + abs_pos.x) + 'px'
+        console.log(editarea.style.top)
         editarea.focus()
 
         editarea.addEventListener('focusout', (e) => {
-            text.text = editarea.value
+            text.setAttrs({text: editarea.value})
             document.body.removeChild(editarea)
         } )
-
-        console.log(editarea)
     }
 
     return(

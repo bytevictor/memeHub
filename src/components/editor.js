@@ -216,6 +216,7 @@ class Editor extends React.Component{
                             </KonvaImage>
                             <CvText 
                                 text='sample text asjfdjasif'
+                                stage={this.stageRef}
                                 draggable
                             />
                             <Rect
