@@ -6,7 +6,7 @@ import '@material-ui/core';
 
 import './assets/css/App.css';
 
-import Editor from './components/Editor';
+import Editor from './components/editor';
 import Home from './components/Home';
 import NoMatch from './components/NoMatch';
 

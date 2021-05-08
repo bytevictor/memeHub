@@ -28,11 +28,6 @@ class Editor extends React.Component{
             startOffsetX: null,
             startOffsetY: null,
         }
-
-        //
-        this.shapeRef = createRef()
-        this.trRef = createRef()
-        //
     }
 
     componentDidMount(){
@@ -42,21 +37,7 @@ class Editor extends React.Component{
         //
     }
 
-    imageLoader(image){
-
-        this.setState({image: image});
-
-        //For scaling the image to the canvas width
-        //
-        let correlation = image.height / image.width;
-        console.log("correlation: " + correlation);
-
-        let canvas_container = document.getElementById('canvas-container');
-        console.log("width:" + canvas_container.clientWidth + " height: " + canvas_container.clientHeight)
-
-        let width = canvas_container.clientWidth
-        let height = canvas_container.clientHeight
-
+    calculate_resize(correlation, width, height){
         //wide photo
         if( correlation <= 1 ){
             //image too small, dont correct
@@ -83,22 +64,41 @@ class Editor extends React.Component{
                 height = correlation * width - 100
             }
         }
-        //
-        //
 
-        console.log("canvas width: "+width+" canvas heigth: "+height)
+        return {
+            width: width,
+            height: height
+        }
+    }
+
+    imageLoader(image){
+
+        this.setState({image: image});
+
+        //For scaling the image to the canvas width
+        //
+        let correlation = image.height / image.width;
+        console.log("correlation: " + correlation);
+
+        let canvas_container = document.getElementById('canvas-container');
+        console.log("width:" + canvas_container.clientWidth + " height: " + canvas_container.clientHeight)
+
+        let width = canvas_container.clientWidth
+        let height = canvas_container.clientHeight
+
+        let size = this.calculate_resize(correlation, width, height)
 
         this.kvMainImageRef.current.setAttrs({
             image: image,
-            width: width,
-            height: height,
+            width: size.width,
+            height: size.height,
             x: 0,
             y: 0
         })
 
         this.stageRef.current.setAttrs({
-            width: width,
-            height: height
+            width: size.width,
+            height: size.height
         })
     }
 
@@ -114,43 +114,6 @@ class Editor extends React.Component{
             height: 0
         }) 
     }
-
-    //Square drawing events
-    //
-    startRectangleDraw({nativeEvent}){
-        let context = this.contextRef.current;
-
-        this.setState({isDrawing: true});
-
-        //settings for the stroke
-        context.lineWidth = 5;
-        context.lineCap = "round";
-        context.strokeStyle = "red";
-
-        let rect = new cvRectangle(context, nativeEvent.offsetX, nativeEvent.offsetY,0,0)
-
-        this.state.shapeArray.push(rect)
-    }
-
-    movingRectangleDraw({nativeEvent}){
-
-        if(this.state.isDrawing){
-            let rect = this.state.shapeArray[this.state.shapeArray.length - 1]
-
-            rect.update(rect.startX,rect.startY, 
-                        nativeEvent.offsetX - rect.startX ,
-                        nativeEvent.offsetY - rect.startY )
-
-                
-            this.repaint()
-        }
-    }
-
-    endRectangleDraw({nativeEvent}){
-        this.setState({isDrawing: false})
-    }
-    //
-
 
     //Free drawing events
     //
@@ -199,13 +162,6 @@ class Editor extends React.Component{
                         <DragandDrop imgLoader={this.imageLoader.bind(this)}/> : null
                     }
                     
-                    <canvas id='canvas' width='0' height='0'
-                        ref={this.canvasRef}
-                        onMouseDown={this.startRectangleDraw.bind(this)}
-                        onMouseMove={this.movingRectangleDraw.bind(this)}
-                        onMouseUp={this.endRectangleDraw.bind(this)}
-                    />
-                    
                     <Stage width={0} height={0} ref={this.stageRef}>
                         <Layer ref={this.mainLayerRef}>
                             <KonvaImage
@@ -219,14 +175,6 @@ class Editor extends React.Component{
                                 fontSize={20}
                                 draggable
                             />
-                            <Rect
-                                ref={this.shapeRef}
-                                width={50}
-                                height={50}
-                                fill="red"
-                                isSelected={true}
-                            />
-
                         </Layer>
                     </Stage>
 
@@ -243,7 +191,7 @@ class Editor extends React.Component{
                     </button>
 
                     <Toolbar></Toolbar>
-                    
+
                 </nav>
                 <div className='bottomtoolbar'>
                     more options over here

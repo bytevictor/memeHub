@@ -11,7 +11,6 @@ function CvText(props) {
     const [selected, setSelected] = useState(false)
     const select = () => {
         setSelected(true)
-        
     }
     const deselect = () => {setSelected(false)}
 
@@ -29,10 +28,6 @@ function CvText(props) {
     //so the text doesn't get distorted
     const scaleReset = () => {
         let text = textRef.current
-
-        console.log(text)
-        console.log(text.width)
-        console.log(text.scaleX)
 
         text.setAttrs({
             width: text.width() * text.scaleX(),
@@ -57,14 +52,14 @@ function CvText(props) {
         editarea.style.left = (stageBox.left  + abs_pos.x) + 'px'
         editarea.style.width = text.width() + 'px'
         editarea.style.height = text.height() + 'px'
-        editarea.style.fontSize = text.fontSize() + 'px';
+        editarea.style.fontSize = text.fontSize() + 'px'
         editarea.style.background = 'none'
         editarea.style.border = 'none'
-        editarea.style.outline = 'none';
-        editarea.style.resize = 'none';
-        editarea.style.lineHeight = text.lineHeight();
-        editarea.style.fontFamily = text.fontFamily();
-        editarea.style.transformOrigin = 'left top';
+        editarea.style.outline = 'none'
+        editarea.style.resize = 'none'
+        editarea.style.lineHeight = text.lineHeight()
+        editarea.style.fontFamily = text.fontFamily()
+        editarea.style.transformOrigin = 'left top'
         let rotation = text.rotation()
         let rot_transformation = ''
         if( rotation ){ rot_transformation += 'rotateZ('+rotation+'deg)'}
@@ -73,14 +68,6 @@ function CvText(props) {
         //Hide original text set focus on the editable area
         text.hide()
         editarea.focus()
-
-        console.log("ancho" + text.width())
-
-        console.log("EDITAREA")
-        console.dir(editarea)
-        
-        console.log("TEXTO")
-        console.log(text)
 
         editarea.addEventListener('focusout', (e) => {
             //apply changes, show text again(repaint), delete textarea
@@ -98,8 +85,8 @@ function CvText(props) {
             ref={textRef}
             x={100}
             y={100}
-            width={ props.fontSize * 32 }
-            height={100}
+            width={ props.fontSize * 16 }
+            height={ props.fontSize * 2 }
             text={props.text}
             fontSize={props.fontSize}
             fontFamily={props.fontFamily}
@@ -108,6 +95,8 @@ function CvText(props) {
             onTransform={scaleReset}
 
             onClick={select}
+            onMouseDown={select}
+            onTap={select}
 
             onDblClick={editText}
             onDblTap={editText}
