@@ -1,27 +1,11 @@
 
-import React, {useEffect, useState, createRef} from 'react';
-import {Text, Transformer} from 'react-konva'
+import React, {createRef} from 'react';
+import {Text} from 'react-konva'
 
 function CvText(props) {
 
     const stageRef = props.stage
-    const transRef = createRef()
     const textRef = createRef()
-
-    const [selected, setSelected] = useState(false)
-    const select = (e) => {
-        setSelected(false)
-        console.log("texto clickada")
-    }
-    const deselect = () => {setSelected(false)}
-
-    useEffect(() => {
-        //show transformer if selected
-        if(selected){
-            transRef.current.nodes([textRef.current])
-        }
-        //
-    })
 
     //by default the transformer only changes the scale
     //in this case we don't want the text to reescale so this method
@@ -109,20 +93,9 @@ function CvText(props) {
 
             onTransform={scaleReset}
 
-            onClick={select}
-            onMouseDown={select}
-            onTap={select}
-
             onDblClick={editText}
             onDblTap={editText}
         />
-        { selected ? 
-            <Transformer
-                ref={transRef}
-                rotateEnabled={true}
-                keepRatio={false}
-            /> : null
-         }
       </React.Fragment>
     );
 }
