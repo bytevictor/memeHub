@@ -102,7 +102,7 @@ class Editor extends React.Component{
 
     imageUnloader(){
         this.setState({image: null})
-        this.setState({shapeArray: []})
+        this.setState({itemArray: []})
 
         let canvas_stage = this.stageRef.current
 
