@@ -31,6 +31,7 @@ function CvText(props) {
         //Making editarea look like the konva text
         let stageBox = stageRef.current.container().getBoundingClientRect();
         editarea.value = text.getAttr('text')
+        editarea.style.textAlign = text.align()
         editarea.style.position = 'absolute'
         let abs_pos = text.getAbsolutePosition()
         editarea.style.top  = (stageBox.top + abs_pos.y) + 'px'
@@ -83,6 +84,7 @@ function CvText(props) {
             width={ props.fontSize * 6 }
             height={ props.fontSize * 1 }
             text={props.text}
+            align={props.align}
             fontSize={props.fontSize}
             fontFamily={props.fontFamily}
             fill={props.fill}

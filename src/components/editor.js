@@ -121,6 +121,7 @@ class Editor extends React.Component{
                               text='sample text'
                               x={e.evt.offsetX}
                               y={e.evt.offsetY}
+                              align={'center'}
                               fontFamily={'Impact'}
                               fontSize={70}
                               fill={'white'}
