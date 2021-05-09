@@ -8,10 +8,10 @@ function CvText(props) {
     const transRef = createRef()
     const textRef = createRef()
 
-    const [selected, setSelected] = useState(true)
+    const [selected, setSelected] = useState(false)
     const select = (e) => {
-        setSelected(true)
-        console.log("caja clickada")
+        setSelected(false)
+        console.log("texto clickada")
     }
     const deselect = () => {setSelected(false)}
 

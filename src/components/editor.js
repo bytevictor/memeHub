@@ -6,7 +6,7 @@ import '../assets/css/editor.css'
 import DeleteIcon from '@material-ui/icons/Delete'
 
 import Toolbar from './EditorComponents/Toolbar'
-import { Stage, Layer, Rect, Image as KonvaImage, Image} from 'react-konva'
+import { Stage, Layer, Rect, Image as KonvaImage, Image, Transformer} from 'react-konva'
 //shapes
 import cvRectangle from './EditorComponents/ToolShapes/rectangle'
 import CvText from './EditorComponents/canvas_text'
@@ -19,6 +19,7 @@ class Editor extends React.Component{
         this.stageRef = createRef()
         this.mainLayerRef = createRef()
         this.kvMainImageRef = createRef()
+        this.transformerRef = createRef()
 
         this.state = {
             image: null,
@@ -175,6 +176,20 @@ class Editor extends React.Component{
         }
     }
 
+    //when canvas is clicked, select the item that is clicked,
+    //or deselect if no item is clicked
+    handleCanvasClick(e){
+        let transformer = this.transformerRef.current
+        console.log("texto:")
+        console.log(e.target)
+
+        if( e.target.className !== "Image" ){
+            transformer.nodes([e.target])
+        } else {
+            transformer.nodes([])
+        }
+    }
+
     render(){
         return( 
             <div className='editor'>
@@ -192,6 +207,7 @@ class Editor extends React.Component{
                     >
                         <Layer
                           ref={this.mainLayerRef}
+                          onClick={this.handleCanvasClick.bind(this)}
                           onDblClick={this.createNewText.bind(this)}
                         >
                             <KonvaImage
@@ -211,6 +227,11 @@ class Editor extends React.Component{
                                 shape
                             ))
                             }
+                            <Transformer
+                                ref={this.transformerRef}
+                                rotateEnabled={true}
+                                keepRatio={false}
+                            />
                         </Layer>
                     </Stage>
 
