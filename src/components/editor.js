@@ -23,7 +23,7 @@ class Editor extends React.Component{
 
         this.state = {
             image: null,
-            shapeArray: [],
+            itemArray: [],
 
             isDrawing: false,
             startOffsetX: null,
@@ -32,10 +32,7 @@ class Editor extends React.Component{
     }
 
     componentDidMount(){
-        //
-        //this.trRef.current.nodes([this.textRef.current]);
-        //this.trRef.current.getLayer().batchDraw();
-        //
+
     }
 
     calculate_resize(correlation, width, height){
@@ -116,44 +113,7 @@ class Editor extends React.Component{
         }) 
     }
 
-    //Free drawing events
-    //
-    startDraw({nativeEvent}){
-        let context = this.contextRef.current;
-
-        this.setState({isDrawing: true});
-
-        //settings for the stroke
-        context.lineWidth = 5;
-        context.lineCap = "round";
-        context.strokeStyle = "red";
-
-        //start path on click
-        context.beginPath();
-        context.moveTo(nativeEvent.offsetX, nativeEvent.offsetY);
-    }
-
-    endDraw(){
-        let context = this.contextRef.current;
-
-        this.setState({isDrawing: false});
-
-        context.closePath();
-    }
-
-    movingDraw({nativeEvent}){
-        let context = this.contextRef.current;
-
-        if(this.state.isDrawing){
-
-            context.lineTo(nativeEvent.offsetX, nativeEvent.offsetY);
-            context.stroke();
-        }
-    }
-    //
-
     createNewText(e){
-        console.log( e.target.className )
         //if the background image is clicked
         if( e.target.className == "Image" ){
             let new_text = <CvText
@@ -169,8 +129,7 @@ class Editor extends React.Component{
 
                               draggable
                            />
-            console.log(e.target)
-            this.state.shapeArray.push(new_text)
+            this.state.itemArray.push(new_text)
             //push doesn't update the state
             this.forceUpdate()
         }
@@ -180,8 +139,6 @@ class Editor extends React.Component{
     //or deselect if no item is clicked
     handleCanvasClick(e){
         let transformer = this.transformerRef.current
-        console.log("texto:")
-        console.log(e.target)
 
         if( e.target.className !== "Image" ){
             transformer.nodes([e.target])
@@ -211,20 +168,14 @@ class Editor extends React.Component{
                           onDblClick={this.createNewText.bind(this)}
                         >
                             <KonvaImage
+                            //Main image
                                 ref={this.kvMainImageRef}
                                 x={500}
                                 y={500}>
                             </KonvaImage>
-                            <CvText 
-                                text='sample text asjfdjasif'
-                                x={100}
-                                y={100}
-                                stage={this.stageRef}
-                                fontSize={20}
-                                draggable
-                            />
-                            {this.state.shapeArray.map(shape => (
-                                shape
+
+                            {this.state.itemArray.map(item => (
+                                item
                             ))
                             }
                             <Transformer
