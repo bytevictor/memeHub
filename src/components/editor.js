@@ -153,15 +153,21 @@ class Editor extends React.Component{
 
     createNewText(e){
         console.log( e.target.className )
+        //if the background image is clicked
         if( e.target.className == "Image" ){
             let new_text = <CvText
-                        text='sample text'
-                        x={e.evt.offsetX}
-                        y={e.evt.offsetY}
-                        stage={this.stageRef}
-                        fontSize={20}
-                        draggable
-                       />
+                              stage={this.stageRef}
+                              text='sample text'
+                              x={e.evt.offsetX}
+                              y={e.evt.offsetY}
+                              fontFamily={'Impact'}
+                              fontSize={70}
+                              fill={'white'}
+                              stroke={'black'}
+                              strokeWidth={3}
+
+                              draggable
+                           />
             console.log(e.target)
             this.state.shapeArray.push(new_text)
             //push doesn't update the state
@@ -186,7 +192,7 @@ class Editor extends React.Component{
                     >
                         <Layer
                           ref={this.mainLayerRef}
-                          onClick={this.createNewText.bind(this)}
+                          onDblClick={this.createNewText.bind(this)}
                         >
                             <KonvaImage
                                 ref={this.kvMainImageRef}

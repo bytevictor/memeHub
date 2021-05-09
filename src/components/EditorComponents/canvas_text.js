@@ -86,11 +86,15 @@ function CvText(props) {
             ref={textRef}
             x={props.x}
             y={props.y}
-            width={ props.fontSize * 16 }
-            height={ props.fontSize * 2 }
+            width={ props.fontSize * 6 }
+            height={ props.fontSize * 1 }
             text={props.text}
             fontSize={props.fontSize}
             fontFamily={props.fontFamily}
+            fill={props.fill}
+            stroke={props.stroke}
+            strokeWidth={props.strokeWidth}
+
             draggable={props.draggable}
 
             onTransform={scaleReset}
