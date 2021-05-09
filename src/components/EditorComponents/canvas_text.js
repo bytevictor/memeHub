@@ -8,9 +8,10 @@ function CvText(props) {
     const transRef = createRef()
     const textRef = createRef()
 
-    const [selected, setSelected] = useState(false)
-    const select = () => {
+    const [selected, setSelected] = useState(true)
+    const select = (e) => {
         setSelected(true)
+        console.log("caja clickada")
     }
     const deselect = () => {setSelected(false)}
 
@@ -83,8 +84,8 @@ function CvText(props) {
       <React.Fragment>
         <Text
             ref={textRef}
-            x={100}
-            y={100}
+            x={props.x}
+            y={props.y}
             width={ props.fontSize * 16 }
             height={ props.fontSize * 2 }
             text={props.text}

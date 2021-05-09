@@ -6,7 +6,7 @@ import '../assets/css/editor.css'
 import DeleteIcon from '@material-ui/icons/Delete'
 
 import Toolbar from './EditorComponents/Toolbar'
-import { Stage, Layer, Rect, Image as KonvaImage} from 'react-konva'
+import { Stage, Layer, Rect, Image as KonvaImage, Image} from 'react-konva'
 //shapes
 import cvRectangle from './EditorComponents/ToolShapes/rectangle'
 import CvText from './EditorComponents/canvas_text'
@@ -151,6 +151,23 @@ class Editor extends React.Component{
     }
     //
 
+    createNewText(e){
+        console.log( e.target.className )
+        if( e.target.className == "Image" ){
+            let new_text = <CvText
+                        text='sample text'
+                        x={e.evt.offsetX}
+                        y={e.evt.offsetY}
+                        stage={this.stageRef}
+                        fontSize={20}
+                        draggable
+                       />
+            console.log(e.target)
+            this.state.shapeArray.push(new_text)
+            //push doesn't update the state
+            this.forceUpdate()
+        }
+    }
 
     render(){
         return( 
@@ -162,8 +179,15 @@ class Editor extends React.Component{
                         <DragandDrop imgLoader={this.imageLoader.bind(this)}/> : null
                     }
                     
-                    <Stage width={0} height={0} ref={this.stageRef}>
-                        <Layer ref={this.mainLayerRef}>
+                    <Stage 
+                      width={0} 
+                      height={0} 
+                      ref={this.stageRef}
+                    >
+                        <Layer
+                          ref={this.mainLayerRef}
+                          onClick={this.createNewText.bind(this)}
+                        >
                             <KonvaImage
                                 ref={this.kvMainImageRef}
                                 x={500}
@@ -171,10 +195,16 @@ class Editor extends React.Component{
                             </KonvaImage>
                             <CvText 
                                 text='sample text asjfdjasif'
+                                x={100}
+                                y={100}
                                 stage={this.stageRef}
                                 fontSize={20}
                                 draggable
                             />
+                            {this.state.shapeArray.map(shape => (
+                                shape
+                            ))
+                            }
                         </Layer>
                     </Stage>
 
