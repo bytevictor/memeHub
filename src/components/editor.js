@@ -164,7 +164,7 @@ class Editor extends React.Component{
                               fontSize={70}
                               fill={'white'}
                               stroke={'black'}
-                              strokeWidth={3}
+                              strokeWidth={2}
 
                               draggable
                            />

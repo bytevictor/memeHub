@@ -54,6 +54,15 @@ function CvText(props) {
         editarea.style.width = text.width() + 'px'
         editarea.style.height = text.height() + 'px'
         editarea.style.fontSize = text.fontSize() + 'px'
+        editarea.style.color = text.fill()
+
+        editarea.style.webkitTextStroke = text.stroke()
+        editarea.style.webkitTextStrokeWidth = text.strokeWidth() + 'px'
+
+        editarea.style.margin = '0px'
+        editarea.style.padding = '0px'
+        editarea.style.lineHeight = text.lineHeight()
+        editarea.style.resize = 'none'
         editarea.style.background = 'none'
         editarea.style.border = 'none'
         editarea.style.outline = 'none'
@@ -69,6 +78,7 @@ function CvText(props) {
         //Hide original text set focus on the editable area
         text.hide()
         editarea.focus()
+        editarea.setSelectionRange(0, editarea.value.length)
 
         editarea.addEventListener('focusout', (e) => {
             //apply changes, show text again(repaint), delete textarea
