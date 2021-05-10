@@ -3,17 +3,26 @@ import React, { createRef } from 'react'
 import DragandDrop from './EditorComponents/DragandDrop'
 
 import '../assets/css/editor.css'
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import blue from '@material-ui/core/colors/blue';
+import purple from '@material-ui/core/colors/purple';
 import Button from '@material-ui/core/Button';
 //Icons
 import DeleteIcon from '@material-ui/icons/Delete'
-import GetAppIcon from '@material-ui/icons/GetApp';
+import SaveIcon from '@material-ui/icons/Save';
 
 import Toolbar from './EditorComponents/Toolbar'
 import { Stage, Layer, Rect, Image as KonvaImage, Image, Transformer} from 'react-konva'
 //canvas items
 import CvText from './EditorComponents/canvas_text'
 
-
+//Colors for the Mui
+const theme = createMuiTheme({
+    palette: {
+        primary: blue,
+        secondary: purple,
+      },
+  });
 
 class Editor extends React.Component{
     constructor(props){
@@ -164,6 +173,7 @@ class Editor extends React.Component{
 
     render(){
         return( 
+            <ThemeProvider theme={theme}>
             <div className='editor'>
                 <div className='d-flex justify-content-center align-items-center' id='canvas-container'>
 
@@ -204,7 +214,7 @@ class Editor extends React.Component{
                 </div>
                 <nav id="sidetoolbar" className="d-flex flex-column p-0 justify-content-between">
                     <div className="d-flex flex-column">
-                    <button type='button' className='btn btn-danger my-1'
+                    <button type='button' id="deletemainbutton" className='btn btn-danger'
                         style={{width: "50px", height: "45px"}}
                         onClick={this.imageUnloader.bind(this)} 
                         variant="contained"
@@ -216,22 +226,24 @@ class Editor extends React.Component{
 
                     <Toolbar></Toolbar>
                     </div>
-
+                    
+                    
                     <Button id="downloadbutton"
                             className="ml-auto p-0 my-0" 
                             color="primary"
                             size='medium'
                             variant={ (this.state.image == null) ? "outlined" : "contained" }
-                            disabled={ (this.state.image == null) ? false : false }
+                            disabled={ (this.state.image == null) ? true : false }
                             onClick={this.imageDownloader.bind(this)}
                             >
-                        <GetAppIcon/>
+                        <SaveIcon/>
                     </Button>
                 </nav>
                 <div className='bottomtoolbar'>
                     more options over here
                 </div>
             </div>
+            </ThemeProvider>
         );
     }
 

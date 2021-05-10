@@ -23,6 +23,11 @@
     background-color: #333333;
 }
 
+#deletemainbutton{
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+
 #downloadbutton{
     max-width: 50px;
     min-width: 50px;
