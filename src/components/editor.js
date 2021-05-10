@@ -3,13 +3,16 @@ import React, { createRef } from 'react'
 import DragandDrop from './EditorComponents/DragandDrop'
 
 import '../assets/css/editor.css'
+import Button from '@material-ui/core/Button';
+//Icons
 import DeleteIcon from '@material-ui/icons/Delete'
+import GetAppIcon from '@material-ui/icons/GetApp';
 
 import Toolbar from './EditorComponents/Toolbar'
 import { Stage, Layer, Rect, Image as KonvaImage, Image, Transformer} from 'react-konva'
-//shapes
-import cvRectangle from './EditorComponents/ToolShapes/rectangle'
+//canvas items
 import CvText from './EditorComponents/canvas_text'
+
 
 
 class Editor extends React.Component{
@@ -113,6 +116,15 @@ class Editor extends React.Component{
         }) 
     }
 
+    imageDownloader(){
+        //pixel ratio 1,same resolution as screen
+        let data = this.stageRef.current.toDataURL({pixelRatio: 1})
+        let download_link = document.createElement('a')
+        download_link.download = 'edit_memehub'
+        download_link.href = data
+        download_link.click()
+    }
+
     createNewText(e){
         //if the background image is clicked
         if( e.target.className == "Image" ){
@@ -188,9 +200,10 @@ class Editor extends React.Component{
                     </Stage>
 
                 </div>
-                <nav id="sidetoolbar" className="d-flex flex-column p-0">
-                    
+                <nav id="sidetoolbar" className="d-flex flex-column p-0 justify-content-between">
+                    <div className="d-flex flex-column">
                     <button type='button' className='btn btn-danger my-1'
+                        style={{width: "50px", height: "45px"}}
                         onClick={this.imageUnloader.bind(this)} 
                         variant="contained"
                         color="secondary"
@@ -200,7 +213,17 @@ class Editor extends React.Component{
                     </button>
 
                     <Toolbar></Toolbar>
+                    </div>
 
+                    <Button id="downloadbutton"
+                            className="ml-auto p-0 my-0" 
+                            color="primary"
+                            size='medium'
+                            variant={ (this.state.image == null) ? "outlined" : "contained" }
+                            disabled={ (this.state.image == null) ? false : false }
+                            >
+                        <GetAppIcon/>
+                    </Button>
                 </nav>
                 <div className='bottomtoolbar'>
                     more options over here
