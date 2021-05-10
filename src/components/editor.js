@@ -15,6 +15,7 @@ import Toolbar from './EditorComponents/Toolbar'
 import { Stage, Layer, Rect, Image as KonvaImage, Image, Transformer} from 'react-konva'
 //canvas items
 import CvText from './EditorComponents/canvas_text'
+import { Paper } from '@material-ui/core';
 
 //Colors for the Mui
 const theme = createMuiTheme({
@@ -115,6 +116,7 @@ class Editor extends React.Component{
     imageUnloader(){
         this.setState({image: null})
         this.setState({itemArray: []})
+        this.transformerRef.current.nodes([])
 
         let canvas_stage = this.stageRef.current
 
@@ -227,7 +229,6 @@ class Editor extends React.Component{
                     <Toolbar></Toolbar>
                     </div>
                     
-                    
                     <Button id="downloadbutton"
                             className="ml-auto p-0 my-0" 
                             color="primary"
@@ -239,8 +240,9 @@ class Editor extends React.Component{
                         <SaveIcon/>
                     </Button>
                 </nav>
-                <div className='bottomtoolbar'>
-                    more options over here
+                <div display='flex' flexWrap='wrap'
+                     id='bottomtoolbar'>
+                    <Paper width={theme.spacing(16)} height={theme.spacing(16)}></Paper>
                 </div>
             </div>
             </ThemeProvider>
