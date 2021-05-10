@@ -117,6 +117,8 @@ class Editor extends React.Component{
     }
 
     imageDownloader(){
+        //Unselect any item (the transform box would be printed otherwise)
+        this.transformerRef.current.nodes([])
         //pixel ratio 1,same resolution as screen
         let data = this.stageRef.current.toDataURL({pixelRatio: 1})
         let download_link = document.createElement('a')
@@ -221,6 +223,7 @@ class Editor extends React.Component{
                             size='medium'
                             variant={ (this.state.image == null) ? "outlined" : "contained" }
                             disabled={ (this.state.image == null) ? false : false }
+                            onClick={this.imageDownloader.bind(this)}
                             >
                         <GetAppIcon/>
                     </Button>
