@@ -12,18 +12,20 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import SaveIcon from '@material-ui/icons/Save';
 
 import Toolbar from './EditorComponents/Toolbar'
+import BottomToolbar from './EditorComponents/BottomToolbar'
 import { Stage, Layer, Rect, Image as KonvaImage, Image, Transformer} from 'react-konva'
 //canvas items
 import CvText from './EditorComponents/canvas_text'
-import { Paper } from '@material-ui/core';
+
 
 //Colors for the Mui
 const theme = createMuiTheme({
     palette: {
+        type: "dark",
         primary: blue,
         secondary: purple,
-      },
-  });
+    },
+});
 
 class Editor extends React.Component{
     constructor(props){
@@ -176,8 +178,9 @@ class Editor extends React.Component{
     render(){
         return( 
             <ThemeProvider theme={theme}>
-            <div className='editor'>
-                <div className='d-flex justify-content-center align-items-center' id='canvas-container'>
+            <div className='editor d-flex flex-column'>
+                <div className='d-flex flex-fill'>
+                <div id='canvas-container' className='d-flex justify-content-center align-items-center w-100' >
 
                     {//If there is no image, show draganddrop input
                     ( this.state.image == null ) ?
@@ -240,10 +243,10 @@ class Editor extends React.Component{
                         <SaveIcon/>
                     </Button>
                 </nav>
-                <div display='flex' flexWrap='wrap'
-                     id='bottomtoolbar'>
-                    <Paper width={theme.spacing(16)} height={theme.spacing(16)}></Paper>
                 </div>
+
+                <BottomToolbar/>
+
             </div>
             </ThemeProvider>
         );

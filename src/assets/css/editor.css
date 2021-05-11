@@ -1,11 +1,5 @@
 
 .editor{
-    display: grid;
-    grid-template-columns: 1fr auto;
-    grid-template-rows: 1fr auto;
-    grid-template-areas: 
-        "canvas sidetoolbar"
-        "bottomtoolbar sidetoolbar";
     height: 100vh;
     width: 100vw;
 }
@@ -20,7 +14,7 @@
 }
 
 #bottomtoolbar{
-    height: 10vh;
+    background-color: #333333;
 }
 
 #sidetoolbar{
