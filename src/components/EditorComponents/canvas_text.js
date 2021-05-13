@@ -83,6 +83,7 @@ function CvText(props) {
             width={ props.fontSize * 6 }
             height={ props.fontSize * 1 }
             text={props.text}
+            
             align={props.align}
             fontSize={props.fontSize}
             fontFamily={props.fontFamily}

@@ -175,6 +175,18 @@ class Editor extends React.Component{
         }
     }
 
+    updateTextSize( newSize ){
+        let text = this.transformerRef.current.nodes()[0]
+        console.log(this.transformerRef.current.nodes()[0])
+        console.log(newSize)
+        
+        if(parseInt(newSize) > 0){
+            text.setAttr('fontSize', parseInt(newSize))
+        }
+        
+        this.transformerRef.current.nodes([text])
+    }
+
     render(){
         return( 
             <ThemeProvider theme={theme}>
@@ -245,7 +257,7 @@ class Editor extends React.Component{
                 </nav>
                 </div>
 
-                <BottomToolbar/>
+                <BottomToolbar sizeUpdater={this.updateTextSize.bind(this)}/>
 
             </div>
             </ThemeProvider>

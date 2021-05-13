@@ -1,4 +1,4 @@
-import React, { createRef, useCallback, useEffect } from 'react';
+import React, { createRef, useCallback, useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import FormLabel from '@material-ui/core/FormLabel';
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function BottomToolbar() {
+export default function BottomToolbar(props) {
   const classes = useStyles();
 
   const [alignment, setAlignment] = React.useState('center')
@@ -75,7 +75,7 @@ export default function BottomToolbar() {
               <FormHelperText>Choose your font</FormHelperText>
             </FormControl>
 
-            <FontSizeSelector/>
+            <FontSizeSelector updater={props.sizeUpdater}/>
 
           </Paper>
         </Grid>
