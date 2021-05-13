@@ -76,7 +76,6 @@ function CvText(props) {
 
 
     return(
-      <React.Fragment>
         <Text
             ref={textRef}
             x={props.x}
@@ -98,7 +97,6 @@ function CvText(props) {
             onDblClick={editText}
             onDblTap={editText}
         />
-      </React.Fragment>
     );
 }
 

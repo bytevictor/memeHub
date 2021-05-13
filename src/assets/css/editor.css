@@ -32,3 +32,15 @@
     max-height: 50px;
     min-height: 50px;
 }
+
+/* Chrome, Safari, Edge, Opera */
+/* Hide horrible number arrows */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
