@@ -52,7 +52,7 @@ export default function BottomToolbar(props) {
               <FontAlignmentSelector/>
             </div>
 
-            <FontFamilySelector/>
+            <FontFamilySelector updater={props.fontFamilyUpdater}/>
 
             <FontSizeSelector updater={props.sizeUpdater}/>
 

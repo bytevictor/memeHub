@@ -211,6 +211,16 @@ class Editor extends React.Component{
         }
     }
 
+    updateFontFamily( newFont ){
+        let text = this.transformerRef.current.nodes()[0]
+
+        if(text != null){
+            console.log(newFont)
+            text.setAttr('fontFamily', newFont)
+            text.getStage().batchDraw()
+        }
+    }
+
     render(){
         return( 
             <ThemeProvider theme={theme}>
@@ -286,6 +296,7 @@ class Editor extends React.Component{
                     fontColorUpdater={this.updateTextColor.bind(this)}
                     strokeColorUpdater={this.updateStrokeColor.bind(this)}
                     strokeSizeUpdater={this.updateStrokeSize.bind(this)}
+                    fontFamilyUpdater={this.updateFontFamily.bind(this)}
                 />
 
             </div>
