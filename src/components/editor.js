@@ -193,6 +193,15 @@ class Editor extends React.Component{
         }
     }
 
+    updateStrokeColor( newColor ){
+        let text = this.transformerRef.current.nodes()[0]
+
+        if(text != null){
+            text.setAttr('stroke', '#' + newColor.hex)
+            text.getStage().batchDraw()
+        }
+    }
+
     render(){
         return( 
             <ThemeProvider theme={theme}>
@@ -265,7 +274,8 @@ class Editor extends React.Component{
 
                 <BottomToolbar 
                     sizeUpdater={this.updateTextSize.bind(this)}
-                    colorUpdater={this.updateTextColor.bind(this)}
+                    fontColorUpdater={this.updateTextColor.bind(this)}
+                    strokeColorUpdater={this.updateStrokeColor.bind(this)}
                 />
 
             </div>

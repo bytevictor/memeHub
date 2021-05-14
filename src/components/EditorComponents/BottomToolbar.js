@@ -39,7 +39,13 @@ export default function BottomToolbar(props) {
   const [fontColor, setFontColor] = useState(createColor("#FFFFFF"));
   const handleFontColorChange = (value) => {
     setFontColor(value);
-    props.colorUpdater(value)
+    props.fontColorUpdater(value)
+  };
+
+  const [strokeColor, setStrokeColor] = useState(createColor("#000000"));
+  const handleStrokeColorChange = (value) => {
+    setStrokeColor(value);
+    props.strokeColorUpdater(value)
   };
 
   return (
@@ -101,7 +107,10 @@ export default function BottomToolbar(props) {
           <Paper className="d-flex m-3 flex-grow-1" elevation={3}>
             <Grid container spacing={0}>
               <Grid item xs={6} className="d-flex align-content-center justify-content-center mt-3">
-                <ColorPicker defaultValue="black" hideTextfield/>
+                <ColorPicker defaultValue={strokeColor} 
+                             value={strokeColor}
+                             onChange={handleStrokeColorChange}
+                             hideTextfield/>
               </Grid>
 
               <Grid item xs={6} className="">
