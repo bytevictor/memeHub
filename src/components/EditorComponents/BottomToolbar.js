@@ -49,7 +49,7 @@ export default function BottomToolbar(props) {
         <Grid item xs={4}>
           <Paper className="m-3 d-flex flex-wrap justify-content-around" elevation={3}>
             <div className="m-3">
-              <FontAlignmentSelector/>
+              <FontAlignmentSelector updater={props.alignmentUpdater}/>
             </div>
 
             <FontFamilySelector updater={props.fontFamilyUpdater}/>

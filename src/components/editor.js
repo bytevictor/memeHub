@@ -221,6 +221,16 @@ class Editor extends React.Component{
         }
     }
 
+    updateFontAlignment( newAlignment ){
+        let text = this.transformerRef.current.nodes()[0]
+
+        if(text != null){
+            console.log( newAlignment )
+            text.setAttr('align', newAlignment)
+            text.getStage().batchDraw()
+        }
+    }
+
     render(){
         return( 
             <ThemeProvider theme={theme}>
@@ -297,6 +307,7 @@ class Editor extends React.Component{
                     strokeColorUpdater={this.updateStrokeColor.bind(this)}
                     strokeSizeUpdater={this.updateStrokeSize.bind(this)}
                     fontFamilyUpdater={this.updateFontFamily.bind(this)}
+                    alignmentUpdater={this.updateFontAlignment.bind(this)}
                 />
 
             </div>

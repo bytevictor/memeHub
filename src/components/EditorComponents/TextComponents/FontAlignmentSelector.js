@@ -10,9 +10,12 @@ import FormatAlignRightIcon from '@material-ui/icons/FormatAlignRight';
 
 export default function FontAlignmentSelector(props){
 
+    const alignmentUpdater = props.updater
+
     const [alignment, setAlignment] = useState('center')
     const handleAlignment = (event, newAlignment) => {
         setAlignment(newAlignment);
+        alignmentUpdater(newAlignment)
     };
 
     return(
