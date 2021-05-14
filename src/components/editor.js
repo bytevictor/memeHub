@@ -177,14 +177,20 @@ class Editor extends React.Component{
 
     updateTextSize( newSize ){
         let text = this.transformerRef.current.nodes()[0]
-        console.log(this.transformerRef.current.nodes()[0])
-        console.log(newSize)
         
-        if(parseInt(newSize) > 0){
+        if(text != null && parseInt(newSize) > 0){
             text.setAttr('fontSize', parseInt(newSize))
+            this.transformerRef.current.nodes([text])
         }
-        
-        this.transformerRef.current.nodes([text])
+    }
+
+    updateTextColor( newColor ){
+        let text = this.transformerRef.current.nodes()[0]
+
+        if(text != null){
+            text.setAttr('fill', '#' + newColor.hex)
+            text.getStage().batchDraw()
+        }
     }
 
     render(){
@@ -257,7 +263,10 @@ class Editor extends React.Component{
                 </nav>
                 </div>
 
-                <BottomToolbar sizeUpdater={this.updateTextSize.bind(this)}/>
+                <BottomToolbar 
+                    sizeUpdater={this.updateTextSize.bind(this)}
+                    colorUpdater={this.updateTextColor.bind(this)}
+                />
 
             </div>
             </ThemeProvider>

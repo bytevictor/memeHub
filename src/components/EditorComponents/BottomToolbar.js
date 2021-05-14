@@ -6,7 +6,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Radio from '@material-ui/core/Radio';
 import Paper from '@material-ui/core/Paper';
-import { ColorButton, ColorPicker } from 'material-ui-color';
+import { ColorButton, ColorPicker, createColor } from 'material-ui-color';
 import { Button, ButtonGroup, FormControl, FormHelperText, InputLabel, MenuItem, Select, Slider, TextField, Typography } from '@material-ui/core';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import FontSizeSelector from './FontSizeSelector'
@@ -26,12 +26,20 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+
+
 export default function BottomToolbar(props) {
   const classes = useStyles();
 
   const [alignment, setAlignment] = React.useState('center')
   const handleAlignment = (event, newAlignment) => {
     setAlignment(newAlignment);
+  };
+
+  const [fontColor, setFontColor] = useState(createColor("#FFFFFF"));
+  const handleFontColorChange = (value) => {
+    setFontColor(value);
+    props.colorUpdater(value)
   };
 
   return (
@@ -83,8 +91,9 @@ export default function BottomToolbar(props) {
           <Paper className="m-3 pt-3 d-flex justify-content-center align-content-center flex-grow-1" 
                  elevation={3}>
             <ColorPicker 
-                  defaultValue="white" 
-                  ColorButtonProps={{size: 100}} 
+                  defaultValue={fontColor} 
+                  value={fontColor}
+                  onChange={handleFontColorChange}
                   hideTextfield/>
           </Paper>
         </Grid>
