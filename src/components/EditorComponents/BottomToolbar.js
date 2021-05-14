@@ -48,6 +48,10 @@ export default function BottomToolbar(props) {
     props.strokeColorUpdater(value)
   };
 
+  const handleStrokeSizeChange = (event, value) => {
+    props.strokeSizeUpdater(value)
+  }
+
   return (
     <div id='bottomtoolbar' className={classes.root}>
         <Grid container spacing={0}>
@@ -119,7 +123,7 @@ export default function BottomToolbar(props) {
                   Stroke
                 </Typography>
                 <Slider
-                  defaultValue={30}
+                  defaultValue={0}
                   //getAriaValueText={valuetext}
                   aria-labelledby="discrete-slider"
                   valueLabelDisplay="auto"
@@ -127,6 +131,7 @@ export default function BottomToolbar(props) {
                   marks
                   min={0}
                   max={15}
+                  onChange={handleStrokeSizeChange}
                 />
                 </div>
               </Grid>

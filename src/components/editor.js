@@ -202,6 +202,15 @@ class Editor extends React.Component{
         }
     }
 
+    updateStrokeSize( newSize ){
+        let text = this.transformerRef.current.nodes()[0]
+
+        if(text != null){
+            text.setAttr('strokeWidth', newSize)
+            text.getStage().batchDraw()
+        }
+    }
+
     render(){
         return( 
             <ThemeProvider theme={theme}>
@@ -276,6 +285,7 @@ class Editor extends React.Component{
                     sizeUpdater={this.updateTextSize.bind(this)}
                     fontColorUpdater={this.updateTextColor.bind(this)}
                     strokeColorUpdater={this.updateStrokeColor.bind(this)}
+                    strokeSizeUpdater={this.updateStrokeSize.bind(this)}
                 />
 
             </div>
