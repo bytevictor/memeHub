@@ -1,19 +1,16 @@
-import React, { createRef, useCallback, useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import FormLabel from '@material-ui/core/FormLabel';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import Radio from '@material-ui/core/Radio';
-import Paper from '@material-ui/core/Paper';
-import { ColorButton, ColorPicker, createColor } from 'material-ui-color';
-import { Button, ButtonGroup, FormControl, FormHelperText, InputLabel, MenuItem, Select, Slider, TextField, Typography } from '@material-ui/core';
-import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
-import FontSizeSelector from './FontSizeSelector'
-
-import FormatAlignLeftIcon from '@material-ui/icons/FormatAlignLeft';
-import FormatAlignCenterIcon from '@material-ui/icons/FormatAlignCenter';
-import FormatAlignRightIcon from '@material-ui/icons/FormatAlignRight';
+import React, { createRef, useCallback, useEffect, useState } from 'react'
+import { makeStyles } from '@material-ui/core/styles'
+import Grid from '@material-ui/core/Grid'
+import FormLabel from '@material-ui/core/FormLabel'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import RadioGroup from '@material-ui/core/RadioGroup'
+import Radio from '@material-ui/core/Radio'
+import Paper from '@material-ui/core/Paper'
+import { ColorButton, ColorPicker, createColor } from 'material-ui-color'
+import { Slider, TextField, Typography } from '@material-ui/core'
+import FontSizeSelector from './TextComponents/FontSizeSelector'
+import FontAlignmentSelector from './TextComponents/FontAlignmentSelector'
+import FontFamilySelector from './TextComponents/FontFamilySelector'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -27,14 +24,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-
 export default function BottomToolbar(props) {
   const classes = useStyles();
-
-  const [alignment, setAlignment] = React.useState('center')
-  const handleAlignment = (event, newAlignment) => {
-    setAlignment(newAlignment);
-  };
 
   const [fontColor, setFontColor] = useState(createColor("#FFFFFF"));
   const handleFontColorChange = (value) => {
@@ -58,40 +49,10 @@ export default function BottomToolbar(props) {
         <Grid item xs={4}>
           <Paper className="m-3 d-flex flex-wrap justify-content-around" elevation={3}>
             <div className="m-3">
-            <ToggleButtonGroup
-              value={alignment}
-              exclusive
-              size="small"
-              onChange={handleAlignment}
-              aria-label="text alignment"
-            >
-              <ToggleButton value="left" aria-label="left aligned">
-                <FormatAlignLeftIcon />
-              </ToggleButton>
-              <ToggleButton value="center" aria-label="centered">
-                <FormatAlignCenterIcon />
-              </ToggleButton>
-              <ToggleButton value="right" aria-label="right aligned">
-                <FormatAlignRightIcon />
-              </ToggleButton>
-            </ToggleButtonGroup>
+              <FontAlignmentSelector/>
             </div>
 
-            <FormControl className="mx-2 my-1 mt-4">
-              <InputLabel>Font</InputLabel>
-                <Select
-                  //value={}
-                  //onChange={}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={10} style={{fontFamily: 'Impact'}}>Ten</MenuItem>
-                  <MenuItem value={20}>Twentyyyyyyyyyyyyyyyyyyyyyy</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
-                </Select>
-              <FormHelperText>Choose your font</FormHelperText>
-            </FormControl>
+            <FontFamilySelector/>
 
             <FontSizeSelector updater={props.sizeUpdater}/>
 

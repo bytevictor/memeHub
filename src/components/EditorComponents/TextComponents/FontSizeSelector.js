@@ -3,8 +3,6 @@ import { render } from "@testing-library/react"
 import { createRef } from "react"
 
 
-
-
 export default function FontSizeSelector(props){
     const sizeRef = createRef()
 
