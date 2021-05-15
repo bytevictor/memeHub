@@ -170,7 +170,7 @@ class Editor extends React.Component{
 
     //when canvas is clicked, select the item that is clicked,
     //or deselect if no item is clicked
-    handleCanvasClick(e){
+    handleCanvasMouseDown(e){
         let transformer = this.transformerRef.current
 
         if( e.target.className !== "Image" ){
@@ -255,7 +255,7 @@ class Editor extends React.Component{
                     >
                         <Layer
                           ref={this.mainLayerRef}
-                          onClick={this.handleCanvasClick.bind(this)}
+                          onMouseDown={this.handleCanvasMouseDown.bind(this)}
                           onDblClick={this.createNewText.bind(this)}
                         >
                             <KonvaImage
