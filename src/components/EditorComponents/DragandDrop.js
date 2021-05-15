@@ -18,7 +18,7 @@ const dragLeave = (e) => {
 
 //* FILE MANIPULATION */
 
-const validateFile = (file) => {
+export function validateFile(file){
     const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
 
     if (validTypes.indexOf(file.type) === -1) {
@@ -76,9 +76,10 @@ class DragandDrop extends React.Component{
                 onDragLeave={dragLeave}
                 onDrop={this.fileDrop.bind(this)}
             >
-                <div className="drop-message">
-                    <div className="upload-icon"></div>
-                    Drag & Drop to start editing!
+                <div className="drop-message d-flex flex-column justify-content-center">
+                    <div className="upload-icon m-4 align-self-center"></div>
+                    <span className="w-100">Drag & Drop to start editing!</span>
+                    <span>Or press Ctrl + V to add from clipboard!</span>
                 </div>
             </div>
         );

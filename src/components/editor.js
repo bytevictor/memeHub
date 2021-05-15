@@ -16,6 +16,7 @@ import BottomToolbar from './EditorComponents/BottomToolbar'
 import { Stage, Layer, Rect, Image as KonvaImage, Image, Transformer} from 'react-konva'
 //canvas items
 import CvText from './EditorComponents/canvas_text'
+import {validateFile} from './EditorComponents/DragandDrop'
 
 
 //Colors for the Mui
@@ -47,7 +48,7 @@ class Editor extends React.Component{
     }
 
     componentDidMount(){
-
+        document.body.addEventListener('paste', this.handlePaste.bind(this));
     }
 
     calculate_resize(correlation, width, height){
@@ -113,6 +114,32 @@ class Editor extends React.Component{
             width: size.width,
             height: size.height
         })
+    }
+
+    handlePaste(e){
+        console.log(e)
+        
+        let pasted_file = e.clipboardData.files[0]
+
+        console.log( pasted_file )
+
+        if( this.state.image == null 
+            && pasted_file != null 
+            && validateFile(pasted_file)){
+
+            const reader = new FileReader();
+            reader.readAsDataURL(pasted_file);
+            reader.onload = (e) => {
+                //Create image from load
+                let image = new window.Image();
+                image.src = e.target.result;
+
+                image.onload = () => {
+                    //send image to editor
+                    this.imageLoader(image)
+                }
+            }
+        }
     }
 
     imageUnloader(){
