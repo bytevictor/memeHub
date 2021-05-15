@@ -16,6 +16,7 @@ export default function FontFamilySelector(props){
         ].sort());
 
     useEffect(() => {
+        //If fontlist not filled, request it
         if(fontList.length == 0){
             (async() => {
                 await document.fonts.ready;

@@ -1,4 +1,4 @@
-import React, { createRef } from 'react'
+import React, { createRef, fordwardRef } from 'react'
 
 import DragandDrop from './EditorComponents/DragandDrop'
 
@@ -145,9 +145,12 @@ class Editor extends React.Component{
         if( e.target.className == "Image" ){
             let new_text = <CvText
                               stage={this.stageRef}
+                              transformer={this.transformerRef}
                               text='sample text'
-                              x={e.evt.offsetX}
-                              y={e.evt.offsetY}
+                              //fontsize * 3 is the half of the width
+                              //so it spawns on the center
+                              x={e.evt.offsetX - 70 * 3}
+                              y={e.evt.offsetY - 35}
                               align={'center'}
                               fontFamily={'Impact'}
                               fontSize={70}
@@ -157,7 +160,9 @@ class Editor extends React.Component{
 
                               draggable
                            />
+
             this.state.itemArray.push(new_text)
+
             //push doesn't update the state
             this.forceUpdate()
         }
@@ -260,7 +265,8 @@ class Editor extends React.Component{
                                 y={500}>
                             </KonvaImage>
 
-                            {this.state.itemArray.map(item => (
+                            { //Renders all items into the canvas
+                            this.state.itemArray.map(item => (
                                 item
                             ))
                             }

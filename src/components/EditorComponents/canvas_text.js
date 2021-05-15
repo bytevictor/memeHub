@@ -1,11 +1,21 @@
 
-import React, {createRef} from 'react';
+import React, {createRef, useEffect} from 'react';
 import {Text} from 'react-konva'
 
 function CvText(props) {
-
+    //To get the bounds
     const stageRef = props.stage
+    //To introduce the text inside on creation
+    const transformerRef = props.transformer
     const textRef = createRef()
+
+    //On creation, spawn the editor
+    useEffect(() => {
+        //Select the item
+        transformerRef.current.nodes([textRef.current])
+        //Spawn the editor
+        editText()
+    }, [])
 
     //by default the transformer only changes the scale
     //in this case we don't want the text to reescale so this method
@@ -75,7 +85,7 @@ function CvText(props) {
     }
 
 
-    return(
+    return (
         <Text
             ref={textRef}
             x={props.x}
@@ -98,7 +108,7 @@ function CvText(props) {
             onDblClick={editText}
             onDblTap={editText}
         />
-    );
+    )
 }
 
 export default CvText
