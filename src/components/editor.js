@@ -48,7 +48,13 @@ class Editor extends React.Component{
     }
 
     componentDidMount(){
-        document.body.addEventListener('paste', this.handlePaste.bind(this));
+        //ctrl + v event
+        document.body.addEventListener('paste', this.handlePaste.bind(this))
+        
+        //make stage focusable
+        this.stageRef.current.container().tabIndex = 1
+        //delete event for the canvas items when stage onfocus
+        this.stageRef.current.container().addEventListener('keydown', this.handleDelete.bind(this))
     }
 
     calculate_resize(correlation, width, height){
@@ -167,6 +173,26 @@ class Editor extends React.Component{
         download_link.click()
     }
 
+    deleteSelectedItem(){
+        let transformer = this.transformerRef.current
+
+        //transformer onScreen & something is selected
+        if(transformer != null && transformer.nodes()[0] != null){
+            transformer.nodes()[0].destroy()
+            transformer.nodes([])
+            this.stageRef.current.batchDraw()
+        }
+    }
+
+    handleDelete(e){
+        //delete and backspace
+        if ( e.keyCode === 8 || e.keyCode === 46 ) {
+            //TAMBIEN LO ESTA BORRANDO CUANDO ESCRIBES EN EL EDITTEXT
+            console.log("Stage delete event, Key: " + e.keyCode)
+            this.deleteSelectedItem()
+          }
+    }
+
     createNewText(e){
         //if the background image is clicked
         if( e.target.className == "Image" ){
@@ -283,6 +309,7 @@ class Editor extends React.Component{
                       width={0} 
                       height={0} 
                       ref={this.stageRef}
+                      style={{outline: 'none'}}
                     >
                         <Layer
                           ref={this.mainLayerRef}
