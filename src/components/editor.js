@@ -201,10 +201,13 @@ class Editor extends React.Component{
     handleCanvasMouseDown(e){
         let transformer = this.transformerRef.current
 
-        if( e.target.className !== "Image" ){
-            transformer.nodes([e.target])
-        } else {
-            transformer.nodes([])
+        //Ignores event if we are transforming 
+        if( !transformer.isTransforming() ){
+            if( e.target.className !== "Image" ){
+                transformer.nodes([e.target])
+            } else {
+                transformer.nodes([])
+            }
         }
     }
 
