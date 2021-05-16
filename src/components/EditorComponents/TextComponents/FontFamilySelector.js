@@ -48,8 +48,13 @@ export default function FontFamilySelector(props){
                   value={fontFamily}
                   onChange={handleFontChange}
                 >
-                    {fontList.map(font => (
-                        <MenuItem value={font} style={{fontFamily: font}}>{font}</MenuItem>
+                    {fontList.map( (font, index) => (
+                        <MenuItem key={index} 
+                                  value={font} 
+                                  style={{fontFamily: font}}>
+
+                                    {font}
+                        </MenuItem>
                     ))
                     }
              </Select>

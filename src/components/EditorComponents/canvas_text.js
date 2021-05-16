@@ -74,6 +74,7 @@ function CvText(props) {
         text.hide()
         editarea.focus()
         editarea.setSelectionRange(0, editarea.value.length)
+        stageRef.current.batchDraw()
 
         editarea.addEventListener('focusout', (e) => {
             //apply changes, show text again(repaint), delete textarea

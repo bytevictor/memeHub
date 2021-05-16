@@ -171,6 +171,7 @@ class Editor extends React.Component{
         //if the background image is clicked
         if( e.target.className == "Image" ){
             let new_text = <CvText
+                              key={this.state.itemArray.length}
                               stage={this.stageRef}
                               transformer={this.transformerRef}
                               text='sample text'
@@ -297,6 +298,7 @@ class Editor extends React.Component{
                                 item
                             ))
                             }
+
                             <Transformer
                                 ref={this.transformerRef}
                                 rotateEnabled={true}
