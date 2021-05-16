@@ -11,8 +11,11 @@ import { Slider, TextField, Typography } from '@material-ui/core'
 import FontSizeSelector from './TextComponents/FontSizeSelector'
 import FontAlignmentSelector from './TextComponents/FontAlignmentSelector'
 import FontFamilySelector from './TextComponents/FontFamilySelector'
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/styles';
+import { render } from '@testing-library/react'
 
-const useStyles = makeStyles((theme) => ({
+const styles = theme => ({
     root: {
       flexGrow: 0,
     },
@@ -21,11 +24,111 @@ const useStyles = makeStyles((theme) => ({
       textAlign: 'center',
       color: theme.palette.text.secondary,
     },
-}));
+})
 
 
-export default function BottomToolbar(props) {
-  const classes = useStyles();
+class BottomToolbar extends React.Component{
+  constructor(props){
+    super(props)
+
+    this.state = {
+      fontColor: createColor("#FFFFFF"),
+      strokeColor: createColor("#000000")
+    }
+  }
+
+  handleFontColorChange = (value) => {
+    //setFontColor(value);
+    this.setState({fontColor: value})
+    this.props.fontColorUpdater(value)
+  };
+
+  handleStrokeColorChange = (value) => {
+    this.setState({strokeColor: value})
+    this.props.strokeColorUpdater(value)
+  };
+
+  handleStrokeSizeChange = (event, value) => {
+    this.props.strokeSizeUpdater(value)
+  }
+
+  render(){
+    const { classes } = this.props
+    return (
+      <div id='bottomtoolbar' className={classes.root}>
+          <Grid container spacing={0}>
+          <Grid item xs={4}>
+            <Paper className="m-3 d-flex flex-wrap justify-content-around" elevation={3}>
+              <div className="m-3">
+                <FontAlignmentSelector updater={this.props.alignmentUpdater}/>
+              </div>
+  
+              <FontFamilySelector updater={this.props.fontFamilyUpdater}/>
+  
+              <FontSizeSelector updater={this.props.sizeUpdater}/>
+  
+            </Paper>
+          </Grid>
+          <Grid item xs={4} className="d-flex">
+            <Paper className="m-3 pt-3 d-flex justify-content-center align-content-center flex-grow-1" 
+                   elevation={3}>
+              <ColorPicker 
+                    defaultValue={this.state.fontColor} 
+                    value={this.state.fontColor}
+                    onChange={this.handleFontColorChange.bind(this)}
+                    hideTextfield/>
+            </Paper>
+          </Grid>
+          <Grid item xs={4} className="d-flex">
+            <Paper className="d-flex m-3 flex-grow-1" elevation={3}>
+              <Grid container spacing={0}>
+                <Grid item xs={6} className="d-flex align-content-center justify-content-center mt-3">
+                  <ColorPicker defaultValue={this.state.strokeColor} 
+                               value={this.state.strokeColor}
+                               onChange={this.handleStrokeColorChange.bind(this)}
+                               hideTextfield/>
+                </Grid>
+  
+                <Grid item xs={6} className="">
+                  <div className="m-2 pr-2">
+                  <Typography id="discrete-slider" gutterBottom>
+                    Stroke
+                  </Typography>
+                  <Slider
+                    defaultValue={0}
+                    //getAriaValueText={valuetext}
+                    aria-labelledby="discrete-slider"
+                    valueLabelDisplay="auto"
+                    step={1}
+                    marks
+                    min={0}
+                    max={15}
+                    onChange={this.handleStrokeSizeChange.bind(this)}
+                  />
+                  </div>
+                </Grid>
+              </Grid>
+            </Paper>
+          </Grid>
+        </Grid>
+      </div>
+    );
+  }
+  
+}
+
+BottomToolbar.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(BottomToolbar)
+
+
+
+/*  OLD Functional component version
+
+  export default function BottomToolbar(props) {
+  const classes = useStyles(); 
 
   const [fontColor, setFontColor] = useState(createColor("#FFFFFF"));
   const handleFontColorChange = (value) => {
@@ -102,4 +205,4 @@ export default function BottomToolbar(props) {
       </Grid>
     </div>
   );
-}
+} */

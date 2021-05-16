@@ -36,6 +36,7 @@ class Editor extends React.Component{
         this.mainLayerRef = createRef()
         this.kvMainImageRef = createRef()
         this.transformerRef = createRef()
+        this.bottomToolbarRef = createRef()
 
         this.state = {
             image: null,
@@ -227,6 +228,8 @@ class Editor extends React.Component{
     handleCanvasMouseDown(e){
         let transformer = this.transformerRef.current
 
+        console.log(this.bottomToolbarRef)
+
         //Ignores event if we are transforming 
         if( !transformer.isTransforming() ){
             if( e.target.className !== "Image" ){
@@ -367,6 +370,7 @@ class Editor extends React.Component{
                 </div>
 
                 <BottomToolbar 
+                    ref={this.bottomToolbarRef}
                     sizeUpdater={this.updateTextSize.bind(this)}
                     fontColorUpdater={this.updateTextColor.bind(this)}
                     strokeColorUpdater={this.updateStrokeColor.bind(this)}
