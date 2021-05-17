@@ -228,12 +228,27 @@ class Editor extends React.Component{
     handleCanvasMouseDown(e){
         let transformer = this.transformerRef.current
 
-        console.log(this.bottomToolbarRef)
-
         //Ignores event if we are transforming 
         if( !transformer.isTransforming() ){
             if( e.target.className !== "Image" ){
                 transformer.nodes([e.target])
+
+                let bottomtoolbar = this.bottomToolbarRef.current
+                let text = e.target.getAttrs()
+                /*let textAlign       = text.getAttr('align')
+                let textFont        = text.getAttr('fontFamily')
+                let textSize        = text.getAttr('fontSize')
+                let textColor       = text.getAttr('fill')
+                let textStrokeColor = text.getAttr('stroke')
+                let textStrokeWidth = text.getAttr('strokeWidth')*/
+
+                bottomtoolbar.updateToolbar( text.align,
+                                             text.fontFamily,
+                                             text.fontSize,
+                                             text.fill,
+                                             text.stroke,
+                                             text.strokeWidth )
+
             } else {
                 transformer.nodes([])
             }
@@ -371,7 +386,7 @@ class Editor extends React.Component{
 
                 <BottomToolbar 
                     ref={this.bottomToolbarRef}
-                    sizeUpdater={this.updateTextSize.bind(this)}
+                    fontSizeUpdater={this.updateTextSize.bind(this)}
                     fontColorUpdater={this.updateTextColor.bind(this)}
                     strokeColorUpdater={this.updateStrokeColor.bind(this)}
                     strokeSizeUpdater={this.updateStrokeSize.bind(this)}

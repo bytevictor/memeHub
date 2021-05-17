@@ -31,26 +31,120 @@ class BottomToolbar extends React.Component{
   constructor(props){
     super(props)
 
+    this.strokeSliderRef = createRef()
+
     this.state = {
+      alignment: 'center',
+      font: 'Impact',
+      fontSize: 70,
       fontColor: createColor("#FFFFFF"),
-      strokeColor: createColor("#000000")
+      strokeColor: createColor("#000000"),
+      strokeWidth: 0,
     }
   }
 
+  /* /////////////// Change UI functions /////////////// */ 
+  // changes the selector state to syncronize it with the text value
+
+  changeAlignment( value ){
+    if(this.state.alignment != value){
+      this.setState({alignment: value})
+    }
+  }
+  
+  changeFont( value ){
+    if(this.state.font != value){
+      this.setState({font: value})
+    }
+  }
+
+  changeFontSize( value ){
+    if(this.state.fontSize != value){
+      this.setState({fontSize: value})
+    }
+  }
+  //value should be a hex string not a color
+  changeFontColor( value ){
+    if(this.state.fontColor != value){
+      this.setState({fontColor: createColor(value)})
+    }
+  }
+  //value should be a hex string not a color
+  changeStrokeColor( value ){
+    if(this.state.strokeColor != value){
+      this.setState({strokeColor: createColor(value)})
+    }
+  }
+
+  changeStroke( value ){
+    if(this.state.strokeWidth != value){
+      this.setState({strokeWidth: value})
+    }
+  }
+
+  updateToolbar( alignment, font, fontSize, fontColor, strokeColor, strokeWidth){
+    if( alignment != null)
+      this.changeAlignment(alignment)
+
+    if( font != null)
+      this.changeFont(font)
+
+    if( fontSize != null)
+      this.changeFontSize(fontSize)
+
+    if( fontColor != null)
+      this.changeFontColor(fontColor)
+
+    if( strokeColor != null)
+      this.changeStrokeColor(strokeColor)
+
+    if( strokeWidth != null)
+      this.changeStroke(strokeWidth)
+  }
+
+  /*  ////////////////////////////////////////////////  */
+
+  /* /////////////// Handlers /////////////// */ 
+  // updaters, update the canvas item
+  // state updates toolbar elements
+
+  handleAlignmentChange = (event, value) => {
+    if(value != null){
+      this.setState({alignment: value})
+      this.props.alignmentUpdater(value)
+    }
+  }
+
+  handleFontFamilyChange = (value) => {
+    this.setState({font: value})
+    this.props.fontFamilyUpdater(value)
+  }
+
+  handleFontSizeChange = (value) => {
+    this.setState({fontSize: value})
+    this.props.fontSizeUpdater(value)
+  }
+
   handleFontColorChange = (value) => {
-    //setFontColor(value);
     this.setState({fontColor: value})
     this.props.fontColorUpdater(value)
-  };
+  }
 
   handleStrokeColorChange = (value) => {
     this.setState({strokeColor: value})
     this.props.strokeColorUpdater(value)
-  };
+  }
 
   handleStrokeSizeChange = (event, value) => {
-    this.props.strokeSizeUpdater(value)
+    //event triggers onmousemove, so it floods, change state
+    //only when value changes (performance)
+    if(this.state.strokeWidth != value){
+      this.props.strokeSizeUpdater(value)
+      this.setState({strokeWidth: value})
+    }
   }
+
+  /*  ////////////////////////////////////////////////  */
 
   render(){
     const { classes } = this.props
@@ -60,13 +154,21 @@ class BottomToolbar extends React.Component{
           <Grid item xs={4}>
             <Paper className="m-3 d-flex flex-wrap justify-content-around" elevation={3}>
               <div className="m-3">
-                <FontAlignmentSelector updater={this.props.alignmentUpdater}/>
+                <FontAlignmentSelector updater={this.props.alignmentUpdater}
+                                       toolbarHandler={this.handleAlignmentChange.bind(this)}
+                                       value={this.state.alignment}
+                />
               </div>
   
-              <FontFamilySelector updater={this.props.fontFamilyUpdater}/>
+              <FontFamilySelector updater={this.props.fontFamilyUpdater}
+                                  toolbarHandler={this.handleFontFamilyChange.bind(this)}
+                                  value={this.state.font}
+              />
   
-              <FontSizeSelector updater={this.props.sizeUpdater}/>
-  
+              <FontSizeSelector updater={this.props.fontSizeUpdater}
+                                toolbarHandler={this.handleFontSizeChange.bind(this)}
+                                value={this.state.fontSize}
+              />  
             </Paper>
           </Grid>
           <Grid item xs={4} className="d-flex">
@@ -86,7 +188,8 @@ class BottomToolbar extends React.Component{
                   <ColorPicker defaultValue={this.state.strokeColor} 
                                value={this.state.strokeColor}
                                onChange={this.handleStrokeColorChange.bind(this)}
-                               hideTextfield/>
+                               hideTextfield
+                  />
                 </Grid>
   
                 <Grid item xs={6} className="">
@@ -95,7 +198,9 @@ class BottomToolbar extends React.Component{
                     Stroke
                   </Typography>
                   <Slider
+                    ref={this.strokeSliderRef}
                     defaultValue={0}
+                    value={this.state.strokeWidth}
                     //getAriaValueText={valuetext}
                     aria-labelledby="discrete-slider"
                     valueLabelDisplay="auto"

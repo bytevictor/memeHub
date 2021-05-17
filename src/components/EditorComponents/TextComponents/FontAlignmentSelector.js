@@ -12,15 +12,25 @@ export default function FontAlignmentSelector(props){
 
     const alignmentUpdater = props.updater
 
+    const handleAlignment = props.toolbarHandler
+
+    /*  Old handling, now toolbar parent handles the state
+    
     const [alignment, setAlignment] = useState('center')
     const handleAlignment = (event, newAlignment) => {
-        setAlignment(newAlignment);
-        alignmentUpdater(newAlignment)
-    };
+        if(newAlignment != null ){
+          //Change button
+          setAlignment(newAlignment) 
+          //Change selected text
+          alignmentUpdater(newAlignment)
+          //notify toolbar
+          props.toolbarHandler(newAlignment)
+        }
+    }*/
 
     return(
         <ToggleButtonGroup
-              value={alignment}
+              value={props.value}
               exclusive
               size="small"
               onChange={handleAlignment}
@@ -36,6 +46,6 @@ export default function FontAlignmentSelector(props){
                 <FormatAlignRightIcon />
               </ToggleButton>
         </ToggleButtonGroup>
-    );
+    )
 }
 

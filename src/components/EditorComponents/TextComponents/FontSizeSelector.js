@@ -8,10 +8,12 @@ export default function FontSizeSelector(props){
 
     const updateText = props.updater
 
+    const handleToolbarOnChange = props.toolbarHandler
+
     const handleIncrement = () => { 
         sizeRef.current.value = parseInt(sizeRef.current.value) + 1
 
-        updateText(sizeRef.current.value)
+        handleToolbarOnChange(sizeRef.current.value)
     }
 
     const handleDecrement = () => { 
@@ -19,13 +21,14 @@ export default function FontSizeSelector(props){
         if(value > 1){ 
             sizeRef.current.value = value - 1
 
-            updateText(sizeRef.current.value)
+            handleToolbarOnChange(sizeRef.current.value)
         } 
     }
 
     const handleOnChange = (e) => {
-        if( Number.isInteger(parseInt(e.target.value)) && parseInt(e.target.value) > 0){
-            updateText(parseInt(e.target.value))
+        let value = e.target.value
+        if( Number.isInteger(parseInt(value)) && parseInt(value) > 0){
+            handleToolbarOnChange(parseInt(value))
         }
     }
 
@@ -40,6 +43,7 @@ export default function FontSizeSelector(props){
               inputRef={sizeRef}
               label="Size"
               type="number"
+              value={props.value}
               defaultValue={70}
               onChange={handleOnChange}
               InputLabelProps={{ shrink: true }}

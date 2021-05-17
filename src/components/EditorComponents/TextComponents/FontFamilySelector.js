@@ -5,7 +5,8 @@ export default function FontFamilySelector(props){
 
     const updateFont = props.updater
 
-    const [fontFamily, setFontFamily] = useState('Impact')
+    const handleToolbarOnChange = props.toolbarHandler
+
     const [fontList, setFontList] = useState([]);
 
     const fontCheck = new Set([
@@ -36,16 +37,14 @@ export default function FontFamilySelector(props){
     });
 
     const handleFontChange = (e) => {
-        console.log(e.target.value)
-        setFontFamily(e.target.value)
-        updateFont(e.target.value)
-    }
+        handleToolbarOnChange(e.target.value)
+    } 
 
     return(
         <FormControl className="mx-2 my-1 mt-4">
             <InputLabel>Font</InputLabel>
             <Select
-                  value={fontFamily}
+                  value={props.value}
                   onChange={handleFontChange}
                 >
                     {fontList.map( (font, index) => (
