@@ -58,6 +58,26 @@ class Editor extends React.Component{
         this.stageRef.current.container().addEventListener('keydown', this.handleDelete.bind(this))
     }
 
+    //This should be called instead of transformer.nodes([])
+    //To change the selected item and syncronize the Toolbar 
+    //with the new item props at the same time
+    changeSelectedItem( nodes ){
+        this.transformerRef.current.nodes(nodes)
+
+        let bottomToolbar = this.bottomToolbarRef.current
+        if( nodes[0] != null){
+            let nodeattrs = nodes[0].getAttrs()
+
+            bottomToolbar.updateToolbar( nodeattrs.align,
+                                         nodeattrs.fontFamily,
+                                         nodeattrs.fontSize,
+                                         nodeattrs.fill,
+                                         nodeattrs.stroke,
+                                         nodeattrs.strokeWidth )
+        }
+        
+    }
+
     calculate_resize(correlation, width, height){
         //wide photo
         if( correlation <= 1 ){
@@ -152,7 +172,8 @@ class Editor extends React.Component{
     imageUnloader(){
         this.setState({image: null})
         this.setState({itemArray: []})
-        this.transformerRef.current.nodes([])
+
+        this.changeSelectedItem([])
 
         let canvas_stage = this.stageRef.current
 
@@ -165,7 +186,7 @@ class Editor extends React.Component{
 
     imageDownloader(){
         //Unselect any item (the transform box would be printed otherwise)
-        this.transformerRef.current.nodes([])
+        this.changeSelectedItem([])
         //pixel ratio 1,same resolution as screen
         let data = this.stageRef.current.toDataURL({pixelRatio: 1})
         let download_link = document.createElement('a')
@@ -180,7 +201,7 @@ class Editor extends React.Component{
         //transformer onScreen & something is selected
         if(transformer != null && transformer.nodes()[0] != null){
             transformer.nodes()[0].destroy()
-            transformer.nodes([])
+            this.changeSelectedItem([])
             this.stageRef.current.batchDraw()
         }
     }
@@ -188,7 +209,6 @@ class Editor extends React.Component{
     handleDelete(e){
         //delete and backspace
         if ( e.keyCode === 8 || e.keyCode === 46 ) {
-            //TAMBIEN LO ESTA BORRANDO CUANDO ESCRIBES EN EL EDITTEXT
             console.log("Stage delete event, Key: " + e.keyCode)
             this.deleteSelectedItem()
           }
@@ -200,7 +220,7 @@ class Editor extends React.Component{
             let new_text = <CvText
                               key={this.state.itemArray.length}
                               stage={this.stageRef}
-                              transformer={this.transformerRef}
+                              selectedItemChanger={this.changeSelectedItem.bind(this)}
                               text='sample text'
                               //fontsize * 3 is the half of the width
                               //so it spawns on the center
@@ -231,7 +251,7 @@ class Editor extends React.Component{
         //Ignores event if we are transforming 
         if( !transformer.isTransforming() ){
             if( e.target.className !== "Image" ){
-                transformer.nodes([e.target])
+                this.changeSelectedItem([e.target])
 
                 let bottomtoolbar = this.bottomToolbarRef.current
                 let text = e.target.getAttrs()
@@ -250,7 +270,7 @@ class Editor extends React.Component{
                                              text.strokeWidth )
 
             } else {
-                transformer.nodes([])
+                this.changeSelectedItem([])
             }
         }
     }
@@ -260,7 +280,7 @@ class Editor extends React.Component{
         
         if(text != null && parseInt(newSize) > 0){
             text.setAttr('fontSize', parseInt(newSize))
-            this.transformerRef.current.nodes([text])
+            text.getStage().batchDraw()
         }
     }
 

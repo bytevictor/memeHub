@@ -154,18 +154,18 @@ class BottomToolbar extends React.Component{
           <Grid item xs={4}>
             <Paper className="m-3 d-flex flex-wrap justify-content-around" elevation={3}>
               <div className="m-3">
-                <FontAlignmentSelector updater={this.props.alignmentUpdater}
+                <FontAlignmentSelector //updater={this.props.alignmentUpdater}
                                        toolbarHandler={this.handleAlignmentChange.bind(this)}
                                        value={this.state.alignment}
                 />
               </div>
   
-              <FontFamilySelector updater={this.props.fontFamilyUpdater}
+              <FontFamilySelector //updater={this.props.fontFamilyUpdater}
                                   toolbarHandler={this.handleFontFamilyChange.bind(this)}
                                   value={this.state.font}
               />
   
-              <FontSizeSelector updater={this.props.fontSizeUpdater}
+              <FontSizeSelector //updater={this.props.fontSizeUpdater}
                                 toolbarHandler={this.handleFontSizeChange.bind(this)}
                                 value={this.state.fontSize}
               />  

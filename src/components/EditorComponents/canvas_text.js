@@ -6,15 +6,15 @@ function CvText(props) {
     //To get the bounds
     const stageRef = props.stage
     //To introduce the text inside on creation
-    const transformerRef = props.transformer
+    const selectedItemChanger = props.selectedItemChanger
     const textRef = createRef()
 
     //On creation, spawn the editor
     useEffect(() => {
-        //Select the item
-        transformerRef.current.nodes([textRef.current])
         //Spawn the editor
         editText()
+        //Select the item
+        selectedItemChanger([textRef.current])
     }, [])
 
     //by default the transformer only changes the scale
