@@ -15,7 +15,7 @@ export default function FontAlignmentSelector(props){
     const handleAlignment = props.toolbarHandler
 
     /*  Old handling, now toolbar parent handles the state
-    
+
     const [alignment, setAlignment] = useState('center')
     const handleAlignment = (event, newAlignment) => {
         if(newAlignment != null ){
@@ -30,6 +30,7 @@ export default function FontAlignmentSelector(props){
 
     return(
         <ToggleButtonGroup
+              className={props.className}
               value={props.value}
               exclusive
               size="small"

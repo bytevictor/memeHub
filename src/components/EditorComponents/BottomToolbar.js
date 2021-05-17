@@ -7,13 +7,14 @@ import RadioGroup from '@material-ui/core/RadioGroup'
 import Radio from '@material-ui/core/Radio'
 import Paper from '@material-ui/core/Paper'
 import { ColorButton, ColorPicker, createColor } from 'material-ui-color'
-import { Slider, TextField, Typography } from '@material-ui/core'
+import { Card, Slider, TextField, Tooltip, Typography, Zoom } from '@material-ui/core'
 import FontSizeSelector from './TextComponents/FontSizeSelector'
 import FontAlignmentSelector from './TextComponents/FontAlignmentSelector'
 import FontFamilySelector from './TextComponents/FontFamilySelector'
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 import { render } from '@testing-library/react'
+import createTypography from '@material-ui/core/styles/createTypography'
 
 const styles = theme => ({
     root: {
@@ -23,6 +24,9 @@ const styles = theme => ({
       padding: theme.spacing(0),
       textAlign: 'center',
       color: theme.palette.text.secondary,
+    },
+    title: {
+      fontSize: 14,
     },
 })
 
@@ -150,38 +154,89 @@ class BottomToolbar extends React.Component{
     const { classes } = this.props
     return (
       <div id='bottomtoolbar' className={classes.root}>
-          <Grid container spacing={0}>
-          <Grid item xs={4}>
-            <Paper className="m-3 d-flex flex-wrap justify-content-around" elevation={3}>
-              <div className="m-3">
-                <FontAlignmentSelector //updater={this.props.alignmentUpdater}
-                                       toolbarHandler={this.handleAlignmentChange.bind(this)}
-                                       value={this.state.alignment}
-                />
-              </div>
-  
+          <Grid container spacing={0} justify="space-evenly">
+          <Grid item xs={7} sm={6} md={4}>
+            <Paper className="m-3 d-flex justify-content-around align-items-center" elevation={3}>
+              <FontAlignmentSelector //updater={this.props.alignmentUpdater}
+                                      toolbarHandler={this.handleAlignmentChange.bind(this)}
+                                      value={this.state.alignment}
+              />
+              
+              <div className="">
               <FontFamilySelector //updater={this.props.fontFamilyUpdater}
+                                  className="w-100"
                                   toolbarHandler={this.handleFontFamilyChange.bind(this)}
                                   value={this.state.font}
               />
-  
+              </div>
+
               <FontSizeSelector //updater={this.props.fontSizeUpdater}
                                 toolbarHandler={this.handleFontSizeChange.bind(this)}
                                 value={this.state.fontSize}
               />  
             </Paper>
           </Grid>
-          <Grid item xs={4} className="d-flex">
-            <Paper className="m-3 pt-3 d-flex justify-content-center align-content-center flex-grow-1" 
+          <Grid item xs={5} sm={6} md={5} className="d-flex">
+            <Paper className="m-3 p-2 d-flex justify-content-around align-items-center flex-grow-1" 
                    elevation={3}>
-              <ColorPicker 
-                    defaultValue={this.state.fontColor} 
-                    value={this.state.fontColor}
-                    onChange={this.handleFontColorChange.bind(this)}
-                    hideTextfield/>
+                <Paper className="p-2 d-flex flex-column justify-content-around align-items-center" variant="outlined">
+                  <Typography className={classes.title} color="textSecondary" gutterBottom>
+                    Font Color
+                  </Typography>
+                  <ColorPicker 
+                        defaultValue={this.state.fontColor} 
+                        value={this.state.fontColor}
+                        onChange={this.handleFontColorChange.bind(this)}
+                        hideTextfield/>
+                </Paper>
+                <Paper className="p-2 d-flex flex-column justify-content-around align-items-center" variant="outlined">
+                  <Typography className={classes.title} color="textSecondary" gutterBottom>
+                    Stroke Color
+                  </Typography>
+                  <ColorPicker 
+                        defaultValue={this.state.strokeColor} 
+                        value={this.state.strokeColor}
+                        onChange={this.handleStrokeColorChange.bind(this)}
+                        hideTextfield
+                  />
+                </Paper>
+                <Paper className="p-2 w-50" variant="outlined">
+                  <Typography className={classes.title} color="textSecondary" gutterBottom>
+                    Stroke Width
+                  </Typography>
+                  <div className="m-2 pr-2">
+                    <Slider
+                      ref={this.strokeSliderRef}
+                      defaultValue={0}
+                      value={this.state.strokeWidth}
+                      //getAriaValueText={valuetext}
+                      aria-labelledby="discrete-slider"
+                      valueLabelDisplay="auto"
+                      step={1}
+                      marks
+                      min={0}
+                      max={15}
+                      onChange={this.handleStrokeSizeChange.bind(this)}
+                    />
+                  </div>
+                </Paper>
             </Paper>
           </Grid>
-          <Grid item xs={4} className="d-flex">
+        </Grid>
+      </div>
+    );
+  }
+  
+}
+
+BottomToolbar.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(BottomToolbar)
+
+/*
+<Grid item xs={4} className="d-flex">
             <Paper className="d-flex m-3 flex-grow-1" elevation={3}>
               <Grid container spacing={0}>
                 <Grid item xs={6} className="d-flex align-content-center justify-content-center mt-3">
@@ -215,20 +270,8 @@ class BottomToolbar extends React.Component{
               </Grid>
             </Paper>
           </Grid>
-        </Grid>
-      </div>
-    );
-  }
-  
-}
 
-BottomToolbar.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(styles)(BottomToolbar)
-
-
+*/
 
 /*  OLD Functional component version
 

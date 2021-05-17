@@ -41,7 +41,7 @@ export default function FontFamilySelector(props){
     } 
 
     return(
-        <FormControl className="mx-2 my-1 mt-4">
+        <FormControl className={props.className}>
             <InputLabel>Font</InputLabel>
             <Select
                   value={props.value}
