@@ -30,3 +30,6 @@ docs/Memoria\ TFG/proyecto*
 #menos el pdf y el fuente
 !docs/Memoria\ TFG/proyecto.pdf
 !docs/Memoria\ TFG/proyecto.tex
+
+#Cypress
+cypress/videos
