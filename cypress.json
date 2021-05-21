@@ -1,5 +1,6 @@
 {
     "port": 3001,
     "integrationFolder": "src/test/",
-    "testFiles": "*.test.*"
+    "testFiles": "*.test.*",
+    "nodeVersion": "system"
 }
