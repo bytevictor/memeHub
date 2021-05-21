@@ -33,3 +33,4 @@ docs/Memoria\ TFG/proyecto*
 
 #Cypress
 cypress/videos
+cypress/screenshots
