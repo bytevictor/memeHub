@@ -18,7 +18,7 @@ function App() {
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/editor" component={Editor} />
-          <Route component={NoMatch} />
+          <Route component={Home} />
         </Switch>
       </Router>
 

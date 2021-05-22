@@ -1,9 +1,16 @@
-const findWebpack = require('find-webpack')
+const injectDevServer = require("@cypress/react/plugins/react-scripts")
+
+module.exports = (on, config) => {
+  injectDevServer(on, config)
+  return config
+}
+
+/*const findWebpack = require('find-webpack')
 const webpackPreprocessor = require('@cypress/webpack-preprocessor')
 
 /**
  * @type {Cypress.PluginConfig}
- */
+ *
 module.exports = (on) => {
   // find the Webpack config used by react-scripts
   const webpackOptions = findWebpack.getWebpackOptions()
@@ -37,4 +44,4 @@ module.exports = (on) => {
   }
 
   on('file:preprocessor', webpackPreprocessor(options))
-}
+} */
