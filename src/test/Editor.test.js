@@ -1,6 +1,7 @@
 import React from 'react';
 import { mount } from '@cypress/react';
 import Editor from '../components/editor';
+import Bootstrap from 'bootstrap/dist/css/bootstrap.css';
 
 it('Renders Editor page', () => {
   mount(<Editor />);
