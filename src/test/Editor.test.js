@@ -60,6 +60,25 @@ describe('Editor Tests', () => {
     })
     
   })
+  it('should load canvas and add a text to the canvas', () => {
+    mount(<Editor />);
+    cy.readFile('src/test/mante.png', 'base64').then( (mante) =>{
+
+      let base_64 = 'data:image/png;base64,' + mante
+      let mante_file = dataURLtoFile(base_64, 'mante.png')
+      let dataTransfer = dataTransferFileObject(mante_file)
+
+      cy.get('.drop-container').trigger('drop', { dataTransfer }).then( () => {
+        cy.get('canvas').dblclick(150, 100).then( () => {
+          cy.waitForReact()
+          cy.getReact('Editor').getCurrentState().then( (state) => {
+            cy.wrap(state).its('itemArray').its('length').should('greaterThan', 0)
+            cy.wrap(state.itemArray[0]).its('props').its('text').should('eq', 'sample text')
+          })
+        })
+      })
+    })
+  })
 })
 
 

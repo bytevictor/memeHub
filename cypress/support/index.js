@@ -18,5 +18,7 @@ import './commands'
 
 import Bootstrap from 'bootstrap/dist/css/bootstrap.css';
 
+import 'cypress-react-selector';
+
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
