@@ -4,6 +4,7 @@
       "integrationFolder": "src/test",
       "componentFolder": "src",
       "viewportWidth": 1280,
-      "viewportHeight": 720
+      "viewportHeight": 720,
+      "nodeVersion": "system"
     }
   }

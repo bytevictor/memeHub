@@ -39,6 +39,7 @@ class DragandDrop extends React.Component{
 
     fileDrop(e) {
         e.preventDefault();
+        console.log(e)
         e.target.classList.toggle('shake');
         const files = e.dataTransfer.files;
 
