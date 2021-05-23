@@ -42,9 +42,23 @@ describe('Editor Tests', () => {
         cy.get('canvas').invoke('width').should('greaterThan', 0)
         cy.get('.drop-container').should('not.exist')
       } )
-
     })
+  })
+  it('should load and remove the loaded image', () => {
+    mount(<Editor />);
+    cy.readFile('src/test/mante.png', 'base64').then( (mante) =>{
 
+      let base_64 = 'data:image/png;base64,' + mante
+      let mante_file = dataURLtoFile(base_64, 'mante.png')
+      let dataTransfer = dataTransferFileObject(mante_file)
+
+      cy.get('.drop-container').trigger('drop', { dataTransfer }).then( () => {
+        cy.get('#deletemainbutton').click().then( () => {
+          cy.get('canvas').invoke('width').should('eq', 0)
+        })
+      } )
+    })
+    
   })
 })
 
