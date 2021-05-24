@@ -1,10 +1,9 @@
 {
-    "component": {
-      "testFiles": "**/*.test.{js,ts,jsx,tsx}",
-      "integrationFolder": "src/test",
-      "componentFolder": "src",
-      "viewportWidth": 1280,
-      "viewportHeight": 720,
-      "nodeVersion": "system"
-    }
+  "component": {
+    "testFiles": "*/*.test.js",
+    "integrationFolder": "src/test",
+    "componentFolder": "src",
+    "viewportWidth": 1920,
+    "viewportHeight": 940
   }
+}
