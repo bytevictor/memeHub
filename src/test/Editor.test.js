@@ -92,7 +92,6 @@ describe('Editor Tests', () => {
     } else {
       cy.exec('rm cypress/downloads/*', { log: true, failOnNonZeroExit: false })
     }
-    cy.readFile('cypress/downloads/edit_memehub.png').should('not.exist')
   })
 
   it('should download the canvas as an image', () => {
@@ -109,6 +108,27 @@ describe('Editor Tests', () => {
       })
     })
   })
+
+  it('should load canvas and add a text to the canvas', () => {
+    mount(<Editor />);
+    cy.readFile('src/test/mante.png', 'base64').then( (mante) =>{
+
+      let base_64 = 'data:image/png;base64,' + mante
+      let mante_file = dataURLtoFile(base_64, 'mante.png')
+      let dataTransfer = dataTransferFileObject(mante_file)
+
+      cy.get('.drop-container').trigger('drop', { dataTransfer }).then( () => {
+        cy.wait(1000)
+        cy.get('canvas').dblclick(150, 100).then( () => {
+          cy.get('canvas').click(300,300)
+          cy.get('canvas').click(150, 100)
+
+          cy.get('body').type("{backspace}").then(()=>{
+            cy.wait(1000)
+          })
+        })
+      })
+    })
+  })
+
 })
-
-
