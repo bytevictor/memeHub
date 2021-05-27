@@ -4,6 +4,8 @@
     "integrationFolder": "src/test",
     "componentFolder": "src",
     "viewportWidth": 1920,
-    "viewportHeight": 940
+    "viewportHeight": 940,
+    "video": false,
+    "videoCompression": 0
   }
 }

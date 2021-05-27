@@ -10,10 +10,13 @@ import Button from '@material-ui/core/Button';
 //Icons
 import DeleteIcon from '@material-ui/icons/Delete'
 import SaveIcon from '@material-ui/icons/Save';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 
 import Toolbar from './EditorComponents/Toolbar'
 import BottomToolbar from './EditorComponents/BottomToolbar'
+import CopytoClipboardButton from './EditorComponents/ToolShapes/CopytoClipboardButton'
 import { Stage, Layer, Rect, Image as KonvaImage, Image, Transformer} from 'react-konva'
+import {dataURLtoBlob} from './Helpers/FileHelpers'
 //canvas items
 import CvText from './EditorComponents/canvas_text'
 import {validateFile} from './EditorComponents/DragandDrop'
@@ -193,6 +196,24 @@ class Editor extends React.Component{
         download_link.download = 'edit_memehub'
         download_link.href = data
         download_link.click()
+    }
+
+    imageCopytoClipboard(){
+        //Unselect any item (the transform box would be printed otherwise)
+        this.changeSelectedItem([])
+        //pixel ratio 1,same resolution as screen
+        let data = this.stageRef.current.toDataURL({pixelRatio: 1})
+        let blob = dataURLtoBlob(data)
+
+        try {
+            navigator.clipboard.write([
+                new ClipboardItem({'image/png': blob})
+            ]);
+        } catch (error) { console.error(error) }
+
+
+        //mostrar popup de copiado correctamente
+        
     }
 
     deleteSelectedItem(){
@@ -391,6 +412,13 @@ class Editor extends React.Component{
                     <Toolbar></Toolbar>
                     </div>
                     
+                    <div className="d-flex flex-column">
+                    
+                    <CopytoClipboardButton
+                        copyHandler={this.imageCopytoClipboard.bind(this)}
+                        enabled={(this.state.image == null) ? true : false}
+                    />
+
                     <Button id="downloadbutton"
                             className="ml-auto p-0 my-0" 
                             color="primary"
@@ -401,6 +429,7 @@ class Editor extends React.Component{
                             >
                         <SaveIcon/>
                     </Button>
+                    </div>
                 </nav>
                 </div>
 

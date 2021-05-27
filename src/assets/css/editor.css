@@ -26,7 +26,11 @@
     margin-bottom: 1px;
 }
 
-#downloadbutton{
+#copybutton{
+    margin-bottom: 1px;
+}
+
+#downloadbutton, #copybutton{
     max-width: 50px;
     min-width: 50px;
     max-height: 50px;
