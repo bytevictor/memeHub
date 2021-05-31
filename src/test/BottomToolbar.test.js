@@ -1,6 +1,6 @@
 import React from 'react';
 import { mount } from '@cypress/react';
-import Editor from '../components/editor';
+import Editor from '../components/Editor';
 
 //To generate the file to drop
 function dataURLtoFile(dataurl, filename) { 

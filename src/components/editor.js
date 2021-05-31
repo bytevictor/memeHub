@@ -15,11 +15,12 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 import Toolbar from './EditorComponents/Toolbar'
 import BottomToolbar from './EditorComponents/BottomToolbar'
 import CopytoClipboardButton from './EditorComponents/ToolShapes/CopytoClipboardButton'
-import { Stage, Layer, Rect, Image as KonvaImage, Image, Transformer} from 'react-konva'
+import SecondaryDragandDrop from './EditorComponents/SecondaryDragandDrop'
+import { Stage, Layer, Rect, Image as KonvaImage, Transformer} from 'react-konva'
 import {dataURLtoBlob} from './Helpers/FileHelpers'
 //canvas items
 import CvText from './EditorComponents/canvas_text'
-import {validateFile} from './EditorComponents/DragandDrop'
+import {validateFile} from './Helpers/FileHelpers'
 
 
 //Colors for the Mui
@@ -64,21 +65,32 @@ class Editor extends React.Component{
     //This should be called instead of transformer.nodes([])
     //To change the selected item and syncronize the Toolbar 
     //with the new item props at the same time
-    changeSelectedItem( nodes ){
-        this.transformerRef.current.nodes(nodes)
+    //Note: should pass a {type: string, item: object} object
+    changeSelectedItem( node ){
+        //Nothing selected or incorrect
+        if(node.item == null || node.type == null){
+            console.log("Deselected")
+            this.transformerRef.current.nodes([])
+        //Node is correct, select it
+        } else {
+            console.log("Selecting: " + node.type)
+            console.log(node.item)
 
-        let bottomToolbar = this.bottomToolbarRef.current
-        if( nodes[0] != null){
-            let nodeattrs = nodes[0].getAttrs()
+            this.transformerRef.current.nodes([node.item])
 
-            bottomToolbar.updateToolbar( nodeattrs.align,
-                                         nodeattrs.fontFamily,
-                                         nodeattrs.fontSize,
-                                         nodeattrs.fill,
-                                         nodeattrs.stroke,
-                                         nodeattrs.strokeWidth )
+            switch( node.type ){
+                case 'CvText':
+                    let bottomToolbar = this.bottomToolbarRef.current
+                    let nodeattrs = node.item.getAttrs()
+    
+                    bottomToolbar.updateToolbar( nodeattrs.align,
+                                                nodeattrs.fontFamily,
+                                                nodeattrs.fontSize,
+                                                nodeattrs.fill,
+                                                nodeattrs.stroke,
+                                                nodeattrs.strokeWidth )
+            }
         }
-        
     }
 
     calculate_resize(correlation, width, height){
@@ -146,17 +158,8 @@ class Editor extends React.Component{
         })
     }
 
-    handlePaste(e){
-        console.log(e)
-        
-        let pasted_file = e.clipboardData.files[0]
-
-        console.log( pasted_file )
-
-        if( this.state.image == null 
-            && pasted_file != null 
-            && validateFile(pasted_file)){
-
+    handleMainPaste(e, pasted_file){
+        if(validateFile(pasted_file)){
             const reader = new FileReader();
             reader.readAsDataURL(pasted_file);
             reader.onload = (e) => {
@@ -169,6 +172,41 @@ class Editor extends React.Component{
                     this.imageLoader(image)
                 }
             }
+        }
+    }
+
+    handleSecondaryPaste(e, pasted_file){
+        if(validateFile(pasted_file)){
+            const reader = new FileReader();
+            reader.readAsDataURL(pasted_file);
+            reader.onload = (e) => {
+                //Create image from load
+                let image = new window.Image();
+                image.src = e.target.result;
+
+                image.onload = () => {
+                    //send image to editor
+                    this.createNewSecondaryImage(e, image)
+                }
+            }
+        }
+    }
+
+    handlePaste(e){
+        console.log(e)
+
+        let pasted_file = e.clipboardData.files[0]
+
+        console.log( pasted_file )
+
+        //Do nothing if there is no file
+        if(pasted_file == null) return false
+
+        //Main is already loaded or not?
+        if( this.state.image == null ){
+            this.handleMainPaste(e, pasted_file)
+        } else{
+            this.handleSecondaryPaste(e, pasted_file)
         }
     }
 
@@ -210,10 +248,6 @@ class Editor extends React.Component{
                 new ClipboardItem({'image/png': blob})
             ]);
         } catch (error) { console.error(error) }
-
-
-        //mostrar popup de copiado correctamente
-        
     }
 
     deleteSelectedItem(){
@@ -264,6 +298,27 @@ class Editor extends React.Component{
         }
     }
 
+    createNewSecondaryImage(e, image){
+        let newImageRef = createRef()
+        let new_image = <KonvaImage 
+                            ref={newImageRef}
+                            key={this.state.itemArray.length}
+                            image={image}
+                            width={300}
+                            height={200}
+                            x={100}
+                            y={100}
+                            draggable
+                        />
+
+        this.state.itemArray.push(new_image)
+        //push doesn't update the state
+        this.forceUpdate()
+        //After its rendered we get the ref (if not rendered, new_image is not a valid node)
+        let item = {type: 'KonvaImage', item: newImageRef.current}
+        this.changeSelectedItem(item)
+    }
+
     //when canvas is clicked, select the item that is clicked,
     //or deselect if no item is clicked
     handleCanvasMouseDown(e){
@@ -272,7 +327,7 @@ class Editor extends React.Component{
         //Ignores event if we are transforming 
         if( !transformer.isTransforming() ){
             if( e.target.className !== "Image" ){
-                this.changeSelectedItem([e.target])
+                this.changeSelectedItem({type: 'CvText', item: e.target})
 
                 let bottomtoolbar = this.bottomToolbarRef.current
                 let text = e.target.getAttrs()
@@ -290,6 +345,8 @@ class Editor extends React.Component{
                                              text.stroke,
                                              text.strokeWidth )
 
+            } else if(e.target != this.kvMainImageRef.current){
+                this.changeSelectedItem({type: 'KonvaImage', item: e.target})
             } else {
                 this.changeSelectedItem([])
             }
@@ -362,6 +419,7 @@ class Editor extends React.Component{
                     {//If there is no image, show draganddrop input
                     ( this.state.image == null ) ?
                         <DragandDrop imgLoader={this.imageLoader.bind(this)}/> : null
+                        //<SecondaryDragandDrop/>
                     }
                     
                     <Stage 

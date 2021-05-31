@@ -14,7 +14,7 @@ function CvText(props) {
         //Spawn the editor
         editText()
         //Select the item
-        selectedItemChanger([textRef.current])
+        selectedItemChanger({type: 'CvText', item: textRef.current})
     }, [])
 
     //by default the transformer only changes the scale

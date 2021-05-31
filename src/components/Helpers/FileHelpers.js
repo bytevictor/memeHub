@@ -8,3 +8,12 @@ export function dataURLtoBlob(dataurl) {
     }
     return new Blob([u8arr], {type:mime});
 }
+
+export function validateFile(file){
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+
+    if (validTypes.indexOf(file.type) === -1) {
+        return false;
+    }
+    return true;
+}

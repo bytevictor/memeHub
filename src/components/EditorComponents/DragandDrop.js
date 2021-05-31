@@ -1,6 +1,7 @@
 import React from 'react';
 
 import '../../assets/css/draganddrop.css';
+import {validateFile} from '../Helpers/FileHelpers'
 
 const dragOver = (e) => {
     e.preventDefault();
@@ -15,19 +16,6 @@ const dragLeave = (e) => {
     e.preventDefault();
     e.target.classList.toggle('shake');
 }
-
-//* FILE MANIPULATION */
-
-export function validateFile(file){
-    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
-
-    if (validTypes.indexOf(file.type) === -1) {
-        return false;
-    }
-    return true;
-}
-
-//
 
 class DragandDrop extends React.Component{
     

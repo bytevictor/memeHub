@@ -50,3 +50,7 @@
     transform-origin: 50% 50%;
     animation: shake .5s linear alternate infinite;
 }
+
+#secondarydropcontainer{
+    z-index: 999
+}
