@@ -84,11 +84,15 @@ class Editor extends React.Component{
                     let nodeattrs = node.item.getAttrs()
     
                     bottomToolbar.updateToolbar( nodeattrs.align,
-                                                nodeattrs.fontFamily,
-                                                nodeattrs.fontSize,
-                                                nodeattrs.fill,
-                                                nodeattrs.stroke,
-                                                nodeattrs.strokeWidth )
+                                                 nodeattrs.fontFamily,
+                                                 nodeattrs.fontSize,
+                                                 nodeattrs.fill,
+                                                 nodeattrs.stroke,
+                                                 nodeattrs.strokeWidth )
+                    break
+                case 'KonvaImage':
+                    //Image toolbar
+                    break
             }
         }
     }
@@ -418,8 +422,11 @@ class Editor extends React.Component{
 
                     {//If there is no image, show draganddrop input
                     ( this.state.image == null ) ?
-                        <DragandDrop imgLoader={this.imageLoader.bind(this)}/> : null
-                        //<SecondaryDragandDrop/>
+                        <DragandDrop imgLoader={this.imageLoader.bind(this)}/> 
+                        : 
+                        <SecondaryDragandDrop 
+                            imgLoader={this.createNewSecondaryImage.bind(this)}
+                        />
                     }
                     
                     <Stage 
@@ -435,9 +442,7 @@ class Editor extends React.Component{
                         >
                             <KonvaImage
                             //Main image
-                                ref={this.kvMainImageRef}
-                                x={500}
-                                y={500}>
+                                ref={this.kvMainImageRef}>
                             </KonvaImage>
 
                             { //Renders all items into the canvas
