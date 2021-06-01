@@ -303,15 +303,24 @@ class Editor extends React.Component{
     }
 
     createNewSecondaryImage(e, image){
+        const reduction = 0.7
+
+        let correlation = image.height / image.width
+        let mainimage = this.kvMainImageRef.current
+        let width  = mainimage.getAttr('width')
+        let height = mainimage.getAttr('height')
+
+        let new_size = this.calculate_resize(correlation, width, height)
+
         let newImageRef = createRef()
         let new_image = <KonvaImage 
                             ref={newImageRef}
                             key={this.state.itemArray.length}
                             image={image}
-                            width={300}
-                            height={200}
-                            x={100}
-                            y={100}
+                            width={new_size.width * reduction}
+                            height={new_size.height * reduction}
+                            x={ (width / 2 ) - (new_size.width * reduction / 2)}
+                            y={ (height / 2) - (new_size.height * reduction / 2)}
                             draggable
                         />
 
