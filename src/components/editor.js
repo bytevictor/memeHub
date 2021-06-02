@@ -529,7 +529,9 @@ class Editor extends React.Component{
                         <DeleteIcon/>
                     </button>
 
-                    <Toolbar></Toolbar>
+                    <Toolbar
+                        toolUpdater={this.changeSelectedTool.bind(this)}
+                    />
                     </div>
                     
                     <div className="d-flex flex-column">

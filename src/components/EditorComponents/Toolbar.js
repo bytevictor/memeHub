@@ -9,15 +9,20 @@ import {ThemeProvider} from '@material-ui/styles'
 import GestureIcon from '@material-ui/icons/Gesture';
 import BrushIcon from '@material-ui/icons/Brush';
 import Crop169Icon from '@material-ui/icons/Crop169';
+import FormatShapesIcon from '@material-ui/icons/FormatShapes';
+import SelectAllIcon from '@material-ui/icons/SelectAll';
+import TextFormatIcon from '@material-ui/icons/TextFormat';
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
 
 
-export default function ToggleButtons() {
-  const [alignment, setAlignment] = React.useState('freehand');
+export default function ToggleButtons(props) {
+  const [alignment, setAlignment] = React.useState('Text');
+  const toolUpdater = props.toolUpdater
 
   const handleAlignment = (event, newAlignment) => {
     if (newAlignment !== null) {
       setAlignment(newAlignment);
+      toolUpdater(newAlignment)
     }
   };
 
@@ -38,7 +43,13 @@ export default function ToggleButtons() {
       className="menuherramientas"
       
     >
-      <ToggleButton value="freehand" aria-label="freehand">
+      <ToggleButton value="Selector" aria-label="Selector">
+        <FormatShapesIcon />
+      </ToggleButton>
+      <ToggleButton value="Text" aria-label="Text">
+        <TextFormatIcon/>
+      </ToggleButton>
+      <ToggleButton value="FreeLine" aria-label="FreeLine">
         <GestureIcon />
       </ToggleButton>
       <ToggleButton value="square" aria-label="square">

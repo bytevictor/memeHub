@@ -25,6 +25,9 @@ yarn-error.log*
 #vscode
 *.code-workspace
 
+#cosas de React 
+*.swp
+
 #Memoria, quito todos los archivos de compilacion
 docs/Memoria\ TFG/proyecto*
 #menos el pdf y el fuente
