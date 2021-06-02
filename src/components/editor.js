@@ -16,7 +16,7 @@ import Toolbar from './EditorComponents/Toolbar'
 import BottomToolbar from './EditorComponents/BottomToolbar'
 import CopytoClipboardButton from './EditorComponents/ToolShapes/CopytoClipboardButton'
 import SecondaryDragandDrop from './EditorComponents/SecondaryDragandDrop'
-import { Stage, Layer, Rect, Image as KonvaImage, Transformer} from 'react-konva'
+import { Stage, Layer, Rect, Image as KonvaImage, Transformer, Line} from 'react-konva'
 import {dataURLtoBlob} from './Helpers/FileHelpers'
 //canvas items
 import CvText from './EditorComponents/canvas_text'
@@ -42,13 +42,14 @@ class Editor extends React.Component{
         this.transformerRef = createRef()
         this.bottomToolbarRef = createRef()
 
+        this.lineRef = createRef()
+
         this.state = {
             image: null,
             itemArray: [],
 
+            selectedTool: "",
             isDrawing: false,
-            startOffsetX: null,
-            startOffsetY: null,
         }
     }
 
@@ -273,6 +274,13 @@ class Editor extends React.Component{
           }
     }
 
+    changeSelectedTool(newTool){
+        if(newTool != null){
+            console.log("changed to: ", newTool)
+            this.state.selectedTool = newTool
+        }
+    }
+
     createNewText(e){
         //if the background image is clicked
         if( e.target.className == "Image" ){
@@ -330,6 +338,42 @@ class Editor extends React.Component{
         //After its rendered we get the ref (if not rendered, new_image is not a valid node)
         let item = {type: 'KonvaImage', item: newImageRef.current}
         this.changeSelectedItem(item)
+    }
+    
+    startCreateNewFreeLine(){
+        //if( pincel seleccionado )
+        console.log("EMPESAMOS A PINTAR")
+
+        let pos = this.stageRef.current.getPointerPosition()
+        let new_line = <Line
+                        key={this.state.itemArray.length}
+                        ref={this.lineRef}
+                        stroke={'#df4b26'}
+                        strokeWidth={5}
+                        globalCompositeOperation={'source-over'}
+                        points={[pos.x, pos.y]}
+                       />
+
+        this.state.itemArray.push(new_line)
+
+        this.setState({isDrawing: true})
+    }
+
+    continueCreateNewFreeLine(){
+        if( this.state.isDrawing ){
+            let lastLine = this.lineRef.current
+            let pos = this.stageRef.current.getPointerPosition()
+            let newLinePoints = lastLine.points().concat([pos.x, pos.y])
+            lastLine.points(newLinePoints)
+            //redraw the changed line
+            this.stageRef.current.batchDraw()
+        }
+    }
+
+    endCreateNewFreeLine(){
+        //if( pincel seleccionado )
+
+        this.setState({isDrawing: false})
     }
 
     //when canvas is clicked, select the item that is clicked,
@@ -443,6 +487,10 @@ class Editor extends React.Component{
                       height={0} 
                       ref={this.stageRef}
                       style={{outline: 'none'}}
+                      onMouseDown={this.startCreateNewFreeLine.bind(this)}
+                      onMouseUp={this.endCreateNewFreeLine.bind(this)}
+                      onMouseLeave={this.endCreateNewFreeLine.bind(this)}
+                      onMouseMove={this.continueCreateNewFreeLine.bind(this)}
                     >
                         <Layer
                           ref={this.mainLayerRef}
