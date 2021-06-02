@@ -163,58 +163,6 @@ class Editor extends React.Component{
         })
     }
 
-    handleMainPaste(e, pasted_file){
-        if(validateFile(pasted_file)){
-            const reader = new FileReader();
-            reader.readAsDataURL(pasted_file);
-            reader.onload = (e) => {
-                //Create image from load
-                let image = new window.Image();
-                image.src = e.target.result;
-
-                image.onload = () => {
-                    //send image to editor
-                    this.imageLoader(image)
-                }
-            }
-        }
-    }
-
-    handleSecondaryPaste(e, pasted_file){
-        if(validateFile(pasted_file)){
-            const reader = new FileReader();
-            reader.readAsDataURL(pasted_file);
-            reader.onload = (e) => {
-                //Create image from load
-                let image = new window.Image();
-                image.src = e.target.result;
-
-                image.onload = () => {
-                    //send image to editor
-                    this.createNewSecondaryImage(e, image)
-                }
-            }
-        }
-    }
-
-    handlePaste(e){
-        console.log(e)
-
-        let pasted_file = e.clipboardData.files[0]
-
-        console.log( pasted_file )
-
-        //Do nothing if there is no file
-        if(pasted_file == null) return false
-
-        //Main is already loaded or not?
-        if( this.state.image == null ){
-            this.handleMainPaste(e, pasted_file)
-        } else{
-            this.handleSecondaryPaste(e, pasted_file)
-        }
-    }
-
     imageUnloader(){
         this.setState({image: null})
         this.setState({itemArray: []})
@@ -264,14 +212,6 @@ class Editor extends React.Component{
             this.changeSelectedItem([])
             this.stageRef.current.batchDraw()
         }
-    }
-
-    handleDelete(e){
-        //delete and backspace
-        if ( e.keyCode === 8 || e.keyCode === 46 ) {
-            console.log("Stage delete event, Key: " + e.keyCode)
-            this.deleteSelectedItem()
-          }
     }
 
     changeSelectedTool(newTool){
@@ -376,6 +316,74 @@ class Editor extends React.Component{
         this.setState({isDrawing: false})
     }
 
+    /**                                                                *
+     *                                                                 *
+     *                            HANDLERS                             *
+     *                                                                 *
+     *                                                                 */
+
+     handlePaste(e){
+        console.log(e)
+
+        let pasted_file = e.clipboardData.files[0]
+
+        console.log( pasted_file )
+
+        //Do nothing if there is no file
+        if(pasted_file == null) return false
+
+        //Main is already loaded or not?
+        if( this.state.image == null ){
+            this.handleMainPaste(e, pasted_file)
+        } else{
+            this.handleSecondaryPaste(e, pasted_file)
+        }
+    }
+
+     handleMainPaste(e, pasted_file){
+        if(validateFile(pasted_file)){
+            const reader = new FileReader();
+            reader.readAsDataURL(pasted_file);
+            reader.onload = (e) => {
+                //Create image from load
+                let image = new window.Image();
+                image.src = e.target.result;
+
+                image.onload = () => {
+                    //send image to editor
+                    this.imageLoader(image)
+                }
+            }
+        }
+    }
+
+    handleSecondaryPaste(e, pasted_file){
+        if(validateFile(pasted_file)){
+            const reader = new FileReader();
+            reader.readAsDataURL(pasted_file);
+            reader.onload = (e) => {
+                //Create image from load
+                let image = new window.Image();
+                image.src = e.target.result;
+
+                image.onload = () => {
+                    //send image to editor
+                    this.createNewSecondaryImage(e, image)
+                }
+            }
+        }
+    }
+
+    handleDelete(e){
+        //delete and backspace
+        if ( e.keyCode === 8 || e.keyCode === 46 ) {
+            console.log("Stage delete event, Key: " + e.keyCode)
+            this.deleteSelectedItem()
+          }
+    }
+
+    /**                             MOUSE EVENTS                               */
+
     //when canvas is clicked, select the item that is clicked,
     //or deselect if no item is clicked
     handleCanvasMouseDown(e){
@@ -388,12 +396,6 @@ class Editor extends React.Component{
 
                 let bottomtoolbar = this.bottomToolbarRef.current
                 let text = e.target.getAttrs()
-                /*let textAlign       = text.getAttr('align')
-                let textFont        = text.getAttr('fontFamily')
-                let textSize        = text.getAttr('fontSize')
-                let textColor       = text.getAttr('fill')
-                let textStrokeColor = text.getAttr('stroke')
-                let textStrokeWidth = text.getAttr('strokeWidth')*/
 
                 bottomtoolbar.updateToolbar( text.align,
                                              text.fontFamily,
@@ -409,6 +411,8 @@ class Editor extends React.Component{
             }
         }
     }
+
+    /** ************************************************************************** **/
 
     updateTextSize( newSize ){
         let text = this.transformerRef.current.nodes()[0]
