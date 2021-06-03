@@ -16,7 +16,7 @@ import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
 
 
 export default function ToggleButtons(props) {
-  const [alignment, setAlignment] = React.useState('Text');
+  const [alignment, setAlignment] = React.useState('SelectorAndText');
   const toolUpdater = props.toolUpdater
 
   const handleAlignment = (event, newAlignment) => {
@@ -43,11 +43,8 @@ export default function ToggleButtons(props) {
       className="menuherramientas"
       
     >
-      <ToggleButton value="Selector" aria-label="Selector">
+      <ToggleButton value="SelectorAndText" aria-label="Selector">
         <FormatShapesIcon />
-      </ToggleButton>
-      <ToggleButton value="Text" aria-label="Text">
-        <TextFormatIcon/>
       </ToggleButton>
       <ToggleButton value="FreeLine" aria-label="FreeLine">
         <GestureIcon />

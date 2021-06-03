@@ -2,6 +2,36 @@
 import React, {createRef, useEffect} from 'react';
 import {Text} from 'react-konva'
 
+export function handleTextDblClick(e){
+    //CAMBIAR ESTO PARA QUE COMPRUEBE SI LA IMAGEN ES LA IMAGEN BASE
+    if( e.target.className == "Image" ){
+        console.log("CREANDO NUEVO TEXTO")
+        let new_text = <CvText
+                          key={this.state.itemArray.length}
+                          stage={this.stageRef}
+                          selectedItemChanger={this.changeSelectedItem.bind(this)}
+                          text='sample text'
+                          //fontsize * 3 is the half of the width
+                          //so it spawns on the center
+                          x={e.evt.offsetX - 70 * 3}
+                          y={e.evt.offsetY - 35}
+                          align={'center'}
+                          fontFamily={'Impact'}
+                          fontSize={70}
+                          fill={'white'}
+                          stroke={'black'}
+                          strokeWidth={2}
+
+                          draggable
+                       />
+
+        this.state.itemArray.push(new_text)
+
+        //push doesn't update the state
+        this.forceUpdate()
+    }
+}
+
 function CvText(props) {
     //To get the bounds
     const stageRef = props.stage

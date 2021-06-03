@@ -19,9 +19,10 @@ import SecondaryDragandDrop from './EditorComponents/SecondaryDragandDrop'
 import { Stage, Layer, Rect, Image as KonvaImage, Transformer, Line} from 'react-konva'
 import {dataURLtoBlob} from './Helpers/FileHelpers'
 //canvas items
-import CvText from './EditorComponents/canvas_text'
+import CvText, { handleTextDblClick } from './EditorComponents/ToolShapes/CvText'
 import {validateFile} from './Helpers/FileHelpers'
-
+import { handleSelectorMouseDown } from './EditorComponents/ToolShapes/Selector';
+import { handleFreeLineMouseDown, handleFreeLineMouseMove, handleFreeLineMouseUp } from './EditorComponents/ToolShapes/FreeLine';
 
 //Colors for the Mui
 const theme = createMuiTheme({
@@ -48,7 +49,7 @@ class Editor extends React.Component{
             image: null,
             itemArray: [],
 
-            selectedTool: "",
+            selectedTool: "SelectorAndText",
             isDrawing: false,
         }
     }
@@ -221,35 +222,6 @@ class Editor extends React.Component{
         }
     }
 
-    createNewText(e){
-        //if the background image is clicked
-        if( e.target.className == "Image" ){
-            let new_text = <CvText
-                              key={this.state.itemArray.length}
-                              stage={this.stageRef}
-                              selectedItemChanger={this.changeSelectedItem.bind(this)}
-                              text='sample text'
-                              //fontsize * 3 is the half of the width
-                              //so it spawns on the center
-                              x={e.evt.offsetX - 70 * 3}
-                              y={e.evt.offsetY - 35}
-                              align={'center'}
-                              fontFamily={'Impact'}
-                              fontSize={70}
-                              fill={'white'}
-                              stroke={'black'}
-                              strokeWidth={2}
-
-                              draggable
-                           />
-
-            this.state.itemArray.push(new_text)
-
-            //push doesn't update the state
-            this.forceUpdate()
-        }
-    }
-
     createNewSecondaryImage(e, image){
         const reduction = 0.7
 
@@ -280,41 +252,6 @@ class Editor extends React.Component{
         this.changeSelectedItem(item)
     }
     
-    startCreateNewFreeLine(){
-        //if( pincel seleccionado )
-        console.log("EMPESAMOS A PINTAR")
-
-        let pos = this.stageRef.current.getPointerPosition()
-        let new_line = <Line
-                        key={this.state.itemArray.length}
-                        ref={this.lineRef}
-                        stroke={'#df4b26'}
-                        strokeWidth={5}
-                        globalCompositeOperation={'source-over'}
-                        points={[pos.x, pos.y]}
-                       />
-
-        this.state.itemArray.push(new_line)
-
-        this.setState({isDrawing: true})
-    }
-
-    continueCreateNewFreeLine(){
-        if( this.state.isDrawing ){
-            let lastLine = this.lineRef.current
-            let pos = this.stageRef.current.getPointerPosition()
-            let newLinePoints = lastLine.points().concat([pos.x, pos.y])
-            lastLine.points(newLinePoints)
-            //redraw the changed line
-            this.stageRef.current.batchDraw()
-        }
-    }
-
-    endCreateNewFreeLine(){
-        //if( pincel seleccionado )
-
-        this.setState({isDrawing: false})
-    }
 
     /**                                                                *
      *                                                                 *
@@ -382,33 +319,43 @@ class Editor extends React.Component{
           }
     }
 
-    /**                             MOUSE EVENTS                               */
+    /**                              MOUSE EVENTS                                  */
 
-    //when canvas is clicked, select the item that is clicked,
-    //or deselect if no item is clicked
     handleCanvasMouseDown(e){
-        let transformer = this.transformerRef.current
+        switch(this.state.selectedTool){
+            case 'SelectorAndText': 
+                handleSelectorMouseDown.bind(this)(e)
+            break
 
-        //Ignores event if we are transforming 
-        if( !transformer.isTransforming() ){
-            if( e.target.className !== "Image" ){
-                this.changeSelectedItem({type: 'CvText', item: e.target})
+            case 'FreeLine':
+                handleFreeLineMouseDown.bind(this)(e)
+            break
+        }
+    }
 
-                let bottomtoolbar = this.bottomToolbarRef.current
-                let text = e.target.getAttrs()
+    handleCanvasMouseUp(e){
+        if(this.state.selectedTool == 'FreeLine'){
+            handleFreeLineMouseUp.bind(this)(e)
+        }
+    }
 
-                bottomtoolbar.updateToolbar( text.align,
-                                             text.fontFamily,
-                                             text.fontSize,
-                                             text.fill,
-                                             text.stroke,
-                                             text.strokeWidth )
+    handleCanvasMouseMove(e){
+        if(this.state.selectedTool == 'FreeLine'){
+            handleFreeLineMouseMove.bind(this)(e)
+        }
+    }
 
-            } else if(e.target != this.kvMainImageRef.current){
-                this.changeSelectedItem({type: 'KonvaImage', item: e.target})
-            } else {
-                this.changeSelectedItem([])
-            }
+    handleCanvasMouseLeave(e){
+        if(this.state.selectedTool == 'FreeLine'){
+            //If leave, end line
+            handleFreeLineMouseUp.bind(this)(e)
+        }
+    }
+
+    handleCanvasDblClick(e){
+        if(this.state.selectedTool == 'SelectorAndText'){
+            console.log("dobleclick")
+            handleTextDblClick.bind(this)(e)
         }
     }
 
@@ -491,15 +438,18 @@ class Editor extends React.Component{
                       height={0} 
                       ref={this.stageRef}
                       style={{outline: 'none'}}
-                      onMouseDown={this.startCreateNewFreeLine.bind(this)}
-                      onMouseUp={this.endCreateNewFreeLine.bind(this)}
-                      onMouseLeave={this.endCreateNewFreeLine.bind(this)}
-                      onMouseMove={this.continueCreateNewFreeLine.bind(this)}
+                      //onMouseDown={this.startCreateNewFreeLine.bind(this)}
+                      //onMouseUp={this.endCreateNewFreeLine.bind(this)}
+                      //onMouseLeave={this.endCreateNewFreeLine.bind(this)}
+                      //onMouseMove={this.continueCreateNewFreeLine.bind(this)}
                     >
                         <Layer
                           ref={this.mainLayerRef}
                           onMouseDown={this.handleCanvasMouseDown.bind(this)}
-                          onDblClick={this.createNewText.bind(this)}
+                          onMouseMove={this.handleCanvasMouseMove.bind(this)}
+                          onMouseUp={this.handleCanvasMouseUp.bind(this)}
+
+                          onDblClick={this.handleCanvasDblClick.bind(this)}
                         >
                             <KonvaImage
                             //Main image
