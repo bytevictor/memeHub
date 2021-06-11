@@ -2,13 +2,25 @@ import {Line} from 'react-konva'
 
 export function handleFreeLineMouseDown(e){
     let pos = this.stageRef.current.getPointerPosition()
+
+    let bottomToolbar = this.bottomToolbarRef.current
+
+    console.log(bottomToolbar)
+
     let new_line = <Line
                     key={this.state.itemArray.length}
                     ref={this.lineRef}
-                    stroke={'#df4b26'}
-                    strokeWidth={5}
+
+                    lineCap={"round"}
+
+                    stroke={'#'+bottomToolbar.state.strokeColor.hex}
+                    strokeWidth={bottomToolbar.state.strokeWidth}
+                    
                     globalCompositeOperation={'source-over'}
                     points={[pos.x, pos.y]}
+
+                    shadowColor={'#'+bottomToolbar.state.shadowColor.hex}
+                    shadowBlur={bottomToolbar.state.shadowWidth}
 
                     draggable
                    />
