@@ -218,7 +218,7 @@ class Editor extends React.Component{
     changeSelectedTool(newTool){
         if(newTool != null){
             console.log("changed to: ", newTool)
-            this.state.selectedTool = newTool
+            this.setState({selectedTool: newTool})
         }
     }
 
@@ -448,6 +448,7 @@ class Editor extends React.Component{
                           onMouseDown={this.handleCanvasMouseDown.bind(this)}
                           onMouseMove={this.handleCanvasMouseMove.bind(this)}
                           onMouseUp={this.handleCanvasMouseUp.bind(this)}
+                          onMouseLeave={this.handleCanvasMouseLeave.bind(this)}
 
                           onDblClick={this.handleCanvasDblClick.bind(this)}
                         >
@@ -457,8 +458,11 @@ class Editor extends React.Component{
                             </KonvaImage>
 
                             { //Renders all items into the canvas
-                            this.state.itemArray.map(item => (
-                                item
+                            this.state.itemArray.map(Item => (
+                                React.cloneElement(
+                                    Item,
+                                    { draggable: (this.state.selectedTool == "SelectorAndText") }
+                                )
                             ))
                             }
 

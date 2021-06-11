@@ -1,9 +1,6 @@
 import {Line} from 'react-konva'
 
 export function handleFreeLineMouseDown(e){
-    //if( pincel seleccionado )
-    console.log("EMPESAMOS A PINTAR")
-
     let pos = this.stageRef.current.getPointerPosition()
     let new_line = <Line
                     key={this.state.itemArray.length}
@@ -23,7 +20,6 @@ export function handleFreeLineMouseDown(e){
 
 export function handleFreeLineMouseMove(e){
     if( this.state.isDrawing ){
-        console.log("dibujando linea")
         let lastLine = this.lineRef.current
         let pos = this.stageRef.current.getPointerPosition()
         let newLinePoints = lastLine.points().concat([pos.x, pos.y])
@@ -34,7 +30,5 @@ export function handleFreeLineMouseMove(e){
 }
 
 export function handleFreeLineMouseUp(e){
-    //if( pincel seleccionado )
-    console.log("PAREAMOS DE  PINTAR")
     this.setState({isDrawing: false})
 }
