@@ -218,6 +218,9 @@ class Editor extends React.Component{
     changeSelectedTool(newTool){
         if(newTool != null){
             console.log("changed to: ", newTool)
+            //nothing should be selected when on change
+            this.changeSelectedItem([])
+            //change and update 
             this.setState({selectedTool: newTool})
         }
     }
