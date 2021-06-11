@@ -13,7 +13,8 @@ import SaveIcon from '@material-ui/icons/Save';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 
 import Toolbar from './EditorComponents/Toolbar'
-import BottomToolbar from './EditorComponents/BottomToolbar'
+import TextBottomToolbar from './EditorComponents/BottomToolbars/TextBottomToolbar'
+import LineBottomToolbar from './EditorComponents/BottomToolbars/LineBottomToolbar'
 import CopytoClipboardButton from './EditorComponents/ToolShapes/CopytoClipboardButton'
 import SecondaryDragandDrop from './EditorComponents/SecondaryDragandDrop'
 import { Stage, Layer, Rect, Image as KonvaImage, Transformer, Line} from 'react-konva'
@@ -400,6 +401,24 @@ class Editor extends React.Component{
         }
     }
 
+    updateShadowColor( newColor ){
+        let line = this.transformerRef.current.nodes()[0]
+
+        if(line != null){
+            line.setAttr('shadowColor', '#' + newColor.hex)
+            line.getStage().batchDraw()
+        }
+    }
+
+    updateShadowSize( newSize ){
+        let line = this.transformerRef.current.nodes()[0]
+
+        if(line != null){
+            line.setAttr('shadowBlur', newSize)
+            line.getStage().batchDraw()
+        }
+    }
+
     updateFontFamily( newFont ){
         let text = this.transformerRef.current.nodes()[0]
 
@@ -516,15 +535,30 @@ class Editor extends React.Component{
                 </nav>
                 </div>
 
-                <BottomToolbar 
-                    ref={this.bottomToolbarRef}
-                    fontSizeUpdater={this.updateTextSize.bind(this)}
-                    fontColorUpdater={this.updateTextColor.bind(this)}
-                    strokeColorUpdater={this.updateStrokeColor.bind(this)}
-                    strokeSizeUpdater={this.updateStrokeSize.bind(this)}
-                    fontFamilyUpdater={this.updateFontFamily.bind(this)}
-                    alignmentUpdater={this.updateFontAlignment.bind(this)}
-                />
+                {
+                    (this.state.selectedTool != "SelectorAndText") ?
+                      <LineBottomToolbar 
+                        ref={this.bottomToolbarRef}
+
+                        strokeColorUpdater={this.updateStrokeColor.bind(this)}
+                        strokeSizeUpdater={this.updateStrokeSize.bind(this)}
+                        shadowColorUpdater={this.updateShadowColor.bind(this)}
+                        shadowSizeUpdater={this.updateShadowSize.bind(this)}
+
+                      />
+                        :
+                      <TextBottomToolbar 
+                        ref={this.bottomToolbarRef}
+
+                        fontSizeUpdater={this.updateTextSize.bind(this)}
+                        fontColorUpdater={this.updateTextColor.bind(this)}
+                        strokeColorUpdater={this.updateStrokeColor.bind(this)}
+                        strokeSizeUpdater={this.updateStrokeSize.bind(this)}
+                        fontFamilyUpdater={this.updateFontFamily.bind(this)}
+                        alignmentUpdater={this.updateFontAlignment.bind(this)}
+                      />
+                    
+                }
 
             </div>
             </ThemeProvider>
