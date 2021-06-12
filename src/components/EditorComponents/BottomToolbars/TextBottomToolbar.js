@@ -1,10 +1,5 @@
 import React, { createRef, useCallback, useEffect, useState } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
-import FormLabel from '@material-ui/core/FormLabel'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import RadioGroup from '@material-ui/core/RadioGroup'
-import Radio from '@material-ui/core/Radio'
 import Paper from '@material-ui/core/Paper'
 import { ColorButton, ColorPicker, createColor } from 'material-ui-color'
 import { Card, Slider, TextField, Tooltip, Typography, Zoom } from '@material-ui/core'
@@ -13,8 +8,7 @@ import FontAlignmentSelector from '../TextComponents/FontAlignmentSelector'
 import FontFamilySelector from '../TextComponents/FontFamilySelector'
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
-import { render } from '@testing-library/react'
-import createTypography from '@material-ui/core/styles/createTypography'
+
 
 const styles = theme => ({
     root: {
@@ -87,6 +81,9 @@ class TextBottomToolbar extends React.Component{
   }
 
   updateToolbar( alignment, font, fontSize, fontColor, strokeColor, strokeWidth){
+
+    console.log(this)
+
     if( alignment != null)
       this.changeAlignment(alignment)
 

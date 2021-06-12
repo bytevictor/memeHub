@@ -3,9 +3,8 @@ import {Line} from 'react-konva'
 export function handleFreeLineMouseDown(e){
     let pos = this.stageRef.current.getPointerPosition()
 
-    let bottomToolbar = this.bottomToolbarRef.current
-
-    console.log(bottomToolbar)
+    //get the bottomToolbar that is rendered
+    let bottomToolbar = this.bottomToolbarRef.current.bottomToolbarRef.current
 
     let new_line = <Line
                     key={this.state.itemArray.length}

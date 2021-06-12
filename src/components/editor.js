@@ -13,6 +13,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 
 import Toolbar from './EditorComponents/Toolbar'
+import BottomToolbar from './EditorComponents/BottomToolbar'
 import TextBottomToolbar from './EditorComponents/BottomToolbars/TextBottomToolbar'
 import LineBottomToolbar from './EditorComponents/BottomToolbars/LineBottomToolbar'
 import CopytoClipboardButton from './EditorComponents/ToolShapes/CopytoClipboardButton'
@@ -81,23 +82,41 @@ class Editor extends React.Component{
 
             this.transformerRef.current.nodes([node.item])
 
+            let bottomToolbar = this.bottomToolbarRef.current
+            let nodeattrs = node.item.getAttrs()
             switch( node.type ){
                 case 'CvText':
-                    let bottomToolbar = this.bottomToolbarRef.current
-                    let nodeattrs = node.item.getAttrs()
-    
-                    bottomToolbar.updateToolbar( nodeattrs.align,
-                                                 nodeattrs.fontFamily,
-                                                 nodeattrs.fontSize,
-                                                 nodeattrs.fill,
-                                                 nodeattrs.stroke,
-                                                 nodeattrs.strokeWidth )
+                    //Change the toolbar
+                    this.changeBottomToolbar("SelectorAndText")
+
+                    bottomToolbar.updateToolbar()( nodeattrs.align,
+                                                   nodeattrs.fontFamily,
+                                                   nodeattrs.fontSize,
+                                                   nodeattrs.fill,
+                                                   nodeattrs.stroke,
+                                                   nodeattrs.strokeWidth )
+                    break
+                case 'Line':
+                    this.changeBottomToolbar("FreeLine")
+
+                    console.log(nodeattrs)
+
+                    bottomToolbar.updateToolbar()( nodeattrs.stroke,
+                                                   nodeattrs.strokeWidth,
+                                                   nodeattrs.shadowColor,
+                                                   nodeattrs.shadowBlur )
                     break
                 case 'KonvaImage':
                     //Image toolbar
                     break
             }
         }
+    }
+
+    changeBottomToolbar( bottomToolbarName ){
+        let bottomToolbar = this.bottomToolbarRef.current
+        console.log("bottomToolbar changed to: " + bottomToolbarName)
+        bottomToolbar.changeBottomToolbar(bottomToolbarName)
     }
 
     calculate_resize(correlation, width, height){
@@ -223,6 +242,7 @@ class Editor extends React.Component{
             this.changeSelectedItem([])
             //change and update 
             this.setState({selectedTool: newTool})
+            this.changeBottomToolbar(newTool)
         }
     }
 
@@ -535,30 +555,19 @@ class Editor extends React.Component{
                 </nav>
                 </div>
 
-                {
-                    (this.state.selectedTool != "SelectorAndText") ?
-                      <LineBottomToolbar 
-                        ref={this.bottomToolbarRef}
+                <BottomToolbar
+                    ref={this.bottomToolbarRef}
 
-                        strokeColorUpdater={this.updateStrokeColor.bind(this)}
-                        strokeSizeUpdater={this.updateStrokeSize.bind(this)}
-                        shadowColorUpdater={this.updateShadowColor.bind(this)}
-                        shadowSizeUpdater={this.updateShadowSize.bind(this)}
+                    fontSizeUpdater={this.updateTextSize.bind(this)}
+                    fontColorUpdater={this.updateTextColor.bind(this)}
+                    strokeColorUpdater={this.updateStrokeColor.bind(this)}
+                    strokeSizeUpdater={this.updateStrokeSize.bind(this)}
+                    fontFamilyUpdater={this.updateFontFamily.bind(this)}
+                    alignmentUpdater={this.updateFontAlignment.bind(this)}
 
-                      />
-                        :
-                      <TextBottomToolbar 
-                        ref={this.bottomToolbarRef}
-
-                        fontSizeUpdater={this.updateTextSize.bind(this)}
-                        fontColorUpdater={this.updateTextColor.bind(this)}
-                        strokeColorUpdater={this.updateStrokeColor.bind(this)}
-                        strokeSizeUpdater={this.updateStrokeSize.bind(this)}
-                        fontFamilyUpdater={this.updateFontFamily.bind(this)}
-                        alignmentUpdater={this.updateFontAlignment.bind(this)}
-                      />
-                    
-                }
+                    shadowColorUpdater={this.updateShadowColor.bind(this)}
+                    shadowSizeUpdater={this.updateShadowSize.bind(this)}
+                />
 
             </div>
             </ThemeProvider>

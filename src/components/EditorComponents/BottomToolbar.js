@@ -2,64 +2,80 @@ import React, { createRef, useCallback, useEffect, useState } from 'react'
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 import TextBottomToolbar from './BottomToolbars/TextBottomToolbar'
-import LineBottomToolbar from './BottomToolbars/TextBottomToolbar'
-
-const styles = theme => ({
-    root: {
-      flexGrow: 0,
-    },
-    paper: {
-      padding: theme.spacing(0),
-      textAlign: 'center',
-      color: theme.palette.text.secondary,
-    },
-    title: {
-      fontSize: 14,
-    },
-})
+import LineBottomToolbar from './BottomToolbars/LineBottomToolbar'
 
 class BottomToolbar extends React.Component{
   constructor(props){
     super(props)
 
-    this.strokeSliderRef = createRef()
+    this.bottomToolbarRef = createRef()
+
+    this.fontSizeUpdater=props.fontSizeUpdater
+    this.fontColorUpdater=props.fontColorUpdater
+    this.strokeColorUpdater=props.strokeColorUpdater
+    this.strokeSizeUpdater=props.strokeSizeUpdater
+    this.fontFamilyUpdater=props.fontFamilyUpdater
+    this.alignmentUpdater=props.alignmentUpdater
+
+    this.shadowColorUpdater=props.shadowColorUpdater
+    this.shadowSizeUpdater=props.shadowSizeUpdater
+
+    this.state = {
+      selectedToolbar: "SelectorAndText"
+    }
   }
 
-  render(){
-    const { classes } = this.props
+  changeBottomToolbar(newToolbarName){
+    this.setState({selectedToolbar: newToolbarName})
+  }
 
-    let bottomToolbar;
+  updateToolbar(){
+    let bottomToolbar = this.bottomToolbarRef.current
+    return bottomToolbar.updateToolbar.bind(bottomToolbar)
+  }
 
-    switch(this.props.tool){
-      case 'SelectorAndText':
-        bottomToolbar=<TextBottomToolbar 
-                        ref={this.bottomToolbarRef}
-                        fontSizeUpdater={this.props.fontSizeUpdater.bind(this)}
-                        fontColorUpdater={this.props.fontColorUpdater.bind(this)}
-                        strokeColorUpdater={this.props.strokeColorUpdater.bind(this)}
-                        strokeSizeUpdater={this.props.strokeSizeUpdater.bind(this)}
-                        fontFamilyUpdater={this.props.fontFamilyUpdater.bind(this)}
-                        alignmentUpdater={this.props.alignmentUpdater.bind(this)}
-                      />
-      break
-      case 'FreeLine':
-        bottomToolbar=<LineBottomToolbar
+  getBottomToolbar(){
+    switch(this.state.selectedToolbar){
+        case "SelectorAndText":
+          console.log("Devolviendo el selector")
+          return <TextBottomToolbar 
+                    ref={this.bottomToolbarRef}
 
-                      />
-      break
+                    fontSizeUpdater    = {this.fontSizeUpdater}
+                    fontColorUpdater   = {this.fontColorUpdater}
+                    strokeColorUpdater = {this.strokeColorUpdater}
+                    strokeSizeUpdater  = {this.strokeSizeUpdater}
+                    fontFamilyUpdater  = {this.fontFamilyUpdater}
+                    alignmentUpdater   = {this.alignmentUpdater}
+                 />
+        break
+        case "FreeLine":
+            console.log("Devolviendo el Line")
+            return <LineBottomToolbar 
+                    ref={this.bottomToolbarRef}
+
+                    strokeColorUpdater = {this.strokeColorUpdater}
+                    strokeSizeUpdater  = {this.strokeSizeUpdater}
+                    shadowColorUpdater={this.shadowColorUpdater}
+                    shadowSizeUpdater={this.shadowSizeUpdater}
+                   />
+        break
+        case "KonvaImage":
+            
+        break
     }
+}
 
+  render(){
     return (
       <React.Fragment>
-        {bottomToolbar}
+        {
+          this.getBottomToolbar()
+        }
       </React.Fragment>
     );
   }
   
 }
 
-BottomToolbar.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(styles)(BottomToolbar)
+export default (BottomToolbar)
