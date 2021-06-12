@@ -2,7 +2,7 @@ import React, { createRef } from 'react'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import { ColorPicker, createColor } from 'material-ui-color'
-import { Slider, Typography } from '@material-ui/core'
+import { Select, Slider, Typography, MenuItem } from '@material-ui/core'
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 
@@ -20,6 +20,12 @@ const styles = theme => ({
     },
 }) 
 
+function arrayEquals(a, b) {
+  return Array.isArray(a) &&
+    Array.isArray(b) &&
+    a.length === b.length &&
+    a.every((val, index) => val === b[index]);
+}
 
 class LineBottomToolbar extends React.Component{
   constructor(props){
@@ -30,7 +36,16 @@ class LineBottomToolbar extends React.Component{
       strokeWidth: 6,
       shadowColor: createColor("#000000"),
       shadowWidth: 0,
+      dashValue: false
     }
+    
+    this.dashValues = {
+      continuous  : false,
+      dashLine    : [35, 30],
+      dotLine     : [0.001, 30],
+      dashAndDots : [29, 25, 0.001, 25]
+    }
+
   }
 
   /* /////////////// Change UI functions /////////////// */ 
@@ -62,7 +77,13 @@ class LineBottomToolbar extends React.Component{
     }
   }
 
-  updateToolbar(strokeColor, strokeWidth, shadowColor, shadowWidth){
+  changeDash( value ){
+    if(this.state.dashValue != value){
+      this.setState({dashValue: value})
+    }
+  }
+
+  updateToolbar(strokeColor, strokeWidth, shadowColor, shadowWidth, dashValue){
     if( strokeColor != null)
       this.changeStrokeColor(strokeColor)
 
@@ -74,6 +95,20 @@ class LineBottomToolbar extends React.Component{
 
     if( shadowWidth != null)
       this.changeShadowWidth(shadowWidth)
+
+    //Selector value should be the same object to work properly so
+    //here we compare to the object and replace value with it
+    if( dashValue != null){
+      if(dashValue == this.dashValues.continuous){
+        this.changeDash(this.dashValues.continuous)
+      } else if( arrayEquals(dashValue, this.dashValues.dashLine) ){
+        this.changeDash(this.dashValues.dashLine)
+      } else if( arrayEquals(dashValue, this.dashValues.dotLine) ){
+        this.changeDash(this.dashValues.dotLine)
+      } else if( arrayEquals(dashValue, this.dashValues.dashAndDots) ){
+        this.changeDash(this.dashValues.dashAndDots)
+      } 
+    }
   }
 
   /*  ////////////////////////////////////////////////  */
@@ -106,9 +141,18 @@ class LineBottomToolbar extends React.Component{
     //event triggers onmousemove, so it floods, change state
     //only when value changes (performance)
     if(this.state.shadowSize != value){
-      console.log(value)
       this.props.shadowSizeUpdater(value)
       this.setState({shadowWidth: value})
+    }
+  }
+
+  handleDashChange = (event) => {
+    let value = event.target.value
+    console.log("Cambiando ", value)
+    if(this.state.dash != value){
+
+      this.setState({dashValue: value})
+      this.props.dashUpdater(value)
     }
   }
 
@@ -119,7 +163,7 @@ class LineBottomToolbar extends React.Component{
     return (
       <div id='bottomtoolbar' className={classes.root}>
           <Grid container spacing={0} justify="space-evenly">
-          <Grid item xs={5} sm={6} md={5} className="d-flex">
+          <Grid item xs={4} sm={4} md={4} className="d-flex">
           <Paper className="m-3 p-2 d-flex justify-content-around align-items-center flex-grow-1" 
                    elevation={3}>
                 <Paper className="p-2 d-flex flex-column justify-content-around align-items-center" variant="outlined">
@@ -153,7 +197,33 @@ class LineBottomToolbar extends React.Component{
                 </Paper>
             </Paper>
           </Grid>
-          <Grid item xs={5} sm={6} md={5} className="d-flex">
+          <Grid item xs={4} sm={4} md={4} className="d-flex">
+          <Paper className="m-3 p-2 d-flex justify-content-around align-items-center flex-grow-1" 
+                   elevation={3}>
+                <Paper className="p-2 w-50" variant="outlined">
+                  <Typography className={classes.title} color="textSecondary" gutterBottom>
+                    Line Type
+                  </Typography>
+                  <div className="m-2 pr-2">
+                  <Select
+                    className="w-100"
+                    labelId="demo-simple-select-outlined-label"
+                    id="demo-simple-select-outlined"
+                    value={this.state.dashValue}
+                    defaultValue={false}
+                    onChange={this.handleDashChange.bind(this)}
+                    label="Age"
+                  >
+                      <MenuItem value={this.dashValues.continuous}>Continuous</MenuItem>
+                      <MenuItem value={this.dashValues.dashLine}>Dashed</MenuItem>
+                      <MenuItem value={this.dashValues.dotLine}>Dots</MenuItem>
+                      <MenuItem value={this.dashValues.dashAndDots}>Dash & Dots</MenuItem>
+                    </Select>
+                  </div>
+                </Paper>
+            </Paper>
+          </Grid>
+          <Grid item xs={4} sm={4} md={4} className="d-flex">
             <Paper className="m-3 p-2 d-flex justify-content-around align-items-center flex-grow-1" 
                    elevation={3}>
                 <Paper className="p-2 d-flex flex-column justify-content-around align-items-center" variant="outlined">

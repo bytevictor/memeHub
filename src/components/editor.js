@@ -104,7 +104,8 @@ class Editor extends React.Component{
                     bottomToolbar.updateToolbar()( nodeattrs.stroke,
                                                    nodeattrs.strokeWidth,
                                                    nodeattrs.shadowColor,
-                                                   nodeattrs.shadowBlur )
+                                                   nodeattrs.shadowBlur,
+                                                   nodeattrs.dash )
                     break
                 case 'KonvaImage':
                     //Image toolbar
@@ -430,6 +431,15 @@ class Editor extends React.Component{
         }
     }
 
+    updateDash( value ){
+        let line = this.transformerRef.current.nodes()[0]
+
+        if(line != null){
+            line.setAttr('dash', value)
+            line.getStage().batchDraw()
+        }
+    }
+
     updateShadowSize( newSize ){
         let line = this.transformerRef.current.nodes()[0]
 
@@ -567,6 +577,7 @@ class Editor extends React.Component{
 
                     shadowColorUpdater={this.updateShadowColor.bind(this)}
                     shadowSizeUpdater={this.updateShadowSize.bind(this)}
+                    dashUpdater={this.updateDash.bind(this)}
                 />
 
             </div>

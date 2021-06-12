@@ -21,6 +21,8 @@ export function handleFreeLineMouseDown(e){
                     shadowColor={'#'+bottomToolbar.state.shadowColor.hex}
                     shadowBlur={bottomToolbar.state.shadowWidth}
 
+                    dash={bottomToolbar.state.dashValue}
+
                     draggable
                    />
 

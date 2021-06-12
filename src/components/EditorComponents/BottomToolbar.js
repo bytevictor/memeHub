@@ -19,6 +19,7 @@ class BottomToolbar extends React.Component{
 
     this.shadowColorUpdater=props.shadowColorUpdater
     this.shadowSizeUpdater=props.shadowSizeUpdater
+    this.dashUpdater=props.dashUpdater
 
     this.state = {
       selectedToolbar: "SelectorAndText"
@@ -37,7 +38,6 @@ class BottomToolbar extends React.Component{
   getBottomToolbar(){
     switch(this.state.selectedToolbar){
         case "SelectorAndText":
-          console.log("Devolviendo el selector")
           return <TextBottomToolbar 
                     ref={this.bottomToolbarRef}
 
@@ -50,7 +50,6 @@ class BottomToolbar extends React.Component{
                  />
         break
         case "FreeLine":
-            console.log("Devolviendo el Line")
             return <LineBottomToolbar 
                     ref={this.bottomToolbarRef}
 
@@ -58,6 +57,7 @@ class BottomToolbar extends React.Component{
                     strokeSizeUpdater  = {this.strokeSizeUpdater}
                     shadowColorUpdater={this.shadowColorUpdater}
                     shadowSizeUpdater={this.shadowSizeUpdater}
+                    dashUpdater={this.dashUpdater}
                    />
         break
         case "KonvaImage":
