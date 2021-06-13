@@ -26,8 +26,8 @@ function dataTransferFileObject(files) {
     }
 }
 
-describe('Toolbar tests', () => {
-  it('should change the selected tool', () => {
+describe('LineBottomToolbar tests', () => {
+  it('should change the bottom toolbar', () => {
     mount(<Editor />);
 
     cy.readFile('src/test/mante.png', 'base64').then( (mante) =>{
@@ -39,11 +39,11 @@ describe('Toolbar tests', () => {
         cy.wait(1000)
         cy.waitForReact()
 
+        cy.get('#dashSelector').should('not.exist')
+
         cy.get('button[aria-label="FreeLine"]').click()
 
-        cy.getReact('Editor').getCurrentState().then( (state) => {
-            cy.wrap(state).its('selectedTool').should('eq', 'FreeLine')
-        })
+        cy.get('#dashSelector').should('exist')
       })
     })
   })

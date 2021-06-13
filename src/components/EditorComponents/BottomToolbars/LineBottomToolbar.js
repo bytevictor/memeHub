@@ -207,8 +207,7 @@ class LineBottomToolbar extends React.Component{
                   <div className="m-2 pr-2">
                   <Select
                     className="w-100"
-                    labelId="demo-simple-select-outlined-label"
-                    id="demo-simple-select-outlined"
+                    id="dashSelector"
                     value={this.state.dashValue}
                     defaultValue={false}
                     onChange={this.handleDashChange.bind(this)}
