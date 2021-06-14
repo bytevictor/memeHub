@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 import TextBottomToolbar from './BottomToolbars/TextBottomToolbar'
 import LineBottomToolbar from './BottomToolbars/LineBottomToolbar'
+import RectBottomToolbar from './BottomToolbars/RectBottomToolbar'
 
 class BottomToolbar extends React.Component{
   constructor(props){
@@ -71,6 +72,17 @@ class BottomToolbar extends React.Component{
                       dashUpdater={this.dashUpdater}
                    />
         break
+        case "Rectangle":
+            return <RectBottomToolbar
+                      ref={this.bottomToolbarRef}
+
+                      strokeColorUpdater = {this.strokeColorUpdater}
+                      strokeSizeUpdater  = {this.strokeSizeUpdater}
+                      shadowColorUpdater={this.shadowColorUpdater}
+                      shadowSizeUpdater={this.shadowSizeUpdater}
+                      cornerRadiusUpdater={this.cornerRadiusUpdater}
+                      fillUpdater={this.fillUpdater}
+                   />
         case "KonvaImage":
             
         break

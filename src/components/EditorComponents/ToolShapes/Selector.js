@@ -11,28 +11,15 @@ export function handleSelectorMouseDown(e){
         if( e.target.className === "Text" ){
             this.changeSelectedItem({type: 'CvText', item: e.target})
 
-            let bottomtoolbar = this.bottomToolbarRef.current
-            let text = e.target.getAttrs()
-
-            bottomtoolbar.updateToolbar(    text.align,
-                                            text.fontFamily,
-                                            text.fontSize,
-                                            text.fill,
-                                            text.stroke,
-                                            text.strokeWidth )
-
         } else if(e.target.className === "Line"){
             this.changeSelectedItem({type: 'Line', item: e.target})
 
-            let bottomtoolbar = this.bottomToolbarRef.current
-            let line = e.target.getAttrs()
+        } else if(e.target.className === "Rect") {
+            this.changeSelectedItem({type: 'Rect', item: e.target})
 
-            bottomtoolbar.updateToolbar(    line.stroke,
-                                            line.strokeWidth,
-                                            line.shadowColor,
-                                            line.shadowBlur )
         } else if(e.target != this.kvMainImageRef.current){
             this.changeSelectedItem({type: 'KonvaImage', item: e.target})
+            
         } else {
             this.changeSelectedItem([])
         }

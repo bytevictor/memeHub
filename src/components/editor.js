@@ -26,6 +26,7 @@ import {validateFile} from './Helpers/FileHelpers'
 import { handleSelectorMouseDown } from './EditorComponents/ToolShapes/Selector';
 import { handleFreeLineMouseDown, handleFreeLineMouseMove, handleFreeLineMouseUp } from './EditorComponents/ToolShapes/FreeLine';
 import { handleStraightLineMouseDown, handleStraightLineMouseMove, handleStraightLineMouseUp } from './EditorComponents/ToolShapes/StraightLine';
+import { handleRectangleMouseDown, handleRectangleMouseMove, handleRectangleMouseUp } from './EditorComponents/ToolShapes/Rectangle';
 
 //Colors for the Mui
 const theme = createMuiTheme({
@@ -105,6 +106,16 @@ class Editor extends React.Component{
                                                    nodeattrs.shadowColor,
                                                    nodeattrs.shadowBlur,
                                                    nodeattrs.dash )
+                    break
+                case 'Rect':
+                    this.changeBottomToolbar("Rectangle")
+
+                    bottomToolbar.updateToolbar()( nodeattrs.stroke,
+                                                   nodeattrs.strokeWidth,
+                                                   nodeattrs.shadowColor,
+                                                   nodeattrs.shadowBlur,
+                                                   nodeattrs.cornerRadius,
+                                                   nodeattrs.fill )
                     break
                 case 'KonvaImage':
                     //Image toolbar
@@ -358,22 +369,39 @@ class Editor extends React.Component{
             case 'StraightLine':
                 handleStraightLineMouseDown.bind(this)(e)
             break
+
+            case 'Rectangle':
+                handleRectangleMouseDown.bind(this)(e)
         }
     }
 
     handleCanvasMouseUp(e){
-        if(this.state.selectedTool == 'FreeLine'){
-            handleFreeLineMouseUp.bind(this)(e)
-        } else if( this.state.selectedTool == 'StraightLine'){
-            handleStraightLineMouseUp.bind(this)(e)
+        switch(this.state.selectedTool){
+            case 'FreeLine':
+                handleFreeLineMouseUp.bind(this)(e)
+            break
+
+            case 'StraightLine':
+                handleStraightLineMouseUp.bind(this)(e)
+            break
+
+            case 'Rectangle':
+                handleRectangleMouseUp.bind(this)(e)
         }
     }
 
     handleCanvasMouseMove(e){
-        if(this.state.selectedTool == 'FreeLine'){
-            handleFreeLineMouseMove.bind(this)(e)
-        } else if( this.state.selectedTool == 'StraightLine'){
-            handleStraightLineMouseMove.bind(this)(e)
+        switch(this.state.selectedTool){
+            case 'FreeLine':
+                handleFreeLineMouseMove.bind(this)(e)
+            break
+
+            case 'StraightLine':
+                handleStraightLineMouseMove.bind(this)(e)
+            break
+
+            case 'Rectangle':
+                handleRectangleMouseMove.bind(this)(e)
         }
     }
 
@@ -473,6 +501,30 @@ class Editor extends React.Component{
             console.log( newAlignment )
             text.setAttr('align', newAlignment)
             text.getStage().batchDraw()
+        }
+    }
+
+    updateCornerRadius( newRadius ){
+        let rect = this.transformerRef.current.nodes()[0]
+
+        if(rect != null){
+            console.log( newRadius )
+            text.setAttr('cornerRadius', newRadius)
+            text.getStage().batchDraw()
+        }
+    }
+
+    updateFill( newColor ){
+        let rect = this.transformerRef.current.nodes()[0]
+
+        if(rect != null){
+            if( newColor == null ){
+                rect.setAttr('fill', newColor)
+            } else {
+                rect.setAttr('fill', '#' + newColor.hex)
+            }
+            
+            rect.getStage().batchDraw()
         }
     }
 
@@ -585,6 +637,9 @@ class Editor extends React.Component{
                     shadowColorUpdater={this.updateShadowColor.bind(this)}
                     shadowSizeUpdater={this.updateShadowSize.bind(this)}
                     dashUpdater={this.updateDash.bind(this)}
+
+                    cornerRadiusUpdater={this.updateCornerRadius.bind(this)}
+                    fillUpdater={this.updateFill.bind(this)}
                 />
 
             </div>

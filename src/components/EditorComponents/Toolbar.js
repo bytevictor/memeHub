@@ -53,7 +53,7 @@ export default function ToggleButtons(props) {
       <ToggleButton value="StraightLine" aria-label="StraightLine">
         <ShowChartIcon />
       </ToggleButton>
-      <ToggleButton value="square" aria-label="square">
+      <ToggleButton value="Rectangle" aria-label="Rectangle">
         <Crop169Icon />
       </ToggleButton>
       <ToggleButton value="circle" aria-label="circle">
