@@ -22,6 +22,9 @@ class BottomToolbar extends React.Component{
     this.shadowSizeUpdater=props.shadowSizeUpdater
     this.dashUpdater=props.dashUpdater
 
+    this.cornerRadiusUpdater=props.cornerRadiusUpdater
+    this.fillUpdater=props.fillUpdater
+
     this.state = {
       selectedToolbar: "SelectorAndText"
     }

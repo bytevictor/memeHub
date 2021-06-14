@@ -37,7 +37,7 @@ class RectBottomToolbar extends React.Component{
       shadowColor: createColor("#000000"),
       shadowWidth: 0,
       cornerRadius: 0,
-      fill: false,
+      fill: createColor("#00000000"),
     }
   }
 
@@ -146,7 +146,7 @@ class RectBottomToolbar extends React.Component{
     }
   }
 
-  handleFillChange = (event, value) => {
+  handleFillChange = (value) => {
     //event triggers onmousemove, so it floods, change state
     //only when value changes (performance)
     if(this.state.fill != value){
@@ -199,12 +199,33 @@ class RectBottomToolbar extends React.Component{
           <Grid item xs={4} sm={4} md={4} className="d-flex">
           <Paper className="m-3 p-2 d-flex justify-content-around align-items-center flex-grow-1" 
                    elevation={3}>
+                <Paper className="p-2 d-flex flex-column justify-content-around align-items-center" variant="outlined">
+                    <Typography className={classes.title} color="textSecondary" gutterBottom>
+                        Fill Color
+                    </Typography>
+                    <ColorPicker 
+                            defaultValue={this.state.fill} 
+                            value={this.state.fill}
+                            onChange={this.handleFillChange.bind(this)}
+                            hideTextfield
+                    />
+                  </Paper>
                 <Paper className="p-2 w-50" variant="outlined">
                   <Typography className={classes.title} color="textSecondary" gutterBottom>
-                    Rectangle
+                    Corner Radius
                   </Typography>
                   <div className="m-2 pr-2">
-
+                    <Slider
+                      value={this.state.cornerRadius}
+                      //getAriaValueText={valuetext}
+                      aria-labelledby="discrete-slider"
+                      valueLabelDisplay="auto"
+                      step={1}
+                      marks
+                      min={0}
+                      max={60}
+                      onChange={this.handleCornerRadiusChange.bind(this)}
+                    />
                   </div>
                 </Paper>
             </Paper>

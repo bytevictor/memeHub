@@ -48,6 +48,8 @@ class Editor extends React.Component{
         this.bottomToolbarRef = createRef()
 
         this.lineRef = createRef()
+        this.rectRef = createRef()
+        let lastRectAttrs = {}
 
         this.state = {
             image: null,
@@ -509,17 +511,19 @@ class Editor extends React.Component{
 
         if(rect != null){
             console.log( newRadius )
-            text.setAttr('cornerRadius', newRadius)
-            text.getStage().batchDraw()
+            rect.setAttr('cornerRadius', newRadius)
+            rect.getStage().batchDraw()
         }
     }
 
     updateFill( newColor ){
         let rect = this.transformerRef.current.nodes()[0]
 
+        console.log(newColor)
+
         if(rect != null){
             if( newColor == null ){
-                rect.setAttr('fill', newColor)
+                rect.setAttr('fill', '#' + newColor.hex)
             } else {
                 rect.setAttr('fill', '#' + newColor.hex)
             }
