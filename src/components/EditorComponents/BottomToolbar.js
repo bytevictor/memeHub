@@ -60,6 +60,17 @@ class BottomToolbar extends React.Component{
                     dashUpdater={this.dashUpdater}
                    />
         break
+        case "StraightLine":
+            return <LineBottomToolbar 
+                      ref={this.bottomToolbarRef}
+
+                      strokeColorUpdater = {this.strokeColorUpdater}
+                      strokeSizeUpdater  = {this.strokeSizeUpdater}
+                      shadowColorUpdater={this.shadowColorUpdater}
+                      shadowSizeUpdater={this.shadowSizeUpdater}
+                      dashUpdater={this.dashUpdater}
+                   />
+        break
         case "KonvaImage":
             
         break

@@ -25,6 +25,7 @@ import CvText, { handleTextDblClick } from './EditorComponents/ToolShapes/CvText
 import {validateFile} from './Helpers/FileHelpers'
 import { handleSelectorMouseDown } from './EditorComponents/ToolShapes/Selector';
 import { handleFreeLineMouseDown, handleFreeLineMouseMove, handleFreeLineMouseUp } from './EditorComponents/ToolShapes/FreeLine';
+import { handleStraightLineMouseDown, handleStraightLineMouseMove, handleStraightLineMouseUp } from './EditorComponents/ToolShapes/StraightLine';
 
 //Colors for the Mui
 const theme = createMuiTheme({
@@ -98,8 +99,6 @@ class Editor extends React.Component{
                     break
                 case 'Line':
                     this.changeBottomToolbar("FreeLine")
-
-                    console.log(nodeattrs)
 
                     bottomToolbar.updateToolbar()( nodeattrs.stroke,
                                                    nodeattrs.strokeWidth,
@@ -355,18 +354,26 @@ class Editor extends React.Component{
             case 'FreeLine':
                 handleFreeLineMouseDown.bind(this)(e)
             break
+
+            case 'StraightLine':
+                handleStraightLineMouseDown.bind(this)(e)
+            break
         }
     }
 
     handleCanvasMouseUp(e){
         if(this.state.selectedTool == 'FreeLine'){
             handleFreeLineMouseUp.bind(this)(e)
+        } else if( this.state.selectedTool == 'StraightLine'){
+            handleStraightLineMouseUp.bind(this)(e)
         }
     }
 
     handleCanvasMouseMove(e){
         if(this.state.selectedTool == 'FreeLine'){
             handleFreeLineMouseMove.bind(this)(e)
+        } else if( this.state.selectedTool == 'StraightLine'){
+            handleStraightLineMouseMove.bind(this)(e)
         }
     }
 
