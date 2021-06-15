@@ -27,6 +27,7 @@ import { handleSelectorMouseDown } from './EditorComponents/ToolShapes/Selector'
 import { handleFreeLineMouseDown, handleFreeLineMouseMove, handleFreeLineMouseUp } from './EditorComponents/ToolShapes/FreeLine';
 import { handleStraightLineMouseDown, handleStraightLineMouseMove, handleStraightLineMouseUp } from './EditorComponents/ToolShapes/StraightLine';
 import { handleRectangleMouseDown, handleRectangleMouseMove, handleRectangleMouseUp } from './EditorComponents/ToolShapes/Rectangle';
+import { handleEllipseMouseDown, handleEllipseMouseMove, handleEllipseMouseUp } from './EditorComponents/ToolShapes/Ellipse';
 
 //Colors for the Mui
 const theme = createMuiTheme({
@@ -110,6 +111,7 @@ class Editor extends React.Component{
                                                    nodeattrs.dash )
                     break
                 case 'Rect':
+                case 'Ellipse':
                     this.changeBottomToolbar("Rectangle")
 
                     bottomToolbar.updateToolbar()( nodeattrs.stroke,
@@ -374,6 +376,11 @@ class Editor extends React.Component{
 
             case 'Rectangle':
                 handleRectangleMouseDown.bind(this)(e)
+            break
+
+            case 'Ellipse':
+                handleEllipseMouseDown.bind(this)(e)
+            break
         }
     }
 
@@ -389,6 +396,11 @@ class Editor extends React.Component{
 
             case 'Rectangle':
                 handleRectangleMouseUp.bind(this)(e)
+            break
+
+            case 'Ellipse':
+                handleEllipseMouseUp.bind(this)(e)
+            break
         }
     }
 
@@ -404,6 +416,11 @@ class Editor extends React.Component{
 
             case 'Rectangle':
                 handleRectangleMouseMove.bind(this)(e)
+            break
+
+            case 'Ellipse':
+                handleEllipseMouseMove.bind(this)(e)
+            break
         }
     }
 

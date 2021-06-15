@@ -225,6 +225,7 @@ class RectBottomToolbar extends React.Component{
                       min={0}
                       max={60}
                       onChange={this.handleCornerRadiusChange.bind(this)}
+                      disabled={this.props.disableCornerRadius}
                     />
                   </div>
                 </Paper>

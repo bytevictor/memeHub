@@ -1,12 +1,12 @@
-import {Rect} from 'react-konva'
+import {Ellipse} from 'react-konva'
 
-export function handleRectangleMouseDown(e){
+export function handleEllipseMouseDown(e){
     let pos = this.stageRef.current.getPointerPosition()
 
     //get the bottomToolbar that is rendered
     let bottomToolbar = this.bottomToolbarRef.current.bottomToolbarRef.current
 
-    let new_rect = <Rect
+    let new_rect = <Ellipse
                     key={this.state.itemArray.length}
                     ref={this.rectRef}
 
@@ -38,7 +38,7 @@ export function handleRectangleMouseDown(e){
     this.setState({isDrawing: true})
 }
 
-export function handleRectangleMouseMove(e){
+export function handleEllipseMouseMove(e){
     if( this.state.isDrawing ){
         let lastRectangle = this.rectRef.current
         let pos = this.stageRef.current.getPointerPosition()
@@ -49,8 +49,10 @@ export function handleRectangleMouseMove(e){
         lrData.height = pos.y - lrData.y
 
         lastRectangle.setAttrs({
-            x: (lrData.width < 0) ? lrData.x + lrData.width : lrData.x,
-            y: (lrData.height < 0) ? lrData.y + lrData.height : lrData.y,
+            x: (lrData.width < 0)  ? lrData.x + (lrData.width/2)  
+                                    : lrData.x + (lrData.width / 2),
+            y: (lrData.height < 0) ? lrData.y + (lrData.height/2) 
+                                    : lrData.y + (lrData.height / 2),
             width: Math.abs(lrData.width),
             height: Math.abs(lrData.height)
         })
@@ -60,7 +62,7 @@ export function handleRectangleMouseMove(e){
     }
 }
 
-export function handleRectangleMouseUp(e){
+export function handleEllipseMouseUp(e){
     if(this.state.isDrawing){
         this.setState({isDrawing: false})
     }

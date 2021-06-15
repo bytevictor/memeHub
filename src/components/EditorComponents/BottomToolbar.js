@@ -76,8 +76,12 @@ class BottomToolbar extends React.Component{
                    />
         break
         case "Rectangle":
+        case "Ellipse":
             return <RectBottomToolbar
                       ref={this.bottomToolbarRef}
+
+                      //we can reuse the rectbottom toolbar but corner radius has no sense
+                      disableCornerRadius={this.state.selectedToolbar == "Ellipse"}
 
                       strokeColorUpdater = {this.strokeColorUpdater}
                       strokeSizeUpdater  = {this.strokeSizeUpdater}

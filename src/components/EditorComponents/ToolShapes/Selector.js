@@ -14,7 +14,7 @@ export function handleSelectorMouseDown(e){
         } else if(e.target.className === "Line"){
             this.changeSelectedItem({type: 'Line', item: e.target})
 
-        } else if(e.target.className === "Rect") {
+        } else if(e.target.className === "Rect" || e.target.className === "Ellipse") {
             this.changeSelectedItem({type: 'Rect', item: e.target})
 
         } else if(e.target != this.kvMainImageRef.current){

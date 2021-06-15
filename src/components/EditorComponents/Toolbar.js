@@ -56,11 +56,8 @@ export default function ToggleButtons(props) {
       <ToggleButton value="Rectangle" aria-label="Rectangle">
         <Crop169Icon />
       </ToggleButton>
-      <ToggleButton value="circle" aria-label="circle">
+      <ToggleButton value="Ellipse" aria-label="Ellipse">
         <RadioButtonUncheckedIcon />
-      </ToggleButton>
-      <ToggleButton value="brush" aria-label="brush">
-        <BrushIcon />
       </ToggleButton>
     </ToggleButtonGroup>
     </ThemeProvider>
