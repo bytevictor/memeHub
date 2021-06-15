@@ -50,7 +50,7 @@ class Editor extends React.Component{
 
         this.lineRef = createRef()
         this.rectRef = createRef()
-        let lastRectAttrs = {}
+        this.lastRectAttrs = {}
 
         this.state = {
             image: null,
@@ -170,6 +170,7 @@ class Editor extends React.Component{
 
     imageLoader(image){
 
+        this.stageRef.current.setAttrs({visible: true})
         this.setState({image: image});
 
         //For scaling the image to the canvas width
@@ -195,23 +196,24 @@ class Editor extends React.Component{
 
         this.stageRef.current.setAttrs({
             width: size.width,
-            height: size.height
+            height: size.height,
+            visible: true
         })
     }
 
     imageUnloader(){
-        this.setState({image: null})
-        this.setState({itemArray: []})
-
         this.changeSelectedItem([])
 
-        let canvas_stage = this.stageRef.current
-
-        canvas_stage.clear()
-        canvas_stage.setAttrs({
-            width: 0,
-            height: 0
-        }) 
+        this.setState({image: null,
+                       itemArray: []})
+        
+        //has to be greater than 0 because of a bug from the library
+        //so we make it invisible
+        this.stageRef.current.setAttrs({
+            width: 1,
+            height: 1,
+            visible: false
+        })
     }
 
     imageDownloader(){
@@ -540,7 +542,7 @@ class Editor extends React.Component{
 
         if(rect != null){
             if( newColor == null ){
-                rect.setAttr('fill', '#' + newColor.hex)
+                rect.setAttr('fill', newColor)
             } else {
                 rect.setAttr('fill', '#' + newColor.hex)
             }
