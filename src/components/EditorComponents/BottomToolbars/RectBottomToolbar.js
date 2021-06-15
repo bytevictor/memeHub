@@ -78,7 +78,7 @@ class RectBottomToolbar extends React.Component{
 
   changeFill( value ){
     if(this.state.fill != value){
-        this.setState({fill: value})
+        this.setState({fill: createColor(value)})
       }
   }
 
