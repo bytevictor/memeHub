@@ -56,7 +56,7 @@ describe('Editor Tests', () => {
 
       cy.get('.drop-container').trigger('drop', { dataTransfer }).then( () => {
         cy.get('#deletemainbutton').click().then( () => {
-          cy.get('canvas').invoke('width').should('eq', 0)
+          cy.get('canvas').invoke('width').should('eq', 1)
         })
       } )
     })
