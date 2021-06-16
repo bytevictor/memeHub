@@ -60,6 +60,7 @@ class DragandDrop extends React.Component{
     render(){
         return(
             <div className="drop-container "
+                id="maindropcontainer"
                 onDragOver={dragOver}
                 onDragEnter={dragEnter}
                 onDragLeave={dragLeave}

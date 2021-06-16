@@ -42,7 +42,8 @@ describe('Editor Tests', () => {
 
       cy.get('.drop-container').trigger('drop', { dataTransfer }).then( () => {
         cy.get('canvas').invoke('width').should('greaterThan', 0)
-        cy.get('.drop-container').should('not.exist')
+        cy.get('#maindropcontainer').should('not.exist')
+        cy.get('#secondarydropcontainer').should('exist')
       } )
     })
   })
