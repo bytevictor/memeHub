@@ -28,7 +28,7 @@ function dataTransferFileObject(files) {
 }
 
 describe('LineBottomToolbar tests', () => {
-  it('should change the bottom toolbar', () => {
+  it('should draw a straight line', () => {
     mount(<Editor />);
 
     cy.readFile('src/test/mante.png', 'base64').then( (mante) =>{
