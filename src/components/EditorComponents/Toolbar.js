@@ -16,13 +16,12 @@ import TextFormatIcon from '@material-ui/icons/TextFormat';
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
 
 
-export default function ToggleButtons(props) {
-  const [selection, setSelection] = React.useState('SelectorAndText');
+export default function Toolbar(props) {
+  //const [selection, setSelection] = React.useState('SelectorAndText');
   const toolUpdater = props.toolUpdater
 
   const handleSelection = (event, newSelection) => {
     if (newSelection !== null) {
-      setSelection(newSelection);
       toolUpdater(newSelection)
     }
   };
@@ -36,7 +35,7 @@ export default function ToggleButtons(props) {
   return (
     <ThemeProvider theme={darkTheme}>
     <ToggleButtonGroup
-      value={selection}
+      value={props.tool}
       exclusive
       onChange={handleSelection}
       aria-label="text alignment"

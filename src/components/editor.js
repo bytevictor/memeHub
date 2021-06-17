@@ -290,6 +290,8 @@ class Editor extends React.Component{
         this.forceUpdate()
         //After its rendered we get the ref (if not rendered, new_image is not a valid node)
         let item = {type: 'KonvaImage', item: newImageRef.current}
+        //change to the correct tool
+        this.changeSelectedTool("SelectorAndText")
         this.changeSelectedItem(item)
     }
     
@@ -622,6 +624,7 @@ class Editor extends React.Component{
                     </button>
 
                     <Toolbar
+                        tool={this.state.selectedTool}
                         toolUpdater={this.changeSelectedTool.bind(this)}
                     />
                     </div>
