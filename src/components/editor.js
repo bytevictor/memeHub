@@ -68,7 +68,7 @@ class Editor extends React.Component{
         //make stage focusable
         this.stageRef.current.container().tabIndex = 1
         //delete event for the canvas items when stage onfocus
-        this.stageRef.current.container().addEventListener('keydown', this.handleDelete.bind(this))
+        this.stageRef.current.container().addEventListener('keydown', this.handleKeyDown.bind(this))
     }
 
     //This should be called instead of transformer.nodes([])
@@ -354,13 +354,29 @@ class Editor extends React.Component{
         }
     }
 
+    handleCtrlplusKey(e){
+        let charCode = String.fromCharCode(e.which).toLowerCase();
+        if(e.ctrlKey && charCode === 'c') {
+            console.log("Ctrl + C pressed");
+        } else if(e.ctrlKey && charCode === 's') {
+            e.preventDefault();
+            console.log("Ctrl + S pressed");
+        }
+    }
+
     handleDelete(e){
         //delete and backspace
         if ( e.keyCode === 8 || e.keyCode === 46 ) {
             console.log("Stage delete event, Key: " + e.keyCode)
             this.deleteSelectedItem()
-          }
+        }
     }
+
+    handleKeyDown(e){
+        this.handleDelete(e)
+        this.handleCtrlplusKey(e)
+    }
+    
 
     /**                              MOUSE EVENTS                                  */
 
