@@ -604,9 +604,6 @@ class Editor extends React.Component{
     updateBlur( newValue ){
         let img = this.transformerRef.current.nodes()[0]
 
-        console.log(img)
-        console.log("updated", newValue)
-
         if( img != null){
             //change
             img.blurRadius(newValue)

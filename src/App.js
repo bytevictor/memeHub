@@ -16,9 +16,9 @@ function App() {
     <React.Fragment>
       <Router>
         <Switch>
-          <Route exact path="/" component={Home} />
+          <Route exact path="/" component={Editor} />
           <Route exact path="/editor" component={Editor} />
-          <Route component={Home} />
+          <Route component={Editor} />
         </Switch>
       </Router>
 
