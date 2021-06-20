@@ -19,7 +19,6 @@ export function handleSelectorMouseDown(e){
 
         } else if(e.target != this.kvMainImageRef.current){
             this.changeSelectedItem({type: 'KonvaImage', item: e.target})
-            
         } else {
             this.changeSelectedItem([])
         }

@@ -123,6 +123,13 @@ class Editor extends React.Component{
                     break
                 case 'KonvaImage':
                     //Image toolbar
+                    this.changeBottomToolbar("KonvaImage")
+
+                    bottomToolbar.updateToolbar()( nodeattrs.stroke,
+                                                   nodeattrs.strokeWidth,
+                                                   nodeattrs.shadowColor,
+                                                   nodeattrs.shadowBlur,
+                                                   nodeattrs.dash )
                     break
             }
         }
@@ -252,6 +259,24 @@ class Editor extends React.Component{
         }
     }
 
+    duplicateSelectedItem(){
+        let transformer = this.transformerRef.current
+
+        //transformer onScreen & something is selected
+        if(transformer != null && transformer.nodes()[0] != null){
+            let element = transformer.nodes()[0]
+            console.log(element)
+            let duplicate = React.cloneElement( element )
+            console.log(duplicate)
+
+            this.state.itemArray.push(duplicate)
+
+            this.changeSelectedItem([duplicate])
+
+            this.forceUpdate()
+        }
+    }
+
     changeSelectedTool(newTool){
         if(newTool != null){
             console.log("changed to: ", newTool)
@@ -283,11 +308,18 @@ class Editor extends React.Component{
                             x={ (width / 2 ) - (new_size.width * reduction / 2)}
                             y={ (height / 2) - (new_size.height * reduction / 2)}
                             draggable
+
+                            filters={[Konva.Filters.Blur]}
+                            blurRadius={0}
                         />
 
         this.state.itemArray.push(new_image)
         //push doesn't update the state
         this.forceUpdate()
+
+        //cache after render for the filters
+        newImageRef.current.cache()
+
         //After its rendered we get the ref (if not rendered, new_image is not a valid node)
         let item = {type: 'KonvaImage', item: newImageRef.current}
         //change to the correct tool
@@ -358,6 +390,7 @@ class Editor extends React.Component{
         let charCode = String.fromCharCode(e.which).toLowerCase();
         if(e.ctrlKey && charCode === 'c') {
             console.log("Ctrl + C pressed");
+            this.duplicateSelectedItem()
         } else if(e.ctrlKey && charCode === 's') {
             e.preventDefault();
             console.log("Ctrl + S pressed");
@@ -367,7 +400,6 @@ class Editor extends React.Component{
     handleDelete(e){
         //delete and backspace
         if ( e.keyCode === 8 || e.keyCode === 46 ) {
-            console.log("Stage delete event, Key: " + e.keyCode)
             this.deleteSelectedItem()
         }
     }
@@ -569,6 +601,23 @@ class Editor extends React.Component{
         }
     }
 
+    updateBlur( newValue ){
+        let img = this.transformerRef.current.nodes()[0]
+
+        console.log(img)
+        console.log("updated", newValue)
+
+        if( img != null){
+            //change
+            img.blurRadius(newValue)
+            //Apply changes
+            img.cache()
+            //redraw
+            img.getStage().batchDraw()
+        }
+        
+    }
+
     render(){
         return( 
             <ThemeProvider theme={theme}>
@@ -682,6 +731,8 @@ class Editor extends React.Component{
 
                     cornerRadiusUpdater={this.updateCornerRadius.bind(this)}
                     fillUpdater={this.updateFill.bind(this)}
+
+                    blurValueUpdater={this.updateBlur.bind(this)}
                 />
 
             </div>

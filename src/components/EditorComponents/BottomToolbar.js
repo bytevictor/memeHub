@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/styles';
 import TextBottomToolbar from './BottomToolbars/TextBottomToolbar'
 import LineBottomToolbar from './BottomToolbars/LineBottomToolbar'
 import RectBottomToolbar from './BottomToolbars/RectBottomToolbar'
+import ImageBottomToolbar from './BottomToolbars/ImageBottomToolbar'
 
 class BottomToolbar extends React.Component{
   constructor(props){
@@ -24,6 +25,8 @@ class BottomToolbar extends React.Component{
 
     this.cornerRadiusUpdater=props.cornerRadiusUpdater
     this.fillUpdater=props.fillUpdater
+
+    this.blurValueUpdater=props.blurValueUpdater
 
     this.state = {
       selectedToolbar: "SelectorAndText"
@@ -91,7 +94,15 @@ class BottomToolbar extends React.Component{
                       fillUpdater={this.fillUpdater}
                    />
         case "KonvaImage":
-            
+          return <ImageBottomToolbar 
+                      ref={this.bottomToolbarRef}
+
+                      strokeColorUpdater = {this.strokeColorUpdater}
+                      strokeSizeUpdater  = {this.strokeSizeUpdater}
+                      shadowColorUpdater={this.shadowColorUpdater}
+                      shadowSizeUpdater={this.shadowSizeUpdater}
+                      blurValueUpdater={this.blurValueUpdater}
+                 />
         break
     }
 }
