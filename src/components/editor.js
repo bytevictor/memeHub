@@ -309,8 +309,14 @@ class Editor extends React.Component{
                             y={ (height / 2) - (new_size.height * reduction / 2)}
                             draggable
 
-                            filters={[Konva.Filters.Blur]}
-                            blurRadius={0}
+                            filters={[Konva.Filters.Blur, Konva.Filters.Brighten, 
+                                      Konva.Filters.Noise, Konva.Filters.Pixelate,
+                                      Konva.Filters.Mask]}
+                            blurRadius = {0} 
+                            brightness = {0} // -1 | 1
+                            pixelSize  = {1}
+                            noise      = {0}
+                            threshold  = {0}
                         />
 
         this.state.itemArray.push(new_image)
@@ -318,7 +324,7 @@ class Editor extends React.Component{
         this.forceUpdate()
 
         //cache after render for the filters
-        newImageRef.current.cache()
+        //newImageRef.current.cache()
 
         //After its rendered we get the ref (if not rendered, new_image is not a valid node)
         let item = {type: 'KonvaImage', item: newImageRef.current}
@@ -612,7 +618,58 @@ class Editor extends React.Component{
             //redraw
             img.getStage().batchDraw()
         }
-        
+    }
+
+    updateBrightness( newValue ){
+        let img = this.transformerRef.current.nodes()[0]
+
+        if( img != null){
+            //change
+            img.brightness(newValue)
+            //Apply changes
+            img.cache()
+            //redraw
+            img.getStage().batchDraw()
+        }
+    }
+
+    updateNoise( newValue ){
+        let img = this.transformerRef.current.nodes()[0]
+
+        if( img != null){
+            //change
+            img.noise(newValue)
+            //Apply changes
+            img.cache()
+            //redraw
+            img.getStage().batchDraw()
+        }
+    }
+
+    updatePixelate( newValue ){
+        let img = this.transformerRef.current.nodes()[0]
+
+        if( img != null){
+            //change
+            img.pixelSize(newValue)
+            //Apply changes
+            img.cache()
+            //redraw
+            img.getStage().batchDraw()
+        }
+    }
+
+    updateMask( newValue ){
+        let img = this.transformerRef.current.nodes()[0]
+
+        if( img != null){
+            //change
+            img.threshold(newValue)
+            //Apply changes
+            img.cache()
+            //redraw
+            img.getStage().batchDraw()
+        }
     }
 
     render(){
@@ -730,6 +787,10 @@ class Editor extends React.Component{
                     fillUpdater={this.updateFill.bind(this)}
 
                     blurValueUpdater={this.updateBlur.bind(this)}
+                    brightnessValueUpdater={this.updateBrightness.bind(this)}
+                    noiseValueUpdater={this.updateNoise.bind(this)}
+                    pixelValueUpdater={this.updatePixelate.bind(this)}
+                    maskValueUpdater={this.updateMask.bind(this)}
                 />
 
             </div>

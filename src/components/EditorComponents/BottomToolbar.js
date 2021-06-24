@@ -27,6 +27,10 @@ class BottomToolbar extends React.Component{
     this.fillUpdater=props.fillUpdater
 
     this.blurValueUpdater=props.blurValueUpdater
+    this.brightnessValueUpdater=props.brightnessValueUpdater
+    this.noiseValueUpdater=props.noiseValueUpdater
+    this.pixelValueUpdater=props.pixelValueUpdater
+    this.maskValueUpdater=props.maskValueUpdater
 
     this.state = {
       selectedToolbar: "SelectorAndText"
@@ -102,6 +106,10 @@ class BottomToolbar extends React.Component{
                       shadowColorUpdater={this.shadowColorUpdater}
                       shadowSizeUpdater={this.shadowSizeUpdater}
                       blurValueUpdater={this.blurValueUpdater}
+                      brightnessValueUpdater={this.brightnessValueUpdater}
+                      noiseValueUpdater={this.noiseValueUpdater}
+                      pixelValueUpdater={this.pixelValueUpdater}
+                      maskValueUpdater={this.maskValueUpdater}
                  />
         break
     }

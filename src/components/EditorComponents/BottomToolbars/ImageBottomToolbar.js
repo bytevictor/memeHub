@@ -37,9 +37,19 @@ class ImageBottomToolbar extends React.Component{
       shadowColor: createColor("#000000"),
       shadowWidth: 0,
       selectedFilter: "Blur",
+
+      //To change slider depending on the selected filter
+      sliderMin: 0,
+      sliderStep: 1,
+      sliderMax: 50,
+
+      selectedFilterValue: 0,
+
       blurValue: 0,
       brightenValue: 0,
-      filters: [Konva.Filters.Blur, Konva.Filters.Brighten, Konva.Filters.Noise, Konva.Filters.Pixelate]
+      pixelSizeValue: 1,
+      noiseValue: 0,
+      thresholdValue: 0
     }
 
   }
@@ -73,7 +83,14 @@ class ImageBottomToolbar extends React.Component{
     }
   }
 
-  updateToolbar(strokeColor, strokeWidth, shadowColor, shadowWidth, dashValue){
+  changeBlurValue( value ){
+    if(this.state.blurValue != value){
+      this.setState({blurValue: value})
+    }
+  }
+
+  updateToolbar(strokeColor, strokeWidth, shadowColor, shadowWidth, 
+                blurValue, brightenValue, pixelSizeValue, noiseValue, thresholdValue ){
     if( strokeColor != null)
       this.changeStrokeColor(strokeColor)
 
@@ -86,19 +103,10 @@ class ImageBottomToolbar extends React.Component{
     if( shadowWidth != null)
       this.changeShadowWidth(shadowWidth)
 
-    //Selector value should be the same object to work properly so
-    //here we compare to the object and replace value with it
-    if( dashValue != null){
-      if(dashValue == this.dashValues.continuous){
-        this.changeDash(this.dashValues.continuous)
-      } else if( arrayEquals(dashValue, this.dashValues.dashLine) ){
-        this.changeDash(this.dashValues.dashLine)
-      } else if( arrayEquals(dashValue, this.dashValues.dotLine) ){
-        this.changeDash(this.dashValues.dotLine)
-      } else if( arrayEquals(dashValue, this.dashValues.dashAndDots) ){
-        this.changeDash(this.dashValues.dashAndDots)
-      } 
-    }
+    if( blurValue != null)
+      this.changeBlurValue(blurValue)
+
+    
   }
 
   /*  ////////////////////////////////////////////////  */
@@ -139,14 +147,79 @@ class ImageBottomToolbar extends React.Component{
   handleFilterChange = (event) => {
     let value = event.target.value
     console.log("Cambiando ", value)
-    this.setState({selectedFilter: value})
+    console.log(this.state)
+
+    switch(value){
+      case "Blur":
+        this.setState({selectedFilter: value,
+                       selectedFilterValue: this.state.blurValue,
+                       sliderMin: 0,
+                       sliderMax: 50,
+                       sliderStep: 1})
+      break
+      case "Brightness":
+        this.setState({selectedFilter: value,
+                       selectedFilterValue: this.state.brightenValue,
+                       sliderMin: -1,
+                       sliderMax: 1,
+                       sliderStep: 0.05})
+      break
+      case "Noise":
+        this.setState({selectedFilter: value,
+                       selectedFilterValue: this.state.noiseValue,
+                       sliderMin: 0,
+                       sliderMax: 5,
+                       sliderStep: 0.2})
+      break
+      case "Pixelate":
+        this.setState({selectedFilter: value,
+                       selectedFilterValue: this.state.pixelSizeValue,
+                       sliderMin: 1,
+                       sliderMax: 50,
+                       sliderStep: 1})
+      break
+      case "Mask":
+        this.setState({selectedFilter: value,
+                       selectedFilterValue: this.state.thresholdValue,
+                       sliderMin: 0,
+                       sliderMax: 300,
+                       sliderStep: 1})
+      break
+    }
+
+    console.log(this.state)
   }
 
   handleFilterValueChange = (event, value) => {
-      if(this.state.blurValue != value){
-          console.log("new filter value: ", value)
-          this.props.blurValueUpdater(value)
-          this.setState({blurValue: value})
+      if(this.state.selectedFilterValue != value){
+        switch(this.state.selectedFilter){
+          case "Blur":
+            this.props.blurValueUpdater(value)
+            this.setState({selectedFilterValue: value,
+                           blurValue: value})
+          break
+          case "Brightness":
+            this.props.brightnessValueUpdater(value)
+            this.setState({selectedFilterValue: value,
+                           brightenValue: value})
+          break
+          case "Noise":
+            this.props.noiseValueUpdater(value)
+            this.setState({selectedFilterValue: value,
+                           noiseValue: value})
+          break
+          case "Pixelate":
+            this.props.pixelValueUpdater(value)
+            this.setState({selectedFilterValue: value,
+                           pixelSizeValue: value})
+          break
+          case "Mask":
+            this.props.maskValueUpdater(value)
+            this.setState({selectedFilterValue: value,
+                           thresholdValue: value})
+          break
+        }
+          
       }
   }
   
@@ -157,110 +230,44 @@ class ImageBottomToolbar extends React.Component{
     return (
       <div id='bottomtoolbar' className={classes.root}>
           <Grid container spacing={0} justify="space-evenly">
-          <Grid item xs={4} sm={4} md={4} className="d-flex">
+          <Grid item xs={12} sm={10} md={6} className="d-flex">
           <Paper className="m-3 p-2 d-flex justify-content-around align-items-center flex-grow-1" 
                    elevation={3}>
-                <Paper className="p-2 d-flex flex-column justify-content-around align-items-center" variant="outlined">
+                <Paper className="p-2 w-75" variant="outlined">
                   <Typography className={classes.title} color="textSecondary" gutterBottom>
-                    Shadow Color
+                    Image Filter
                   </Typography>
-                  <ColorPicker 
-                        defaultValue={this.state.shadowColor} 
-                        value={this.state.shadowColor}
-                        onChange={this.handleShadowColorChange.bind(this)}
-                        hideTextfield
-                  />
-                </Paper>
-                <Paper className="p-2 w-50" variant="outlined">
-                  <Typography className={classes.title} color="textSecondary" gutterBottom>
-                    Shadow Width
-                  </Typography>
-                  <div className="m-2 pr-2">
-                    <Slider
-                      value={this.state.shadowWidth}
-                      //getAriaValueText={valuetext}
-                      aria-labelledby="discrete-slider"
-                      valueLabelDisplay="auto"
-                      step={2}
-                      marks
-                      min={0}
-                      max={30}
-                      onChange={this.handleShadowSizeChange.bind(this)}
-                    />
+                  <div className="d-flex">
+                    <div className="m-2 pr-2 flex-grow-1">
+                    <Select
+                      className="w-50"
+                      id="dashSelector"
+                      value={this.state.selectedFilter}
+                      defaultValue={"Blur"}
+                      onChange={this.handleFilterChange.bind(this)}
+                      label="Age"
+                    >
+                        <MenuItem value={"Blur"}>Blur</MenuItem>
+                        <MenuItem value={"Brightness"}>Brightness</MenuItem>
+                        <MenuItem value={"Noise"}>Noise</MenuItem>
+                        <MenuItem value={"Pixelate"}>Pixelate</MenuItem>
+                        <MenuItem value={"Mask"}>Mask</MenuItem>
+                      </Select>
+                    </div>
+                  <div className="m-2 pr-2 w-50">
+                      <Slider
+                        defaultValue={0}
+                        value={this.state.selectedFilterValue}
+                        //getAriaValueText={valuetext}
+                        aria-labelledby="discrete-slider"
+                        valueLabelDisplay="auto"
+                        step={this.state.sliderStep}
+                        marks
+                        min={this.state.sliderMin}
+                        max={this.state.sliderMax}
+                        onChange={this.handleFilterValueChange.bind(this)}
+                      />
                   </div>
-                </Paper>
-            </Paper>
-          </Grid>
-          <Grid item xs={4} sm={4} md={4} className="d-flex">
-          <Paper className="m-3 p-2 d-flex justify-content-around align-items-center flex-grow-1" 
-                   elevation={3}>
-                <Paper className="p-2 w-50" variant="outlined">
-                  <Typography className={classes.title} color="textSecondary" gutterBottom>
-                    IMAGEEEE
-                  </Typography>
-                  <div className="m-2 pr-2">
-                  <Select
-                    className="w-100"
-                    id="dashSelector"
-                    value={this.state.selectedFilter}
-                    defaultValue={"Blur"}
-                    onChange={this.handleFilterChange.bind(this)}
-                    label="Age"
-                  >
-                      <MenuItem value={"Blur"}>Blur</MenuItem>
-                      <MenuItem value={"Brightness"}>Brightness</MenuItem>
-                      <MenuItem value={"Noise"}>Noise</MenuItem>
-                      <MenuItem value={"Pixelate"}>Pixelate</MenuItem>
-                    </Select>
-                  </div>
-                  <div className="m-2 pr-2">
-                    <Slider
-                      defaultValue={0}
-                      value={this.state.blurValue}
-                      //getAriaValueText={valuetext}
-                      aria-labelledby="discrete-slider"
-                      valueLabelDisplay="auto"
-                      step={1}
-                      marks
-                      min={0}
-                      max={30}
-                      onChange={this.handleFilterValueChange.bind(this)}
-                    />
-                  </div>
-                </Paper>
-            </Paper>
-          </Grid>
-          <Grid item xs={4} sm={4} md={4} className="d-flex">
-            <Paper className="m-3 p-2 d-flex justify-content-around align-items-center flex-grow-1" 
-                   elevation={3}>
-                <Paper className="p-2 d-flex flex-column justify-content-around align-items-center" variant="outlined">
-                  <Typography className={classes.title} color="textSecondary" gutterBottom>
-                    Stroke Color
-                  </Typography>
-                  <ColorPicker 
-                        defaultValue={this.state.strokeColor} 
-                        value={this.state.strokeColor}
-                        onChange={this.handleStrokeColorChange.bind(this)}
-                        hideTextfield
-                  />
-                </Paper>
-                <Paper className="p-2 w-50" variant="outlined">
-                  <Typography className={classes.title} color="textSecondary" gutterBottom>
-                    Stroke Width
-                  </Typography>
-                  <div className="m-2 pr-2">
-                    <Slider
-                      defaultValue={0}
-                      value={this.state.strokeWidth}
-                      //getAriaValueText={valuetext}
-                      aria-labelledby="discrete-slider"
-                      valueLabelDisplay="auto"
-                      step={1}
-                      marks
-                      min={0}
-                      max={30}
-                      onChange={this.handleStrokeSizeChange.bind(this)}
-                    />
                   </div>
                 </Paper>
             </Paper>
@@ -277,3 +284,42 @@ ImageBottomToolbar.propTypes = {
 };
 
 export default withStyles(styles)(ImageBottomToolbar)
+
+
+/**
+ * <Grid item xs={4} sm={4} md={4} className="d-flex">
+    <Paper className="m-3 p-2 d-flex justify-content-around align-items-center flex-grow-1" 
+            elevation={3}>
+        <Paper className="p-2 d-flex flex-column justify-content-around align-items-center" variant="outlined">
+          <Typography className={classes.title} color="textSecondary" gutterBottom>
+            Stroke Color
+          </Typography>
+          <ColorPicker 
+                defaultValue={this.state.strokeColor} 
+                value={this.state.strokeColor}
+                onChange={this.handleStrokeColorChange.bind(this)}
+                hideTextfield
+          />
+        </Paper>
+        <Paper className="p-2 w-50" variant="outlined">
+          <Typography className={classes.title} color="textSecondary" gutterBottom>
+            Stroke Width
+          </Typography>
+          <div className="m-2 pr-2">
+            <Slider
+              defaultValue={0}
+              value={this.state.strokeWidth}
+              //getAriaValueText={valuetext}
+              aria-labelledby="discrete-slider"
+              valueLabelDisplay="auto"
+              step={1}
+              marks
+              min={0}
+              max={30}
+              onChange={this.handleStrokeSizeChange.bind(this)}
+            />
+          </div>
+        </Paper>
+    </Paper>
+  </Grid>
+ */
