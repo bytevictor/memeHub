@@ -89,6 +89,30 @@ class ImageBottomToolbar extends React.Component{
     }
   }
 
+  changeBrightnessValue( value ){
+    if(this.state.brightenValue != value){
+      this.setState({brightenValue: value})
+    }
+  }
+
+  changePixelSizeValue( value ){
+    if(this.state.pixelSizeValue != value){
+      this.setState({pixelSizeValue: value})
+    }
+  }
+
+  changeNoiseValue( value ){
+    if(this.state.noiseValue != value){
+      this.setState({noiseValue: value})
+    }
+  }
+
+  changeThresholdValue( value ){
+    if(this.state.thresholdValue != value){
+      this.setState({thresholdValue: value})
+    }
+  }
+
   updateToolbar(strokeColor, strokeWidth, shadowColor, shadowWidth, 
                 blurValue, brightenValue, pixelSizeValue, noiseValue, thresholdValue ){
     if( strokeColor != null)
@@ -103,10 +127,23 @@ class ImageBottomToolbar extends React.Component{
     if( shadowWidth != null)
       this.changeShadowWidth(shadowWidth)
 
-    if( blurValue != null)
+    if( blurValue != null){
       this.changeBlurValue(blurValue)
-
+      this.setState({selectedFilter: "Blur",
+                     selectedFilterValue: blurValue})
+    }
     
+    if( brightenValue != null)
+      this.changeBrightnessValue( brightenValue )
+    
+    if( pixelSizeValue != null)
+      this.changePixelSizeValue( pixelSizeValue )
+    
+    if( noiseValue != null)
+      this.changeNoiseValue( noiseValue )
+
+    if( thresholdValue != null)
+      this.changeThresholdValue( thresholdValue )
   }
 
   /*  ////////////////////////////////////////////////  */

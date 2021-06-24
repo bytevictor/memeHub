@@ -129,7 +129,11 @@ class Editor extends React.Component{
                                                    nodeattrs.strokeWidth,
                                                    nodeattrs.shadowColor,
                                                    nodeattrs.shadowBlur,
-                                                   nodeattrs.dash )
+                                                   nodeattrs.blurRadius,
+                                                   nodeattrs.brightness,
+                                                   nodeattrs.pixelSize,
+                                                   nodeattrs.noise,
+                                                   nodeattrs.threshold )
                     break
             }
         }
