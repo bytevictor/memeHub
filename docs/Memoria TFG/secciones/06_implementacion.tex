@@ -31,7 +31,7 @@ mas utilizado en la comunidad de React para implementar esta funcionalidad.
 En un primer lugar se pensó introducir una página de error, pero ya que en principio solo hay una
 página en toda la web, se han redirigido todas las rutas a la misma, el componente principal.
 
-\begin{lstlisting}[caption={App.js}]
+\begin{lstlisting}[caption={Componente Router de App.js}]
   <Router>
     <Switch>
       <Route exact path="/" component={Editor} />
@@ -105,3 +105,31 @@ Esquema para luego redactar bien:
 -despliegue
 
 \fi
+
+\section{Despliegue de la aplicación}
+
+Ahora solo nos falta desplegar la aplicación, en nuestro caso se va a desplegar esta primera 
+versión utilizando el servicio de Github Pages \cite{GithubPages}.
+\\
+Como comentamos al inicio, para crear esta aplicación empleamos el paquete create-react-app \cite{create-react-app},
+este paquete cuenta con scripts que ayudan en el despliegue de la aplicación y crean una 
+versión optimizada del código.
+Como era uno de los objetivos del desarrollo, la aplicación ha sido desarrollada pensando
+en hacer que, aunque sea una aplicación multimedia, no se requiera de un servidor potente que
+soporte mucha carga, es decir, es puro front-end, así que sólo necesitamos que el servidor
+envíe código HTML, CSS y los scripts de Javascript, no tiene que procesar nada relativo a las
+ediciones que haga el usuario ya que esas operaciones se efectuan en el cliente.
+\\
+Esto nos permite emplear hostings ligeros para el despligue, en nuestro caso hemos decidido
+emplear Github Pages por 3 razones, el proyecto ya estaba siendo desarrollado en Github,
+el paquete create-react-app \cite{create-react-app} tiene soporte para Github Pages \cite{GithubPages}
+y por qué no decirlo, es gratuito y funciona bastante bien.
+\\
+Para el despliegue se han seguido las instrucciones que nos da la documentación de 
+create-react-app para hacer deploy en Github Pages \cite{GithubPagesDeploy}.
+Es bastante simple, añadimos la configuración de la ruta donde se hará el deploy e instalamos
+el paquete npm gh-pages \cite{gh-pages}, que es el que recomienda la documentación oficial.
+Y añadimos unos scripts que hacen uso del paquete para el deploy, al ejecutar el script
+crea una branch que sirve como source estático de la web.
+\\\\
+El despliegue puede probarse en el siguiente enlace: \url{https://bytevictor.github.io/memeHub/}
