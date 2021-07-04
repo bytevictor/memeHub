@@ -31,10 +31,10 @@ yarn-error.log*
 #Memoria, quito todos los archivos de compilacion
 docs/Memoria\ TFG/proyecto*
 #menos el pdf y el fuente
-!docs/Memoria\ TFG/proyecto.pdf
 !docs/Memoria\ TFG/proyecto.tex
 
 #Cypress
 cypress/videos
 cypress/screenshots
 cypress/downloads
+
