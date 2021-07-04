@@ -1,4 +1,4 @@
-# Informe TFM
+# Informe TFG
 
 ## Generación
 
