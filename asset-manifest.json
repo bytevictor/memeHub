@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/memehub/static/css/main.9d686eb5.chunk.css",
+    "main.js": "/memehub/static/js/main.7b520617.chunk.js",
+    "main.js.map": "/memehub/static/js/main.7b520617.chunk.js.map",
+    "runtime-main.js": "/memehub/static/js/runtime-main.d97086fc.js",
+    "runtime-main.js.map": "/memehub/static/js/runtime-main.d97086fc.js.map",
+    "static/css/2.fabbef47.chunk.css": "/memehub/static/css/2.fabbef47.chunk.css",
+    "static/js/2.1eeea522.chunk.js": "/memehub/static/js/2.1eeea522.chunk.js",
+    "static/js/2.1eeea522.chunk.js.map": "/memehub/static/js/2.1eeea522.chunk.js.map",
+    "static/js/3.1e97e004.chunk.js": "/memehub/static/js/3.1e97e004.chunk.js",
+    "static/js/3.1e97e004.chunk.js.map": "/memehub/static/js/3.1e97e004.chunk.js.map",
+    "index.html": "/memehub/index.html",
+    "static/css/2.fabbef47.chunk.css.map": "/memehub/static/css/2.fabbef47.chunk.css.map",
+    "static/css/main.9d686eb5.chunk.css.map": "/memehub/static/css/main.9d686eb5.chunk.css.map",
+    "static/js/2.1eeea522.chunk.js.LICENSE.txt": "/memehub/static/js/2.1eeea522.chunk.js.LICENSE.txt",
+    "static/media/draganddrop.css": "/memehub/static/media/upload.8524bf2f.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.d97086fc.js",
+    "static/css/2.fabbef47.chunk.css",
+    "static/js/2.1eeea522.chunk.js",
+    "static/css/main.9d686eb5.chunk.css",
+    "static/js/main.7b520617.chunk.js"
+  ]
+}
