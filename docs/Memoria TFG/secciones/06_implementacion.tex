@@ -1,4 +1,52 @@
 \chapter{Implementación}
+Para comenzar con la implementación, se partió del código elaborado como demo en la fase 
+de planifiación.
+Está bastante extendido en el desarrollo de React emplear el paquete create-react-app 
+\cite{create-react-app}.
+\\
+Es un paquete creado por Facebook que se instala con el gestor de paquetes de node 
+(npm) que crea una aplicación de React vacía con todo lo básico necesario más 
+algunos scripts que ayudan en el desarrollo y en el despliegue, como por ejemplo, el 
+script react-run, para ejecutar el servidor de desarrollo, que se recompila
+automáticamente al detectar cambios y hace el desarrollo mucho más fluido o el build
+para crear una versión release optimizada.
+\\\\
+Por si sólo, React es una biblioteca para construir interfaces de usuario que cuenta con
+módulos extra que permiten extender su funcionalidad, es decir, no es un framework, como
+otras tecnologías empleadas para el diseño de interfaces, como Vue.js o Angular.js, 
+sin embargo con estos módulos podemos ampliar las funcionalidades de la biblioteca React 
+dependiendo del uso que vayamos a darle, en nuestro caso como queremos crear una aplicación
+web, necesitamos interactuar con el 'Document Object Model' (DOM \cite{DOM}), que es la estructura
+de documentos HTML que genera React y procesa el navegador, por ende y tras la creación de 
+la plantilla inicial en React, instalamos los módulos de React que permiten interactuar 
+con él, react-dom \cite{react-dom}.
+\\\\
+También necesitamos un módulo que permita a React cambiar la página generada dependiendo de la 
+ruta a la que accede el usuario, en el caso de nuestra aplicación, siempre querremos mostrar 
+la página del editor así que debemos redirigir todas las rutas al componente principal <Editor/>
+que veremos en profundidad más adelante (aunque se planea añadir más páginas en un futuro).
+Para ello, empleamos el módulo 'react-router-dom' \cite{react-router-dom} que es el módulo
+mas utilizado en la comunidad de React para implementar esta funcionalidad.
+\\\\
+En un primer lugar se pensó introducir una página de error, pero ya que en principio solo hay una
+página en toda la web, se han redirigido todas las rutas a la misma, el componente principal.
+
+\begin{lstlisting}[caption={App.js}]
+  <Router>
+    <Switch>
+      <Route exact path="/" component={Editor} />
+      <Route exact path="/editor" component={Editor} />
+      <Route component={Editor} />
+    </Switch>
+  </Router>
+\end{lstlisting}
+
+Aunque bastaría con emplear una única ruta se han especificado también las rutas '/' y '/editor' 
+ya que, como se ha comentado antes, se planea extender la cantidad de páginas en un futuro.
+
+\section{Componente Principal: Editor}
+
+konva
 
 \iffalse
 La implementación del software se ha dividido en hitos. Estos, han sido definidos en Github
@@ -55,56 +103,5 @@ Esquema para luego redactar bien:
 -production build
 
 -despliegue
-\\\\\\
+
 \fi
-
-Para comenzar con la implementación, se partió del código elaborado como demo en la 
-fase de planifiación.
-Está bastante extendido en el desarrollo de React emplear el paquete create-react-app 
-\cite{create-react-app}.
-
-Es un paquete creado por Facebook que se instala con el gestor de paquetes de node 
-(npm) que crea una aplicación de React vacía con todo lo básico necesario más 
-algunos scripts que ayudan en el desarrollo y en el despliegue, como por ejemplo, el 
-script react-run, para ejecutar el servidor de desarrollo, que se recompila
-automáticamente al detectar cambios y hace el desarrollo mucho más fluido o el build
-para crear una versión release optimizada.
-\\\\
-Por si sólo, React es una biblioteca para construir interfaces de usuario que cuenta con
-módulos extra que permiten extender su funcionalidad, es decir, no es un framework, como
-otras tecnologías empleadas para el diseño de interfaces, como Vue.js o Angular.js, 
-sin embargo con estos módulos podemos ampliar las funcionalidades de la biblioteca React 
-dependiendo del uso que vayamos a darle, en nuestro caso como queremos crear una aplicación
-web, necesitamos interactuar con el 'Document Object Model' (DOM \cite{DOM}), que es la estructura
-de documentos HTML que genera React y procesa el navegador, por ende y tras la creación de 
-la plantilla inicial en React, instalamos los módulos de React que permiten interactuar 
-con él, react-dom \cite{react-dom}.
-
-También necesitamos un módulo que permita a React cambiar la página generada dependiendo de la 
-ruta a la que accede el usuario, en el caso de nuestra aplicación, siempre querremos mostrar 
-la página del editor así que debemos redirigir todas las rutas al componente principal <Editor/>
-que veremos en profundidad más adelante (aunque se planea añadir más páginas en un futuro).
-Para ello, empleamos el módulo 'react-router-dom' \cite{react-router-dom} que es el módulo
-mas utilizado en la comunidad de React para implementar esta funcionalidad.
-\\\\
-\newpage
-En un primer lugar se pensó introducir una página de error, pero ya que en principio solo hay una
-página en toda la web, se han redirigido todas las rutas a la misma, el componente principal.
-
-\begin{lstlisting}[caption={App.js}]
-  <Router>
-    <Switch>
-      <Route exact path="/" component={Editor} />
-      <Route exact path="/editor" component={Editor} />
-      <Route component={Editor} />
-    </Switch>
-  </Router>
-\end{lstlisting}
-
-Aunque bastaría con emplear una única ruta se han especificado también las rutas '/' y '/editor' 
-ya que, como se ha comentado antes, se planea extender la cantidad de páginas en un futuro.
-
-\section{Componente Principal: Editor}
-
-konva
-
