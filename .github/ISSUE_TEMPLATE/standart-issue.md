@@ -1,5 +1,5 @@
 ---
-name: Standart Issue
+name: Standard Issue
 about: Plantilla para propuestas de nuevas funciones/mejoras
 title: ''
 labels: enhancement
