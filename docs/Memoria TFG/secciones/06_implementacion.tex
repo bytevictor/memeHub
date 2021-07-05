@@ -61,6 +61,15 @@ Como se planificó en el diseño y en la demo, la aplicación cuenta de 3 partes
   \caption{Esquema de las principales partes de la aplicación}
 \end{figure}
 
+\newpage
+La principal ventaja que tiene dividir la aplicación en estos subcomponentes es que desde
+React, podemos re-renderizar cada uno de forma individual cuando lo necesitemos, de esta forma
+no hay que renderizar toda la página cada vez que se cambia un simple selector, sólo la o las
+partes necesarias, lo que mejora notablemente el rendimiento y da una experiencia mucho mas
+fluida al usuario.
+\\\\
+
+
 %konva
 
 \iffalse
@@ -107,6 +116,37 @@ Esquema para luego redactar bien:
 -despliegue
 
 \fi
+
+\newpage
+\section{Tests}
+
+Como es costumbre en las metodologías ágiles, se ha testeado, en la medida de lo posible,
+todo el código que se ha ido desarrollando según se iba añadiendo a la aplicación.
+Para ello necesitabamos escoger de que manera íbamos a testear nuestro código, se barajaron
+varias opciones, como el módulo de tests-utils que trae react-dom \cite{react-dom} o jest, 
+pero estos módulos no encajan lo suficientemente bien con una aplicación como un editor, 
+algo que es muy interactivo y gráfico requería testearlo también de forma gráfica. Por ende
+se terminó escogiendo Cypress \cite{cypress} que es una herramienta que simula un navegador de
+forma gráfica y genera los eventos, además cuenta con un módulo para React \cite{cypressReact} que permite montar
+y testear componentes individualmente, además de comprobar el estado (state) de React, cosa
+que no permiten la mayoría de aplicaciones de testeo gráfico, ya que, en el navegador los
+componentes no existen como tal, sólo el código HTML que genera React a partir de estos.
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[scale=0.6]{img/TestsOK.png}
+  \caption{Resultado de la ejecución de los tests de cypress, run-ct}
+\end{figure}
+
+Lo ideal es testear el 100\% del código de la aplicación, aunque en la realidad llegar a esto
+es bastante complicado, se ha intentado cubrir la mayor parte posible, para ello se han creado
+tests para cada historia de usuario que hemos definido, crear el test era requisito para considerar
+terminada la historia de usuario y como es lógico el test debía testear la funcionalidad que 
+proponía la HU. Hubo una excepción en las primeras historias de usuario que se completaron
+no se testearon directamente, ya que el testeo se comenzó algo mas tarde para esperar a 
+que la aplicación tuviera ciertas funcionalidades básicas completas ya que en el inicio es
+muy fácil que ciertas partes cambien drásticamente y así evitar rehacer tests de forma innecesaria,
+de todos modos, estas partes fueron testeadas en cuando se empezaron a desarrollar los tests.
 
 \newpage
 \section{Despliegue de la aplicación}
