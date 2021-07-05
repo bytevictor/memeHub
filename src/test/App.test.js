@@ -4,5 +4,5 @@ import App from '../App';
 
 it('Renders main page', () => {
   mount(<App />);
-  cy.get('a').contains('EDITOR');
+  cy.get('span').contains('Drag & Drop to start editing!');
 });
