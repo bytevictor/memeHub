@@ -68,7 +68,156 @@ no hay que renderizar toda la página cada vez que se cambia un simple selector,
 partes necesarias, lo que mejora notablemente el rendimiento y da una experiencia mucho mas
 fluida al usuario.
 \\\\
+Tras crear una base de placeholders que diferencien las distintas partes planificadas
+de la aplicación, comenzamos con el desarrollo de las primeras carácterísticas 
+partiendo de las primeras historias de usuario.
 
+%Justificar por qué esa biblioteca y hablar un poco de ella
+\section{Biblioteca de canvas para React: KonvaJS}
+Para empezar a elaborar la aplicación, comenzamos por la funcionalidad más básica necesaria
+cargar multimedia en el lienzo del editor, necesitamos una imagen para editar y por
+ende se comenzó por crear esta funcionalidad.
+\\
+Ya se había elaborado una carga de imagen en las demos de la fase de planificación, 
+puramente en html y javascript, empleando el elemento HTML Canvas, en estas demos 
+se pudo comprobar que para la tarea que queríamos realizar manejar el elemento
+canvas desde el DOM\cite{DOM} no era eficiente, ni aprovechaba todas las ventajas 
+de React.
+El elemento HTML canvas es un mero array de píxeles, no hay manera de diferenciar 
+los objetos dibujados en el canvas una vez dibujados, son solo píxeles de otro color,
+para hacer esto, tenemos que tener los objetos almacenados en memoria y actualizar el
+canvas repintando todos los objetos cada vez que se modifica algo, esto no es una 
+tarea fácil, ya que hay que gestionar entre otras cosas la frecuencia de actualización
+del canvas (frames per second) y asegurarse de que el código es eficiente, ya que 
+no es una tarea trivial en potencia de procesado necesaria.
+Por ende y tras investigar las distintas posibilidades se decidió utilizar una 
+biblioteca específica para gestionar el elemento canvas HTML para React, de este
+modo, podemos aprovechar las carácterísticas de React y olvidarnos de gestionar 
+la frecuencia de actualización del canvas, ya que la biblioteca lo repinta cada vez
+que se hace un cambio, además de tener una forma unificada de instanciar los objetos
+que estan pintados en el canvas, todos los objetos que se pintan son instancias de 
+hijos de clases propias de la biblioteca o directamente son instancias de clase de la 
+misma.
+\\\\
+Tras investigar y barajar varias opciones se terminó decidiendo elegir KonvaJS 
+\cite{KonvaJS} como biblioteca, primero porque era específica de React
+(aunque tiene versiones para Vue.js ) 
+y segundo, porque contaba con clases y métodos bastante interesantes para una aplicación
+como un editor, el resto de bibliotecas estaban mucho mas enfocadas a animaciones, sin 
+embargo, KonvaJS permite mucha mas inteacción con el lienzo, que es lo principal en un
+editor.
+%Como funciona
+\section{El Drag\&Drop principal}
+%Lo primero que se empezó a hacer despues de poder añadir la imagen
+Habiendo importado las dependencias necesarias para KonvaJS\cite{KonvaJS} en el proyecto,
+se comenzó a implementar la funcionalidad mas básica y necesaria del editor, para editar,
+necesitamos tener algo que editar. 
+\\
+En este punto había que tener en cuenta una de las principales intenciones del proyecto,
+se debía poder utilizar el editor sin necesidad de descargar nada o utilizar archivos
+guardados en la memoria local, es decir, que había que poder añadir contenido desde 
+el portapapeles al editor, aunque también se da la opción de usar contenido local.
+\\
+Para comenzar, se creó un componente de React que se renderizaría cuando no haya 
+nada cargado en el lienzo.
+
+\begin{lstlisting}[caption={Renderizado condicional del componente del DragandDrop}]
+  {//If there is no image, show draganddrop input
+  ( this.state.image == null ) ?
+      <DragandDrop imgLoader={this.imageLoader.bind(this)}/> 
+      : 
+      <SecondaryDragandDrop 
+          imgLoader={this.createNewSecondaryImage.bind(this)}
+      />
+  }
+\end{lstlisting}
+
+Este componente consiste en un área de drop donde el usuario puede añadir el archivo 
+haciendo drag desde su PC, se emplea el evento OnDrop para leer el fichero, si es
+del formato correcto, se lee y se manda al componente padre (editor) para cargarlo en 
+el canvas.
+\\
+El canvas se carga haciendo uso de la biblioteca KonvaJS \cite{KonvaJS}, desde React 
+no tenemos un elemento canvas, tenemos el componente Stage de la biblioteca, así que 
+lo cargamos en él, haciendo uso de los métodos de la biblioteca.
+\\\\
+El canvas se renderiza desde el principio de la aplicación, al principio se pensó 
+en hacer un renderizado condicional al igual que con la zona de drop, pero el Stage
+(el canvas en el DOM), es el elemento más importante de toda la aplicación
+que además es necesario para el funcionamiento base de la propia aplicación 
+(no se puede editar nada sin él, es el propio lienzo), así que no tenía mucho sentido
+condicionar su renderizado ya que no aportaba nada,
+para evitar posibles complicaciones simplemente se renderiza en oculto con ancho y alto
+de 0.
+\\\\
+Cuando se carga una nueva imagen necesitamos calcular qué tamaño tendrá el lienzo, 
+cada imagen puede tener un tamaño completamente diferente y queremos que la aplicación
+tenga consistencia, es decir, que el usuario sienta que siempre tiene un área de edición
+parecida independientemente de la resolución de la imagen.
+Para ello debemos tener dos cosas en cuenta, el tamaño de la zona de edición del usuario,
+que depende de su propia pantalla y el tamaño original de la imagen.
+La correlación de la imagen siempre habrá que mantenerla para que no se deforme la 
+imagen base, la calculamos y manteniendo esa correlación ajustamos la imagen al tamaño
+disponible dejando algo de espacio por estética (para las imágenes demasiado pequeñas, 
+no se efectua ajuste porque no es necesario).
+
+\begin{lstlisting}[caption={Método para calcular el tamaño del lienzo a partir de una imagen}]
+  calculate_resize(correlation, width, height){
+        let pixel_margin = 100
+        //wide photo
+        if( correlation <= 1 ){
+            //image too small, dont correct
+            width = (width > 400 ? width - pixel_margin : width)
+            //
+            if( correlation * width < height ){
+                height = (correlation * width) - pixel_margin
+                width = width - pixel_margin
+            } else {
+                width = height * (1/correlation) - pixel_margin
+                height = height - pixel_margin
+            }
+
+        //long photo
+        } else {
+            //image too small
+            height = (height > 400 ? height - pixel_margin : height)
+            //
+            if( height * (1/correlation) < width ){
+                width = height * (1/correlation)
+                //height = height
+            } else {
+                width = width - pixel_margin
+                height = correlation * width - pixel_margin
+            }
+        }
+
+        return {
+            width: width,
+            height: height
+        }
+    }
+\end{lstlisting}
+
+
+\section{El Lienzo: Canvas}
+
+\section{La primera herramienta: Añadir Texto}
+
+\section{Cambio entre herramientas: Toolbar}
+%Como funciona el componente bottomtoolbar y como va cambiando
+%Comentar aquí todo el tema handlers, updates etc y como se sincroniza
+%con el cambio de item, es igual para todas las herramientas
+\section{Cambio de propiedades: BottomToolbar}
+%Fusion de creación de texto con el selector
+\section{Herramienta: Selector}
+\section{Herramienta: Lineas}
+  \subsection{Herramienta Freeline}
+  \subsection{Herramienta StraghtLine}
+\section{Herramienta: Formas Geométricas}
+  \subsection{Herramienta: Rectángulos}
+  \subsection{Herramienta: Elipses}
+\section{Herramienta: Imágenes superpuestas}
+Como no podía faltar en un editor de memes
 
 %konva
 
