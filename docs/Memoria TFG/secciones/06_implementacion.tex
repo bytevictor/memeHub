@@ -198,14 +198,75 @@ no se efectua ajuste porque no es necesario).
     }
 \end{lstlisting}
 
+\newpage
 \section{La primera herramienta: Añadir Texto}
 Ya que tenemos el mínimo necesario, que es tener una imagen que empezar a modificar, 
 comenzamos a implementar la primera funcionalidad, al ser un editor especialmente
 enfocado en facilitar la edición de memes, se comenzó por la funcionalidad mas básica
-para hacer un meme, el texto, 
+para hacer un meme, añadir texto encima de una imagen base.
+\\\\
+Como hemos comentado, desde React tenemos una abstración del canvas html llamada Stage,
+dentro de este, podemos añadir cualquier objeto nodo de la biblioteca KonvaJS y el texto
+ya existe como una clase. Para comenzar el desarrollo añadimos un texto temporalmente
+desde el render al que se fue dotando de funcionalidad.
+\\
+Además del texto, la biblioteca cuenta con otra clase llamada transformer, que sirve 
+para mostrar una caja de transformación alrededor de cualquier otro nodo. El problema
+de esta clase es que el comportamiento del transformer por defecto consiste en 
+reescalar el nodo, en un texto lo que queremos es que las letras se distribuyan
+equitativamente por todo el espacio ya que el tamaño se define a parte.
+\\\\
+Para ello, se ha sobrecargado el comportamiento del evento de transformación del texto.
+Ya que sobrecargamos una funcionalidad básica de la clase propia de la biblioteca, se 
+decidió crear una clase propia partiendo de la base de la biblioteca, la clase CvText
+que encapsula el renderizado del nodo base de Konva con nuestras funcionalidades personalizadas.
+Realmente no es una clase, es un componente funcional de React, es decir, es una 
+función que devuelve un render, en las nuevas versiones de React se recomienda usar
+componentes funcionales ya que simplifican el código y practicamente tienen las mismas
+capacidades que las clases gracias a los React-Hooks \cite{React-Hooks}, siempre que 
+no se ha necesitado instanciar un componente para llamar métodos asociados a él 
+(esta es la principal diferencia, al ser una función no tiene métodos propios) se han
+creado componentes funcionales como marcan las buenas prácticas actuales del lenguaje.
+\\\\
+Por defecto, los métodos cuentan con un tamaño (ancho y alto) y una propiedad de escalado
+en X y en Y, el transformador cambia la escala, por ende cada vez que el nodo se transforma
+reseteamos la escala y la aplicamos al tamaño real del nodo. 
+
+\newpage
+
+\begin{lstlisting}[caption={Sobrecarga del reescalado del nodo CvText}]
+const scaleReset = () => {
+    let text = textRef.current
+
+    text.setAttrs({
+        width: text.width() * text.scaleX(),
+        scaleX: 1,
+        height: text.height() * text.scaleY(),
+        scaleY: 1
+    })
+}
+\end{lstlisting}
+
+Para mover el nodo por el lienzo contamos con la propiedad drag de la biblioteca, al ser
+una funcionalidad tan básica, venía también preimplementada en la biblioteca.
+Mas adelante veremos que esta propiedad se hace condicional ya que no siempre queremos
+poder mover cada nodo al clickar encima pero en este punto se añadió directamente para
+simular el comportamiento que queríamos que tuviese el nodo.
+\\\\
+Ahora viene la funcionalidad mas importante del texto, poder editar los 
+carácteres, para ello, hemos hecho uso del elemento HTML textarea, es mucho mas
+fácil 
+
 
 \section{Cambio de propiedades: BottomToolbar}
 %Fusion de creación de texto con el selector
+
+\begin{figure}[!h]
+  \centering
+  \noindent\makebox[\textwidth]{
+    \includegraphics[scale=0.45]{img/FlujoDatosBottomToolbar.png}}
+  \caption{Esquema del flujo de datos entre los nodos del lienzo y la BottomToolbar}
+\end{figure}
 
 \section{Cambio entre herramientas: Toolbar}
 %Como funciona el componente bottomtoolbar y como va cambiando

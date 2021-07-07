@@ -146,30 +146,31 @@ class Editor extends React.Component{
     }
 
     calculate_resize(correlation, width, height){
+        let pixel_margin = 100
         //wide photo
         if( correlation <= 1 ){
             //image too small, dont correct
-            width = (width > 400 ? width - 100 : width)
+            width = (width > 400 ? width - pixel_margin : width)
             //
             if( correlation * width < height ){
-                height = (correlation * width) - 100
-                width = width - 100
+                height = (correlation * width) - pixel_margin
+                width = width - pixel_margin
             } else {
-                width = height * (1/correlation) - 100
-                height = height - 100
+                width = height * (1/correlation) - pixel_margin
+                height = height - pixel_margin
             }
 
         //long photo
         } else {
             //image too small
-            height = (height > 400 ? height - 100 : height)
+            height = (height > 400 ? height - pixel_margin : height)
             //
             if( height * (1/correlation) < width ){
                 width = height * (1/correlation)
                 //height = height
             } else {
-                width = width - 100
-                height = correlation * width - 100
+                width = width - pixel_margin
+                height = correlation * width - pixel_margin
             }
         }
 
