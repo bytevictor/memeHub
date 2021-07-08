@@ -327,7 +327,54 @@ las propiedades de los nodos.
 
 Ahora que tenemos una manera de almacenar y modificar los textos, 
 el usuario necesita una forma de crearlos y eliminarlos, para ello necesitamos 
-detectar los eventos 
+detectar los eventos, al igual que con el texto, también necesitamos tratar los eventos
+para cada herramienta.
+No todas las herramientas tienen los mismos eventos ni se comportan igual ante los eventos,
+por eso la forma de capturar cada evento es con un método handler genérico que lleva a un 
+switch que redirige el evento al handler correspondiente dependiendo de la herramienta seleccionada.
+\\\\
+Los eventos se capturan en el componente Layer, es un componente intermedio propio de KonvaJS\cite{KonvaJS},
+que está entre el Stage y los nodos que se renderizan.
+
+\begin{lstlisting}[caption={Enlazado de los handlers al componente layer que captura los eventos}]
+<Layer
+  ref={this.mainLayerRef}
+  onMouseDown={this.handleCanvasMouseDown.bind(this)}
+  onMouseMove={this.handleCanvasMouseMove.bind(this)}
+  onMouseUp={this.handleCanvasMouseUp.bind(this)}
+  onMouseLeave={this.handleCanvasMouseLeave.bind(this)}
+
+  onDblClick={this.handleCanvasDblClick.bind(this)}
+>
+\end{lstlisting}
+
+Aquí podemos ver un ejemplo de handler genérico del canvas donde se redirige al handler correspondiente
+
+\begin{lstlisting}[caption={Sobrecarga del reescalado del nodo CvText}]
+  handleCanvasMouseDown(e){
+    switch(this.state.selectedTool){
+        case 'SelectorAndText': 
+            handleSelectorMouseDown.bind(this)(e)
+        break
+
+        case 'FreeLine':
+            handleFreeLineMouseDown.bind(this)(e)
+        break
+
+        case 'StraightLine':
+            handleStraightLineMouseDown.bind(this)(e)
+        break
+
+        case 'Rectangle':
+            handleRectangleMouseDown.bind(this)(e)
+        break
+
+        case 'Ellipse':
+            handleEllipseMouseDown.bind(this)(e)
+        break
+    }
+}
+\end{lstlisting}
 
 \newpage
 \section{Cambio de propiedades: BottomToolbar}
