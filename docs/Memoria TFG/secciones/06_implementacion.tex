@@ -266,21 +266,20 @@ y se aplican a la textarea HTML.
 
 \begin{figure}[!h]
   \centering
-    \includegraphics[scale=0.35]{img/textareadiff.png}
+    \includegraphics[scale=0.55]{img/textareadiff.png}
   \caption{Ejemplo de cambio de estilo de la textarea por defecto y el aspecto tras las reglas css calculadas a partir del texto del canvas}
 \end{figure}
 
-\newpage
+%\newpage
 La textarea se genera encima del texto del lienzo y se oculta el texto del canvas,
 de este modo, el usuario tiene la sensación deseada aunque realmente no está tocando
 el lienzo, cuando el area textpierde el focus desaparece y se vuelve a renderizar el 
 texto en el lienzo con el valor actualizado.
 
 No todos los navegadores tienen exactamente el mismo comportamiento así que hubo que 
-introducir algunas reglas extra o excepciones dependiendo del navegador.
+introducir algunas reglas extra o excepciones dependiendo del navegador. 
 \\\\
 
-\newpage
 \section{El lienzo: Stage}
 
 Ahora que tenemos el primer nodo básico con el funcionamiento deseado, necesitamos que
@@ -292,7 +291,7 @@ un array, React no detecta los cambios automáticamente, así que debemos lanzar
 el repintado del lienzo cuando sea necesario, de este modo tenemos mas control sobre 
 el renderizado y el rendimiento.
 \\\\
-Mas avanzado el desarrollo, nos encontramos con un problema en este punto, en el desarrollo
+Mas avanzado el desarrollo, nos encontramos con un problema en este punto. En el desarrollo
 de React, se emplea JSX\cite{JSX}, que es una capa de abstracción sobre los métodos de React 
 para hacer mas intuitivo el desarrollo usando la sintasis de un lenguaje de marcado,
 en este caso HTML.
@@ -319,7 +318,16 @@ con los parámetros cambiados y pero manteniendo los demás que no han sido modi
 }
 \end{lstlisting}
 
-a
+De este modo los nodos solo pueden ser arrastrados cuando la herramienta correcta está
+seleccionada, cuando cambia la herramienta se lanza un re-render del stage y se actualizan
+las propiedades de los nodos.
+
+\newpage
+\subsection{Los handlers}
+
+Ahora que tenemos una manera de almacenar y modificar los textos, 
+el usuario necesita una forma de crearlos y eliminarlos, para ello necesitamos 
+detectar los eventos 
 
 \newpage
 \section{Cambio de propiedades: BottomToolbar}
