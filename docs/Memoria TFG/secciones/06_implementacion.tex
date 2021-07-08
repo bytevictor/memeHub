@@ -263,25 +263,63 @@ sin estilo alguno, para solucionar este problema se ha creado un método dentro 
 componente CvText que lee el estilo del texto dentro del lienzo y calcula una serie
 de reglas CSS que se definen a partir del texto base (el texto de Konva \cite{KonvaJS})
 y se aplican a la textarea HTML.
+
+\begin{figure}[!h]
+  \centering
+    \includegraphics[scale=0.35]{img/textareadiff.png}
+  \caption{Ejemplo de cambio de estilo de la textarea por defecto y el aspecto tras las reglas css calculadas a partir del texto del canvas}
+\end{figure}
+
+\newpage
 La textarea se genera encima del texto del lienzo y se oculta el texto del canvas,
 de este modo, el usuario tiene la sensación deseada aunque realmente no está tocando
 el lienzo, cuando el area textpierde el focus desaparece y se vuelve a renderizar el 
 texto en el lienzo con el valor actualizado.
 
-\newpage
-
-\begin{figure}[!h]
-  \centering
-    \includegraphics[scale=0.4]{img/textareadiff.png}
-  \caption{Ejemplo de cambio de estilo de la textarea por defecto y el aspecto tras las reglas css calculadas a partir del texto del canvas}
-\end{figure}
-
 No todos los navegadores tienen exactamente el mismo comportamiento así que hubo que 
 introducir algunas reglas extra o excepciones dependiendo del navegador.
 \\\\
-Con esto ya tenemos el comportamiento mas esencial cubierto y encapsulado, ahora necesitamos
-que el usuario pueda crear textos en vez de modificar uno ya existente.
 
+\newpage
+\section{El lienzo: Stage}
+
+Ahora que tenemos el primer nodo básico con el funcionamiento deseado, necesitamos que
+el usuario sea capaz de añadir y eliminar textos, para ello debemos almacenar los 
+nodos que se muestran en el lienzo y repintarlos cada vez que haya algún cambio.
+\\\\
+Para ello creamos un array que almacena los nodos en el estado del componente, al ser 
+un array, React no detecta los cambios automáticamente, así que debemos lanzar manualmente
+el repintado del lienzo cuando sea necesario, de este modo tenemos mas control sobre 
+el renderizado y el rendimiento.
+\\\\
+Mas avanzado el desarrollo, nos encontramos con un problema en este punto, en el desarrollo
+de React, se emplea JSX\cite{JSX}, que es una capa de abstracción sobre los métodos de React 
+para hacer mas intuitivo el desarrollo usando la sintasis de un lenguaje de marcado,
+en este caso HTML.
+\\\\
+Por esto, lo que contiene el array de items no son realmente objetos que se re-renderizan
+sino una función propia de React que instancia un objeto camuflado en forma de HTML (JSX\cite{JSX}).
+Esto hace que no podamos cambiar las propiedades de los nodos ya renderizados, ya que
+en las siguientes iteraciones del render, React detecta que ese nodo ya está instanciado,
+el render no hace nada y los cambios no se aplican. 
+\\\\
+Para solucionar esto hicimos uso de la función React.cloneElement al re-renderizar
+un objeto diferente pero que es un clon del anterior (con propiedades modificadas)
+que ya está instanciado en caché el re-render sustituye la instancia por la del clon,
+con los parámetros cambiados y pero manteniendo los demás que no han sido modificados.
+
+\begin{lstlisting}[caption={Render del array de nodos}]
+{ //Renders all items into the canvas
+  this.state.itemArray.map(Item => (
+      React.cloneElement(
+          Item,
+          { draggable: (this.state.selectedTool == "SelectorAndText") }
+      )
+  ))
+}
+\end{lstlisting}
+
+a
 
 \newpage
 \section{Cambio de propiedades: BottomToolbar}
