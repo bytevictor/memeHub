@@ -255,9 +255,35 @@ simular el comportamiento que queríamos que tuviese el nodo.
 \\\\
 Ahora viene la funcionalidad mas importante del texto, poder editar los 
 carácteres, para ello, hemos hecho uso del elemento HTML textarea, es mucho mas
-fácil 
+fácil que crear todo un sistema de edición dentro del lienzo, ya que como hemos comentado
+no es más que un array de píxeles. Pero, queremos que el usuario lo perciba como si estuviera
+realmente editando el texto de dentro del lienzo de una forma dinámica,
+hay un evidente problema con esto ya que la textarea HTML por defecto es una caja opaca
+sin estilo alguno, para solucionar este problema se ha creado un método dentro del 
+componente CvText que lee el estilo del texto dentro del lienzo y calcula una serie
+de reglas CSS que se definen a partir del texto base (el texto de Konva \cite{KonvaJS})
+y se aplican a la textarea HTML.
+La textarea se genera encima del texto del lienzo y se oculta el texto del canvas,
+de este modo, el usuario tiene la sensación deseada aunque realmente no está tocando
+el lienzo, cuando el area textpierde el focus desaparece y se vuelve a renderizar el 
+texto en el lienzo con el valor actualizado.
+
+\newpage
+
+\begin{figure}[!h]
+  \centering
+    \includegraphics[scale=0.4]{img/textareadiff.png}
+  \caption{Ejemplo de cambio de estilo de la textarea por defecto y el aspecto tras las reglas css calculadas a partir del texto del canvas}
+\end{figure}
+
+No todos los navegadores tienen exactamente el mismo comportamiento así que hubo que 
+introducir algunas reglas extra o excepciones dependiendo del navegador.
+\\\\
+Con esto ya tenemos el comportamiento mas esencial cubierto y encapsulado, ahora necesitamos
+que el usuario pueda crear textos en vez de modificar uno ya existente.
 
 
+\newpage
 \section{Cambio de propiedades: BottomToolbar}
 %Fusion de creación de texto con el selector
 
