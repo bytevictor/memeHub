@@ -332,7 +332,7 @@ para cada herramienta.
 No todas las herramientas tienen los mismos eventos ni se comportan igual ante los eventos,
 por eso la forma de capturar cada evento es con un método handler genérico que lleva a un 
 switch que redirige el evento al handler correspondiente dependiendo de la herramienta seleccionada.
-\\\\
+\\
 Los eventos se capturan en el componente Layer, es un componente intermedio propio de KonvaJS\cite{KonvaJS},
 que está entre el Stage y los nodos que se renderizan.
 
@@ -376,9 +376,81 @@ Aquí podemos ver un ejemplo de handler genérico del canvas donde se redirige a
 }
 \end{lstlisting}
 
+En principio todo este sistema de handlers no se implementó, ya que no era necesario 
+porque aún no había mas herramientas, en las metodologías ágiles vas implementando según
+las funciones que vas necesitando por tanto simplemente se enlazó el handler al evento
+de doble click. 
+\\\\
+El handler crea un nuevo componente de texto (una instancia de nuestro componente propio: CvText),
+lo inserta en el array de nodos del editor y lanza un re-render para que se muestre.
+Además en nuestra encapsulación del CvText cuando se crea el nodo por primera vez se
+llama automáticamente al método que genera el textarea de edición ya que recién creado
+el usuario, muy probablemente querrá editar su contenido.
+\\
+Para evitar que se lance cuando se clona el elemento, se ha hecho uso de los React Hooks\cite{React-Hooks}
+propios de los componentes funcionales.
+\\\\
+Para el resto de herramientas todo este sistema funciona igual, se detecta un evento, se
+redirige al handler de la herramienta correspondiente y se crea un nuevo elemento del tipo
+deseado. Dependiendo de cada herramienta el evento con el que se crea el nodo es distinto y el 
+comportamiento de los handlers cambia, pero la estructura es la misma. 
+\\\\
+Hay varios handlers extra que se diferencian de los handlers de las herramientas para los
+eventos de teclado como ctrl + v para cargar una imagen o supr para borrar un nodo.
+El funcionamiento general es el mismo pero no se necesita condicionar la herramienta seleccionada
+para el borrado simplemente se ejecuta una función que obtiene el nodo seleccionado, lo
+destruye de la caché, lo saca del array y re-renderiza el lienzo.
+\\
+Y para la carga de imágenes mediante ctrl + v, se lee el evento, se busca el fichero asociado
+en el portapapeles y se envía al método de carga de imagen principal o secundaria dependiendo
+de si hay una imagen base cargada.
+
 \newpage
+\section{Herramienta: Selector}
+Ya que podemos crear el texto necesitamos poder cambiar entre textos, para ello, se creó
+la primera herramienta, el selector, que mas adelante se fusionó con la creación de texto
+por puro pragmatismo, había que estar cambiando de herramienta innecesariamente después
+de crear un texto, por eso se decidió unir ambas funcionalidades en una sola herramienta,
+para el resto de herramientas no podía ser así ya que coincidian los eventos, el click 
+de selección, con por ejemplo, el click que comienza la creación de una línea.
+\\\\
+La herramienta selectora se encarga de activar y mostrar el componente Transformer en
+el nodo que desea el usuario.
+Para ello, teníamos que poder diferenciar los nodos del canvas, KonvaJS\cite{KonvaJS}
+nos permite encontrar el nodo sobre el que se ha hecho click a partir del evento, 
+aprovechando esto, simplemente tomamos el nodo clickado y lo introducimos en el componente
+transformer, excepto si lo que se clicka es la imagen base, en cuyo caso vacíamos el transformer
+para deseleccionar cualquier nodo.
+
 \section{Cambio de propiedades: BottomToolbar}
-%Fusion de creación de texto con el selector
+
+%Como funciona el componente bottomtoolbar y como va cambiando
+%Comentar aquí todo el tema handlers, updates etc y como se sincroniza
+%con el cambio de item, es igual para todas las herramientas
+
+Además de cambiar el texto, el usuario debe poder personalizar los elementos que añada al lienzo,
+para ello y como teníamos planeado, se añadió una barra de herramientas que irá cambiando
+dependiendo del nodo que esté seleccionado.
+\\\\
+En este punto del desarrollo solo se podían añadir texto, así que se comenzó creando un componente
+BottomToolbar para cambiar las propiedades del texto.
+Para ello, en primer lugar necesitamos controladores con los cuales el usuario pueda cambiar 
+esas propiedades de forma sencilla, para ello hicimos uso de Material-UI\cite{materialui}, una 
+biblioteca de componentes de React con estilo de material design.
+\\
+\begin{figure}[!h]
+  \centering
+  \noindent\makebox[\textwidth]{
+    \includegraphics[scale=0.3]{img/bottomtoolbar.png}}
+  \caption{Aspecto de la BottomToolbar de edición de texto}
+\end{figure}
+
+Todos los componentes usados pertenecen a la biblioteca por defecto de Material-UI excepto el
+selector de color, que es un proyecto open source independiente hecho a partir y para Material-UI
+llamado material-ui-color\cite{material-ui-color}.
+
+\newpage
+
 
 \begin{figure}[!h]
   \centering
@@ -387,12 +459,14 @@ Aquí podemos ver un ejemplo de handler genérico del canvas donde se redirige a
   \caption{Esquema del flujo de datos entre los nodos del lienzo y la BottomToolbar}
 \end{figure}
 
-\section{Cambio entre herramientas: Toolbar}
-%Como funciona el componente bottomtoolbar y como va cambiando
-%Comentar aquí todo el tema handlers, updates etc y como se sincroniza
-%con el cambio de item, es igual para todas las herramientas
 
-\section{Herramienta: Selector}
+
+
+
+\section{Cambio entre herramientas: Toolbar}
+
+
+
 \section{Herramienta: Lineas}
   \subsection{Herramienta Freeline}
   \subsection{Herramienta StraghtLine}
@@ -416,19 +490,23 @@ Esquema para luego redactar bien:
 
 - Comenzamos el poder añadir texto
 
-- todo tema texto, textarea, propiedades, drag, transformador, lo de adaptar el texto al tamaño de la caja bla bla 
+- todo tema texto, textarea, propiedades, drag, transformador, lo de adaptar el texto al tamaño 
+de la caja bla bla 
 
 - Comienzo de la toolbar para poder poner el texto bonito
 
-- Tema toolbar, material-ui, como mandamos la info desde la toolbar al texto y lo actualizamos bla bla
+- Tema toolbar, material-ui, como mandamos la info desde la toolbar al texto y lo actualizamos
+ bla bla
 
 - Hablar de ajustes varios, tema eventos etc.. clicks handlers bla bla
 
-- Añadido el ctrl + v de imagen principal (esto quizá explicarlo después para juntar todo el tema texto)
+- Añadido el ctrl + v de imagen principal (esto quizá explicarlo después para juntar todo el 
+tema texto)
 
 - Handleo de varios textos diferentes
 
-- Cuando ya se cambiaban los textos desde la toolbar ahora como se cambia la toolbar para que coincida con las opciones del texto
+- Cuando ya se cambiaban los textos desde la toolbar ahora como se cambia la toolbar 
+para que coincida con las opciones del texto
 
 - Hablar un poco de tema componentes funcionales vs clases (todos los cambios que se hicieron)
 
