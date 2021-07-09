@@ -400,7 +400,7 @@ eventos de teclado como ctrl + v para cargar una imagen o supr para borrar un no
 El funcionamiento general es el mismo, pero no se necesita condicionar la herramienta seleccionada
 para el borrado simplemente se ejecuta una función que obtiene el nodo seleccionado, lo
 destruye de la caché, lo saca del array y re-renderiza el lienzo.
-\\
+\\\\
 Y para la carga de imágenes mediante ctrl + v, se lee el evento, se busca el fichero asociado
 en el portapapeles y se envía al método de carga de imagen principal o secundaria dependiendo
 de si hay una imagen base cargada.
@@ -501,69 +501,125 @@ Para cambiar los valores de los selectores de la BottomToolbar al seleccionar un
 tenemos que enviar el valor de las propiedades del nodo a la misma, para esto creamos un 
 método que permite cambiar los valores desde el el editor. Cuando se selecciona un nodo
 diferente, el handler llama a este método y cambia los valores.
-
+\\\\
 
 \section{Cambio entre herramientas: Toolbar}
 
-Como podemos ver en la figura 6.4
+Con esta última funcionalidad y esqueleto comenzamos a introducir nuevas herramientas, para 
+cambiar de herramientas necesitamos cambiar los métodos anteriormente implementados como se 
+comentó en el punto 6.5.1, para que el comportamiento de la aplicación se modifique dependiendo
+de la herramienta seleccionada.
+\\\\
+Como la herramienta seleccionada forma parte del estado del componente principal, cuando hay 
+un cambio de herramienta se lanza un re-render del editor y todos sus hijos, esto se ha
+implementado de esta forma intencionalmente, ya que al re-renderizar todo nos aseguramos de que
+ninguna parte de la aplicación se quedará desincronizada con el estado actual. No nos afecta 
+al rendimiento porque es un evento que se lanza de forma puntual, al contrario de otros como
+puede ser un evento de movimiento del ratón.
+\\\\
+No todos los nodos tienen las mismas propiedades, como podemos ver en la figura 6.4,
+la BottomToolbar también cambia dependiendo de que nodo se quiera modificar, para esto, 
+tuvimos que rediseñar la estructura del componente BottomToolbar para que funcionase como un 
+switch que redirija a la toolbar correspondiente dependiendo del estado.
+De este modo, el componente BottomToolbar es mas bien una interfaz que un componente con una 
+funcionalidad propia, todas las diferentes BottomToolbars se han implementado con los mismos
+métodos updateToolbar() aunque cambian los parámetros que recogen.
 
-\section{Herramienta: Lineas}
-  \subsection{Herramienta Freeline}
-  \subsection{Herramienta StraghtLine}
-\section{Herramienta: Formas Geométricas}
-  \subsection{Herramienta: Rectángulos}
-  \subsection{Herramienta: Elipses}
+\begin{lstlisting}[caption={Método updateToolbar del componente BottomToolbar general, que actua como interfaz devolviendo el updateToolbar de la toolbar activada}]
+  updateToolbar(){
+    let bottomToolbar = this.bottomToolbarRef.current
+    return bottomToolbar.updateToolbar.bind(bottomToolbar)
+  }
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Switch del componente BottomToolbar principal que devuelve la BottomToolbar según el estado.}]
+  getBottomToolbar(){
+    switch(this.state.selectedToolbar){
+        case "SelectorAndText":
+          return <TextBottomToolbar 
+            ref={this.bottomToolbarRef}
+
+            fontSizeUpdater    = {this.fontSizeUpdater}
+            fontColorUpdater   = {this.fontColorUpdater}
+            strokeColorUpdater = {this.strokeColorUpdater}
+            strokeSizeUpdater  = {this.strokeSizeUpdater}
+            fontFamilyUpdater  = {this.fontFamilyUpdater}
+            alignmentUpdater   = {this.alignmentUpdater}
+          />
+        break
+        case "FreeLine":
+          return <LineBottomToolbar 
+            ref={this.bottomToolbarRef}
+
+            strokeColorUpdater = {this.strokeColorUpdater}
+            strokeSizeUpdater  = {this.strokeSizeUpdater}
+            shadowColorUpdater={this.shadowColorUpdater}
+            shadowSizeUpdater={this.shadowSizeUpdater}
+            dashUpdater={this.dashUpdater}
+            />
+        break
+        case "StraightLine":
+          return <LineBottomToolbar 
+            ref={this.bottomToolbarRef}
+
+            strokeColorUpdater = {this.strokeColorUpdater}
+            strokeSizeUpdater  = {this.strokeSizeUpdater}
+            shadowColorUpdater={this.shadowColorUpdater}
+            shadowSizeUpdater={this.shadowSizeUpdater}
+            dashUpdater={this.dashUpdater}
+          />
+        break
+        case "Rectangle":
+        case "Ellipse":
+          return <RectBottomToolbar
+            ref={this.bottomToolbarRef}
+
+            //we can reuse the rectbottom toolbar but corner radius has no sense
+            disableCornerRadius={this.state.selectedToolbar == "Ellipse"}
+
+            strokeColorUpdater = {this.strokeColorUpdater}
+            strokeSizeUpdater  = {this.strokeSizeUpdater}
+            shadowColorUpdater={this.shadowColorUpdater}
+            shadowSizeUpdater={this.shadowSizeUpdater}
+            cornerRadiusUpdater={this.cornerRadiusUpdater}
+            fillUpdater={this.fillUpdater}
+          />
+        case "KonvaImage":
+          return <ImageBottomToolbar 
+            ref={this.bottomToolbarRef}
+
+            strokeColorUpdater = {this.strokeColorUpdater}
+            strokeSizeUpdater  = {this.strokeSizeUpdater}
+            shadowColorUpdater={this.shadowColorUpdater}
+            shadowSizeUpdater={this.shadowSizeUpdater}
+            blurValueUpdater={this.blurValueUpdater}
+            brightnessValueUpdater={this.brightnessValueUpdater}
+            noiseValueUpdater={this.noiseValueUpdater}
+            pixelValueUpdater={this.pixelValueUpdater}
+            maskValueUpdater={this.maskValueUpdater}
+        />
+        break
+    }
+  }
+\end{lstlisting}
+
+De este modo se resolvió el problema del comportamiento distinto entre toolbars, ya que cada
+una cambia los parámetros que necesita pero englobándolo todo en un solo componente, esto es 
+importante para el rendimiento ya que cada vez que se selecciona un nodo al contrario que al
+cambiar de herramienta sólo se refresca el componente BottomToolbar y no toda la aplcación,
+lo que hace que la experiencia del usuario mejore sustancialmente.
+
 \section{Herramienta: Imágenes superpuestas}
-Como no podía faltar en un editor de memes
 
-%konva
+
 
 \iffalse
 Esquema para luego redactar bien:
-- A partir de la demo rehice todo para adaptarlo a la libería 
-
-- Lo primero fue hacer que se pudiera añadir una foto base (DragAndDrop y Konva canvas)
-
-- Explicar todo tema lienzo, cálculos etc..
-
-- Se añadió poder quitar la foto y volver a añadir otra
-
-- Comenzamos el poder añadir texto
-
-- todo tema texto, textarea, propiedades, drag, transformador, lo de adaptar el texto al tamaño 
-de la caja bla bla 
-
-- Comienzo de la toolbar para poder poner el texto bonito
-
-- Tema toolbar, material-ui, como mandamos la info desde la toolbar al texto y lo actualizamos
- bla bla
-
-- Hablar de ajustes varios, tema eventos etc.. clicks handlers bla bla
-
-- Añadido el ctrl + v de imagen principal (esto quizá explicarlo después para juntar todo el 
-tema texto)
-
-- Handleo de varios textos diferentes
 
 - Cuando ya se cambiaban los textos desde la toolbar ahora como se cambia la toolbar 
 para que coincida con las opciones del texto
 
-- Hablar un poco de tema componentes funcionales vs clases (todos los cambios que se hicieron)
-
-- PRIMERA TANDA DE TESTS (preguntar a JJ si explicar esto todo luego o aquí)
-
 - Además de texto ahora a añadir mas cosas, Imágenes y sus transformaciones
-
-- Hablar del tema lineas, como se movian las cosas al pintar encima, la lógica de las herramientas
-  como se ha solucionado, porque se ha hecho así y el React.clone()
-
-- [pensar lo que falta por aqui]
-
-- tema eventos, copiar pegar, guardar etc
-
--production build
-
--despliegue
 
 \fi
 
