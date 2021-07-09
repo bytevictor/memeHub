@@ -1,6 +1,6 @@
 \chapter{Implementación}
 Para comenzar con la implementación, se partió del código elaborado como demo en la fase 
-de planifiación.
+de planificación.
 Está bastante extendido en el desarrollo de React emplear el paquete create-react-app 
 \cite{create-react-app}.
 \\
@@ -11,10 +11,10 @@ script react-run, para ejecutar el servidor de desarrollo, que se recompila
 automáticamente al detectar cambios y hace el desarrollo mucho más fluido o el build
 para crear una versión release optimizada.
 \\\\
-Por si sólo, React es una biblioteca para construir interfaces de usuario que cuenta con
+Por sí sólo, React es una biblioteca para construir interfaces de usuario que cuenta con
 módulos extra que permiten extender su funcionalidad, es decir, no es un framework, como
 otras tecnologías empleadas para el diseño de interfaces, como Vue.js o Angular.js, 
-sin embargo con estos módulos podemos ampliar las funcionalidades de la biblioteca React 
+sin embargo, con estos módulos podemos ampliar las funcionalidades de la biblioteca React 
 dependiendo del uso que vayamos a darle, en nuestro caso como queremos crear una aplicación
 web, necesitamos interactuar con el 'Document Object Model' (DOM \cite{DOM}), que es la estructura
 de documentos HTML que genera React y procesa el navegador, por ende y tras la creación de 
@@ -26,7 +26,7 @@ ruta a la que accede el usuario, en el caso de nuestra aplicación, siempre quer
 la página del editor así que debemos redirigir todas las rutas al componente principal <Editor/>
 que veremos en profundidad más adelante (aunque se planea añadir más páginas en un futuro).
 Para ello, empleamos el módulo 'react-router-dom' \cite{react-router-dom} que es el módulo
-mas utilizado en la comunidad de React para implementar esta funcionalidad.
+más utilizado en la comunidad de React para implementar esta funcionalidad.
 \\\\
 En un primer lugar se pensó introducir una página de error, pero ya que en principio solo hay una
 página en toda la web, se han redirigido todas las rutas a la misma, el componente principal.
@@ -50,7 +50,7 @@ En el desarrollo de React, todo está formado por componentes, como hemos coment
 cada página es un componente, en nuestro caso solo tenemos una página y por ende un gran componente,
 el componente Editor.
 \\
-Este es el componente que renderiza todos los demas subcomponentes que componen la aplicación
+Este es el componente que renderiza todos los demás subcomponentes que componen la aplicación
 y que se encarga de comunicar todas las partes de la misma actuando como un hub.
 \\
 Como se planificó en el diseño y en la demo, la aplicación cuenta de 3 partes principales.
@@ -65,11 +65,11 @@ Como se planificó en el diseño y en la demo, la aplicación cuenta de 3 partes
 La principal ventaja que tiene dividir la aplicación en estos subcomponentes es que desde
 React, podemos re-renderizar cada uno de forma individual cuando lo necesitemos, de esta forma
 no hay que renderizar toda la página cada vez que se cambia un simple selector, sólo la o las
-partes necesarias, lo que mejora notablemente el rendimiento y da una experiencia mucho mas
+partes necesarias, lo que mejora notablemente el rendimiento y da una experiencia mucho más
 fluida al usuario.
 \\\\
 Tras crear una base de placeholders que diferencien las distintas partes planificadas
-de la aplicación, comenzamos con el desarrollo de las primeras carácterísticas 
+de la aplicación, comenzamos con el desarrollo de las primeras características 
 partiendo de las primeras historias de usuario.
 
 %Justificar por qué esa biblioteca y hablar un poco de ella
@@ -92,25 +92,25 @@ del canvas (frames per second) y asegurarse de que el código es eficiente, ya q
 no es una tarea trivial en potencia de procesado necesaria.
 Por ende y tras investigar las distintas posibilidades se decidió utilizar una 
 biblioteca específica para gestionar el elemento canvas HTML para React, de este
-modo, podemos aprovechar las carácterísticas de React y olvidarnos de gestionar 
+modo, podemos aprovechar las características de React y olvidarnos de gestionar 
 la frecuencia de actualización del canvas, ya que la biblioteca lo repinta cada vez
 que se hace un cambio, además de tener una forma unificada de instanciar los objetos
-que estan pintados en el canvas, todos los objetos que se pintan son instancias de 
+que están pintados en el canvas, todos los objetos que se pintan son instancias de 
 hijos de clases propias de la biblioteca o directamente son instancias de clase de la 
 misma.
 \\\\
 Tras investigar y barajar varias opciones se terminó decidiendo elegir KonvaJS 
 \cite{KonvaJS} como biblioteca, primero porque era específica de React
-(aunque tiene versiones para Vue.js ) 
+(aunque tiene versiones para Vue.js) 
 y segundo, porque contaba con clases y métodos bastante interesantes para una aplicación
-como un editor, el resto de bibliotecas estaban mucho mas enfocadas a animaciones, sin 
-embargo, KonvaJS permite mucha mas inteacción con el lienzo, que es lo principal en un
+como un editor, el resto de bibliotecas estaban mucho más enfocadas a animaciones, sin 
+embargo, KonvaJS permite mucha más interacción con el lienzo, que es lo principal en un
 editor.
 %Como funciona
 \section{El Drag\&Drop principal}
 %Lo primero que se empezó a hacer despues de poder añadir la imagen
 Habiendo importado las dependencias necesarias para KonvaJS\cite{KonvaJS} en el proyecto,
-se comenzó a implementar la funcionalidad mas básica y necesaria del editor, para editar,
+se comenzó a implementar la funcionalidad más básica y necesaria del editor, para editar,
 necesitamos tener algo que editar. 
 \\
 En este punto había que tener en cuenta una de las principales intenciones del proyecto,
@@ -159,7 +159,7 @@ que depende de su propia pantalla y el tamaño original de la imagen.
 La correlación de la imagen siempre habrá que mantenerla para que no se deforme la 
 imagen base, la calculamos y manteniendo esa correlación ajustamos la imagen al tamaño
 disponible dejando algo de espacio por estética (para las imágenes demasiado pequeñas, 
-no se efectua ajuste porque no es necesario).
+no se efectúa ajuste porque no es necesario).
 
 \begin{lstlisting}[caption={Método para calcular el tamaño del lienzo a partir de una imagen}]
   calculate_resize(correlation, width, height){
@@ -202,10 +202,10 @@ no se efectua ajuste porque no es necesario).
 \section{La primera herramienta: Añadir Texto}
 Ya que tenemos el mínimo necesario, que es tener una imagen que empezar a modificar, 
 comenzamos a implementar la primera funcionalidad, al ser un editor especialmente
-enfocado en facilitar la edición de memes, se comenzó por la funcionalidad mas básica
+enfocado en facilitar la edición de memes, se comenzó por la funcionalidad más básica
 para hacer un meme, añadir texto encima de una imagen base.
 \\\\
-Como hemos comentado, desde React tenemos una abstración del canvas html llamada Stage,
+Como hemos comentado, desde React tenemos una abstracción del canvas html llamada Stage,
 dentro de este, podemos añadir cualquier objeto nodo de la biblioteca KonvaJS y el texto
 ya existe como una clase. Para comenzar el desarrollo añadimos un texto temporalmente
 desde el render al que se fue dotando de funcionalidad.
@@ -229,7 +229,7 @@ no se ha necesitado instanciar un componente para llamar métodos asociados a é
 creado componentes funcionales como marcan las buenas prácticas actuales del lenguaje.
 \\\\
 Por defecto, los métodos cuentan con un tamaño (ancho y alto) y una propiedad de escalado
-en X y en Y, el transformador cambia la escala, por ende cada vez que el nodo se transforma
+en X y en Y, el transformador cambia la escala, por ende, cada vez que el nodo se transforma
 reseteamos la escala y la aplicamos al tamaño real del nodo. 
 
 \newpage
@@ -249,11 +249,11 @@ const scaleReset = () => {
 
 Para mover el nodo por el lienzo contamos con la propiedad drag de la biblioteca, al ser
 una funcionalidad tan básica, venía también preimplementada en la biblioteca.
-Mas adelante veremos que esta propiedad se hace condicional ya que no siempre queremos
-poder mover cada nodo al clickar encima pero en este punto se añadió directamente para
+Más adelante veremos que esta propiedad se hace condicional ya que no siempre queremos
+poder mover cada nodo al clickar encima, pero en este punto se añadió directamente para
 simular el comportamiento que queríamos que tuviese el nodo.
 \\\\
-Ahora viene la funcionalidad mas importante del texto, poder editar los 
+Ahora viene la funcionalidad más importante del texto, poder editar los 
 carácteres, para ello, hemos hecho uso del elemento HTML textarea, es mucho mas
 fácil que crear todo un sistema de edición dentro del lienzo, ya que como hemos comentado
 no es más que un array de píxeles. Pero, queremos que el usuario lo perciba como si estuviera
@@ -272,7 +272,7 @@ y se aplican a la textarea HTML.
 
 %\newpage
 La textarea se genera encima del texto del lienzo y se oculta el texto del canvas,
-de este modo, el usuario tiene la sensación deseada aunque realmente no está tocando
+de este modo, el usuario tiene la sensación deseada, aunque realmente no está tocando
 el lienzo, cuando el area textpierde el focus desaparece y se vuelve a renderizar el 
 texto en el lienzo con el valor actualizado.
 
@@ -288,12 +288,12 @@ nodos que se muestran en el lienzo y repintarlos cada vez que haya algún cambio
 \\\\
 Para ello creamos un array que almacena los nodos en el estado del componente, al ser 
 un array, React no detecta los cambios automáticamente, así que debemos lanzar manualmente
-el repintado del lienzo cuando sea necesario, de este modo tenemos mas control sobre 
+el repintado del lienzo cuando sea necesario, de este modo tenemos más control sobre 
 el renderizado y el rendimiento.
 \\\\
-Mas avanzado el desarrollo, nos encontramos con un problema en este punto. En el desarrollo
+Más avanzado el desarrollo, nos encontramos con un problema en este punto. En el desarrollo
 de React, se emplea JSX\cite{JSX}, que es una capa de abstracción sobre los métodos de React 
-para hacer mas intuitivo el desarrollo usando la sintasis de un lenguaje de marcado,
+para hacer más intuitivo el desarrollo usando la sintasis de un lenguaje de marcado,
 en este caso HTML.
 \\\\
 Por esto, lo que contiene el array de items no son realmente objetos que se re-renderizan
@@ -305,7 +305,7 @@ el render no hace nada y los cambios no se aplican.
 Para solucionar esto hicimos uso de la función React.cloneElement al re-renderizar
 un objeto diferente pero que es un clon del anterior (con propiedades modificadas)
 que ya está instanciado en caché el re-render sustituye la instancia por la del clon,
-con los parámetros cambiados y pero manteniendo los demás que no han sido modificados.
+con los parámetros cambiados, pero manteniendo los demás que no han sido modificados.
 
 \begin{lstlisting}[caption={Render del array de nodos}]
 { //Renders all items into the canvas
@@ -377,13 +377,13 @@ Aquí podemos ver un ejemplo de handler genérico del canvas donde se redirige a
 \end{lstlisting}
 
 En principio todo este sistema de handlers no se implementó, ya que no era necesario 
-porque aún no había mas herramientas, en las metodologías ágiles vas implementando según
+porque aún no había más herramientas, en las metodologías ágiles vas implementando según
 las funciones que vas necesitando por tanto simplemente se enlazó el handler al evento
 de doble click. 
 \\\\
 El handler crea un nuevo componente de texto (una instancia de nuestro componente propio: CvText),
 lo inserta en el array de nodos del editor y lanza un re-render para que se muestre.
-Además en nuestra encapsulación del CvText cuando se crea el nodo por primera vez se
+Además, en nuestra encapsulación del CvText cuando se crea el nodo por primera vez se
 llama automáticamente al método que genera el textarea de edición ya que recién creado
 el usuario, muy probablemente querrá editar su contenido.
 \\
@@ -397,7 +397,7 @@ comportamiento de los handlers cambia, pero la estructura es la misma.
 \\\\
 Hay varios handlers extra que se diferencian de los handlers de las herramientas para los
 eventos de teclado como ctrl + v para cargar una imagen o supr para borrar un nodo.
-El funcionamiento general es el mismo pero no se necesita condicionar la herramienta seleccionada
+El funcionamiento general es el mismo, pero no se necesita condicionar la herramienta seleccionada
 para el borrado simplemente se ejecuta una función que obtiene el nodo seleccionado, lo
 destruye de la caché, lo saca del array y re-renderiza el lienzo.
 \\
@@ -408,7 +408,7 @@ de si hay una imagen base cargada.
 \newpage
 \section{Herramienta: Selector}
 Ya que podemos crear el texto necesitamos poder cambiar entre textos, para ello, se creó
-la primera herramienta, el selector, que mas adelante se fusionó con la creación de texto
+la primera herramienta, el selector, que más adelante se fusionó con la creación de texto
 por puro pragmatismo, había que estar cambiando de herramienta innecesariamente después
 de crear un texto, por eso se decidió unir ambas funcionalidades en una sola herramienta,
 para el resto de herramientas no podía ser así ya que coincidian los eventos, el click 
@@ -424,7 +424,7 @@ para deseleccionar cualquier nodo.
 
 \section{Cambio de propiedades: BottomToolbar}
 
-%Como funciona el componente bottomtoolbar y como va cambiando
+%Como funciona el componente bottomtoolbar y cómo va cambiando
 %Comentar aquí todo el tema handlers, updates etc y como se sincroniza
 %con el cambio de item, es igual para todas las herramientas
 
@@ -434,7 +434,7 @@ dependiendo del nodo que esté seleccionado.
 \\\\
 En este punto del desarrollo solo se podían añadir texto, así que se comenzó creando un componente
 BottomToolbar para cambiar las propiedades del texto.
-Para ello, en primer lugar necesitamos controladores con los cuales el usuario pueda cambiar 
+Para ello, en primer lugar, necesitamos controladores con los cuales el usuario pueda cambiar 
 esas propiedades de forma sencilla, para ello hicimos uso de Material-UI\cite{materialui}, una 
 biblioteca de componentes de React con estilo de material design.
 \\
@@ -458,7 +458,7 @@ y la barra de herramientas tienen que estar sincronizados.
 \\\\
 Aquí nos encontramos con un problema, en React el flujo de datos funciona en una única dirección,
 de padres a hijos mediante los props, así que tenemos que encontrar una manera de comunicar y
-pasar información entre componentes que no sólo no son padre e hijo sino que ni siquiera están
+pasar información entre componentes que no sólo no son padre e hijo, sino que ni siquiera están
 anidados y tienen varias capas de abstracción por encima.
 \\\\
 Para solucionar este problema se optó por aprovechar una de las propiedades de Javascript, 
@@ -498,9 +498,11 @@ updateBlur( newValue ){
 \end{lstlisting}
 
 
+
+
 \section{Cambio entre herramientas: Toolbar}
 
-
+Como podemos ver en la figura 6.4
 
 \section{Herramienta: Lineas}
   \subsection{Herramienta Freeline}
@@ -567,7 +569,7 @@ para que coincida con las opciones del texto
 
 Como es costumbre en las metodologías ágiles, se ha testeado, en la medida de lo posible,
 todo el código que se ha ido desarrollando según se iba añadiendo a la aplicación.
-Para ello necesitabamos escoger de que manera íbamos a testear nuestro código, se barajaron
+Para ello necesitábamos escoger de qué manera íbamos a testear nuestro código, se barajaron
 varias opciones, como el módulo de tests-utils que trae react-dom \cite{react-dom} o jest, 
 pero estos módulos no encajan lo suficientemente bien con una aplicación como un editor, 
 algo que es muy interactivo y gráfico requería testearlo también de forma gráfica. Por ende
@@ -588,7 +590,7 @@ es bastante complicado, se ha intentado cubrir la mayor parte posible, para ello
 tests para cada historia de usuario que hemos definido, crear el test era requisito para considerar
 terminada la historia de usuario y como es lógico el test debía testear la funcionalidad que 
 proponía la HU. Hubo una excepción en las primeras historias de usuario que se completaron
-no se testearon directamente, ya que el testeo se comenzó algo mas tarde para esperar a 
+no se testearon directamente, ya que el testeo se comenzó algo más tarde para esperar a 
 que la aplicación tuviera ciertas funcionalidades básicas completas ya que en el inicio es
 muy fácil que ciertas partes cambien drásticamente y así evitar rehacer tests de forma innecesaria,
 de todos modos, estas partes fueron testeadas en cuando se empezaron a desarrollar los tests.
@@ -606,14 +608,14 @@ Como era uno de los objetivos del desarrollo, la aplicación ha sido desarrollad
 en hacer que, aunque sea una aplicación multimedia, no se requiera de un servidor potente que
 soporte mucha carga, es decir, es puro front-end, así que sólo necesitamos que el servidor
 envíe código HTML, CSS y los scripts de Javascript, no tiene que procesar nada relativo a las
-ediciones que haga el usuario ya que esas operaciones se efectuan en el cliente.
+ediciones que haga el usuario ya que esas operaciones se efectúan en el cliente.
 \\
-Esto nos permite emplear hostings ligeros para el despligue, 
+Esto nos permite emplear hostings ligeros para el despliegue, 
 %en nuestro caso hemos decidido
 %emplear Github Pages por 3 razones, el proyecto ya estaba siendo desarrollado en Github,
 %el paquete create-react-app \cite{create-react-app} tiene soporte para Github Pages \cite{GithubPages}
 %y por qué no decirlo, es gratuito y funciona bastante bien.
-los hostings mas usados son Azure, Firebase o AWS aunque son bastante flexibles son hostings 
+los hostings más usados son Azure, Firebase o AWS aunque son bastante flexibles son hostings 
 bastante potentes y de pago, gracias a como está construida la aplicación no necesitamos tanto,
 así que vamos a emplear Github Pages por varias razones, el paquete 
 create-react-app \cite{create-react-app} tiene soporte para Github Pages \cite{GithubPages}
