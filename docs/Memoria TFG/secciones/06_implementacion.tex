@@ -497,7 +497,10 @@ updateBlur( newValue ){
 }
 \end{lstlisting}
 
-
+Para cambiar los valores de los selectores de la BottomToolbar al seleccionar un nuevo nodo
+tenemos que enviar el valor de las propiedades del nodo a la misma, para esto creamos un 
+método que permite cambiar los valores desde el el editor. Cuando se selecciona un nodo
+diferente, el handler llama a este método y cambia los valores.
 
 
 \section{Cambio entre herramientas: Toolbar}
