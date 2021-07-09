@@ -451,6 +451,23 @@ llamado material-ui-color\cite{material-ui-color}.
 
 \newpage
 
+Teniendo ya los selectores de propiedades creados e insertados en la web, tenemos que hacer
+que puedan modificar el texto y viceversa, al seleccionar un texto distinto los selectores 
+deben de mostrar los valores actuales del texto en todo momento, es decir, el nodo seleccionado
+y la barra de herramientas tienen que estar sincronizados.
+\\\\
+Aquí nos encontramos con un problema, en React el flujo de datos funciona en una única dirección,
+de padres a hijos mediante los props, así que tenemos que encontrar una manera de comunicar y
+pasar información entre componentes que no sólo no son padre e hijo sino que ni siquiera están
+anidados y tienen varias capas de abstracción por encima.
+\\\\
+Para solucionar este problema se optó por aprovechar una de las propiedades de Javascript, 
+las funciones también son objetos, objetos a los que se puede ligar un contexto \textbf{this}
+dinámico, es decir, que el this no tiene por qué ser la propia función, puede ser su padre como
+hemos hecho en este caso.
+De este modo, lo que pasamos al componente BottomToolbar son funciones que permiten modificar
+las propiedades del nodo seleccionado y son llamadas desde la BottomToolbar pasando el valor 
+del selector que está siendo modificado por un evento que genera el usuario.
 
 \begin{figure}[!h]
   \centering
@@ -459,8 +476,26 @@ llamado material-ui-color\cite{material-ui-color}.
   \caption{Esquema del flujo de datos entre los nodos del lienzo y la BottomToolbar}
 \end{figure}
 
+Como hemos comentado, lo contrario también es cierto, como podemos ver en la anterior figura, 
+necesitamos una forma de cambiar el estado de la toolbar al seleccionar un nodo distinto
+para que los valores se sincronicen.
 
+\newpage
 
+\begin{lstlisting}[caption={Ejemplo de una función updater de la propiedad de un nodo}]
+updateBlur( newValue ){
+  let img = this.transformerRef.current.nodes()[0]
+
+  if( img != null){
+      //change
+      img.blurRadius(newValue)
+      //Apply changes
+      img.cache()
+      //redraw
+      img.getStage().batchDraw()
+  }
+}
+\end{lstlisting}
 
 
 \section{Cambio entre herramientas: Toolbar}
