@@ -254,7 +254,7 @@ poder mover cada nodo al clickar encima, pero en este punto se añadió directam
 simular el comportamiento que queríamos que tuviese el nodo.
 \\\\
 Ahora viene la funcionalidad más importante del texto, poder editar los 
-carácteres, para ello, hemos hecho uso del elemento HTML textarea, es mucho mas
+carácteres, para ello, hemos hecho uso del elemento HTML textarea, es mucho más
 fácil que crear todo un sistema de edición dentro del lienzo, ya que como hemos comentado
 no es más que un array de píxeles. Pero, queremos que el usuario lo perciba como si estuviera
 realmente editando el texto de dentro del lienzo de una forma dinámica,
@@ -521,7 +521,7 @@ No todos los nodos tienen las mismas propiedades, como podemos ver en la figura 
 la BottomToolbar también cambia dependiendo de que nodo se quiera modificar, para esto, 
 tuvimos que rediseñar la estructura del componente BottomToolbar para que funcionase como un 
 switch que redirija a la toolbar correspondiente dependiendo del estado.
-De este modo, el componente BottomToolbar es mas bien una interfaz que un componente con una 
+De este modo, el componente BottomToolbar es más bien una interfaz que un componente con una 
 funcionalidad propia, todas las diferentes BottomToolbars se han implementado con los mismos
 métodos updateToolbar() aunque cambian los parámetros que recogen.
 
@@ -608,20 +608,53 @@ una cambia los parámetros que necesita pero englobándolo todo en un solo compo
 importante para el rendimiento ya que cada vez que se selecciona un nodo al contrario que al
 cambiar de herramienta sólo se refresca el componente BottomToolbar y no toda la aplcación,
 lo que hace que la experiencia del usuario mejore sustancialmente.
+\\\\
+Tras la implementación de todo este esqueleto sólo nos faltaba añadir más herramientas, las 
+distintas partes del editor ya son capaces de comunicarse de forma eficiente, como hemos
+comentado anteriormente, cada herramienta tiene sus propios handlers para definir su comportamiento,
+por ejemplo, las líneas se crean clickando y arrastrando y se desactivan el resto de handlers dependiendo
+de la herramienta seleccionada.
+\\\\
+Todos los nodos derivan de clases ya definidas en la biblioteca de Konva\cite{KonvaJS},
+se ha creado su bottomtoolbar correspondiente dependiendo de las propiedades que quisiesemos modificar,
+sus handlers propios y se han añadido.
+\\\\
 
-\section{Herramienta: Imágenes superpuestas}
+\newpage
+\section{Imágenes superpuestas}
 
+El nodo más destacable de todos los que se pueden añadir son las imágenes superpuestas, no son
+una herramienta como tal ya que no hay eventos de ratón más que los propios del selector para
+transformar la imagen. Para introducir imágenes podemos usar los mismos eventos que para la imagen
+principal, arrastrar para introducir una encima de la principal o añadir desde el portapapeles 
+haciendo uso del shortcut. Para implementarlo, hemos reutilizado las funciones que leen la imagen
+y adaptado para que se cree un nuevo nodo cuando se termina la carga. 
+\\\\
+Para el área de drop se creó un elemento HTML oculto que se muestra cuando se detecta que el 
+usuario arrastra un archivo, para que tenga un aspecto agradable se jugó con las reglas CSS 
+para que tenga una posición absoluta encima de toda la página,
+ al ser translúcido da un efecto de oscurecimiento.
 
+\begin{figure}[!h]
+  \centering
+  \noindent\makebox[\textwidth]{
+    \includegraphics[scale=0.4]{img/secondaryadd.png}}
+  \caption{Área de drop para imagenes secundarias}
+\end{figure}
 
-\iffalse
-Esquema para luego redactar bien:
+\newpage
+En las imágenes se pueden aplicar filtros desde la BottomToolbar, al contrario que en el resto
+de propiedades de otros nodos, para aplicar los filtros había que darle una vuelta de tuerca mas,
+puesto que necesitamos guardar la imagen base para aplicar los filtros encima.
+Para ello, tenemos que guardar la imagen en caché al crear el nodo y añadirle los filtros con 
+valores por defecto, es decir, el filtro está aplicado pero con un valor que no afecta la imagen.
 
-- Cuando ya se cambiaban los textos desde la toolbar ahora como se cambia la toolbar 
-para que coincida con las opciones del texto
-
-- Además de texto ahora a añadir mas cosas, Imágenes y sus transformaciones
-
-\fi
+\begin{figure}[!h]
+  \centering
+  \noindent\makebox[\textwidth]{
+    \includegraphics[scale=0.4]{img/ejemploimagenblur.png}}
+  \caption{Ejemplo imagen superpuesta con un flitro de blur al máximo.}
+\end{figure}
 
 \newpage
 \section{Tests}
