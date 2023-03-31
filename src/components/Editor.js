@@ -29,6 +29,8 @@ import { handleStraightLineMouseDown, handleStraightLineMouseMove, handleStraigh
 import { handleRectangleMouseDown, handleRectangleMouseMove, handleRectangleMouseUp } from './EditorComponents/ToolShapes/Rectangle';
 import { handleEllipseMouseDown, handleEllipseMouseMove, handleEllipseMouseUp } from './EditorComponents/ToolShapes/Ellipse';
 
+import LineaCentrado from './EditorComponents/LineasdeCentrado/LineaCentrado'
+
 //Colors for the Mui
 const theme = createMuiTheme({
     palette: {
@@ -41,6 +43,12 @@ const theme = createMuiTheme({
 class Editor extends React.Component{
     constructor(props){
         super(props)
+
+        //Lineas de centrado
+        this.lineaCentradoVerticalRef = createRef()
+        this.lineaCentradoHorizontalRef = createRef()
+        this.lineaCentradoVerticalMitadIzquierda = createRef()
+        this.lineaCentradoVerticalMitadDerecha = createRef()
 
         this.stageRef = createRef()
         this.mainLayerRef = createRef()
@@ -448,6 +456,7 @@ class Editor extends React.Component{
     }
 
     handleCanvasMouseUp(e){
+
         switch(this.state.selectedTool){
             case 'FreeLine':
                 handleFreeLineMouseUp.bind(this)(e)
@@ -499,6 +508,83 @@ class Editor extends React.Component{
             console.log("dobleclick")
             handleTextDblClick.bind(this)(e)
         }
+    }
+
+    handleTransformerMove(e){
+        let tipoSeleccionado = this.transformerRef.current.nodes()[0].className
+        if(this.stageRef != null && ( tipoSeleccionado == 'Text' || tipoSeleccionado == 'Rect')){
+
+            let transformerRect = this.transformerRef.current
+            let stage = this.stageRef.current
+            //let lineaCentralRect = this.lineaCentradoVerticalRef.current
+
+            // Obtiene la coordenada x del centro del transformer
+            const centroTransformer = transformerRect.getAttr("x") + transformerRect.getAttr("width") / 2;
+            const centroNodoX = transformerRect.nodes()[0].getAttr("x") + transformerRect.nodes()[0].getAttr("width") / 2;
+            const centroNodoY = transformerRect.nodes()[0].getAttr("y") + transformerRect.nodes()[0].getAttr("height") / 2;
+
+            const centroLienzoX = stage.getAttr("width") / 2;
+            const centroLienzoY = stage.getAttr("height") / 2;
+
+            const mitadIzquierdaX = stage.getAttr("width") / 2 / 2;
+            const mitadDerechaX = stage.getAttr("width") / 1.3333;
+
+            //Calculo de la coordenada de la mitad izquierda y derecha del lienzo respecto al padre
+            const posicionStageX = this.stageRef.current.container().getBoundingClientRect().x;
+            const mitadIzquierdaXLienzo = mitadIzquierdaX + posicionStageX
+            const mitadDerechaXLienzo = mitadDerechaX + posicionStageX
+
+            this.lineaCentradoVerticalMitadIzquierda.current.style.left = mitadIzquierdaXLienzo + "px"
+            this.lineaCentradoVerticalMitadDerecha.current.style.left = mitadDerechaXLienzo + "px"
+
+            const distanciaCentroX = Math.abs(centroNodoX - centroLienzoX)
+            const distanciaMitadIzquierdaX = Math.abs(centroNodoX - mitadIzquierdaX)
+            const distanciaMitadDerechaX = Math.abs(centroNodoX - mitadDerechaX)
+
+            const distanciaCentroY = Math.abs(centroNodoY - centroLienzoY)
+
+            if(distanciaCentroX < 40){
+                this.centrarTransformerALineaX(transformerRect, centroLienzoX)
+                this.lineaCentradoVerticalRef.current.style.display = 'block'
+            } else {
+                this.lineaCentradoVerticalRef.current.style.display = 'none'
+            }
+            if(distanciaMitadIzquierdaX < 40){
+                this.centrarTransformerALineaX(transformerRect, mitadIzquierdaX)
+                this.lineaCentradoVerticalMitadIzquierda.current.style.display = 'block'
+            } else {
+                this.lineaCentradoVerticalMitadIzquierda.current.style.display = 'none'
+            }
+            if(distanciaMitadDerechaX < 40){
+                this.centrarTransformerALineaX(transformerRect, mitadDerechaX)
+                this.lineaCentradoVerticalMitadDerecha.current.style.display = 'block'
+            } else {
+                this.lineaCentradoVerticalMitadDerecha.current.style.display = 'none'
+            }
+
+            if(distanciaCentroY < 40){
+                this.centrarTransformerALineaY(transformerRect, centroLienzoY)
+                this.lineaCentradoHorizontalRef.current.style.display = 'block'
+            } else {
+                this.lineaCentradoHorizontalRef.current.style.display = 'none'
+            }
+        
+        }   
+    }
+
+    centrarTransformerALineaX(transformer, coordLineaX){
+        transformer.nodes()[0].setAttrs({x: coordLineaX - transformer.nodes()[0].getAttr("width") / 2 })
+    }
+
+    centrarTransformerALineaY(transformer, coordLineaY){
+        transformer.nodes()[0].setAttrs({y: coordLineaY - transformer.nodes()[0].getAttr("height") / 2 })
+    }
+
+    ocultarTodasLasLineasdeCentrado(){
+        this.lineaCentradoVerticalRef.current.style.display = 'none'
+        this.lineaCentradoHorizontalRef.current.style.display = 'none'
+        this.lineaCentradoVerticalMitadIzquierda.current.style.display = 'none'
+        this.lineaCentradoVerticalMitadDerecha.current.style.display = 'none'
     }
 
     /** ************************************************************************** **/
@@ -728,11 +814,19 @@ class Editor extends React.Component{
 
                             <Transformer
                                 ref={this.transformerRef}
+                                onDragMove={this.handleTransformerMove.bind(this)}
+                                onDragEnd={this.ocultarTodasLasLineasdeCentrado.bind(this)}
                                 rotateEnabled={true}
                                 keepRatio={false}
                             />
                         </Layer>
                     </Stage>
+
+                    { /* Lineas de centrado */}
+                    <div id="lineacentralvertical" ref={this.lineaCentradoVerticalRef}></div>
+                    <div id="lineacentralhorizontal" ref={this.lineaCentradoHorizontalRef}></div>
+                    <div id="lineamitadverticalizquierda" ref={this.lineaCentradoVerticalMitadIzquierda}></div>
+                    <div id="lineamitadverticalderecha" ref={this.lineaCentradoVerticalMitadDerecha}></div>
 
                 </div>
                 <nav id="sidetoolbar" className="d-flex flex-column p-0 justify-content-between">
