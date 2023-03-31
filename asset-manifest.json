@@ -1,26 +1,16 @@
 {
   "files": {
-    "main.css": "/memeHub/static/css/main.2b71fc9f.chunk.css",
-    "main.js": "/memeHub/static/js/main.7b520617.chunk.js",
-    "main.js.map": "/memeHub/static/js/main.7b520617.chunk.js.map",
-    "runtime-main.js": "/memeHub/static/js/runtime-main.e33a9e41.js",
-    "runtime-main.js.map": "/memeHub/static/js/runtime-main.e33a9e41.js.map",
-    "static/css/2.fabbef47.chunk.css": "/memeHub/static/css/2.fabbef47.chunk.css",
-    "static/js/2.7b47e6bc.chunk.js": "/memeHub/static/js/2.7b47e6bc.chunk.js",
-    "static/js/2.7b47e6bc.chunk.js.map": "/memeHub/static/js/2.7b47e6bc.chunk.js.map",
-    "static/js/3.1e97e004.chunk.js": "/memeHub/static/js/3.1e97e004.chunk.js",
-    "static/js/3.1e97e004.chunk.js.map": "/memeHub/static/js/3.1e97e004.chunk.js.map",
+    "main.css": "/memeHub/static/css/main.fb9b3a46.css",
+    "main.js": "/memeHub/static/js/main.3cb256cd.js",
+    "static/js/651.a6fb8682.chunk.js": "/memeHub/static/js/651.a6fb8682.chunk.js",
+    "static/media/upload.png": "/memeHub/static/media/upload.8524bf2fd502ab916814.png",
     "index.html": "/memeHub/index.html",
-    "static/css/2.fabbef47.chunk.css.map": "/memeHub/static/css/2.fabbef47.chunk.css.map",
-    "static/css/main.2b71fc9f.chunk.css.map": "/memeHub/static/css/main.2b71fc9f.chunk.css.map",
-    "static/js/2.7b47e6bc.chunk.js.LICENSE.txt": "/memeHub/static/js/2.7b47e6bc.chunk.js.LICENSE.txt",
-    "static/media/draganddrop.css": "/memeHub/static/media/upload.8524bf2f.png"
+    "main.fb9b3a46.css.map": "/memeHub/static/css/main.fb9b3a46.css.map",
+    "main.3cb256cd.js.map": "/memeHub/static/js/main.3cb256cd.js.map",
+    "651.a6fb8682.chunk.js.map": "/memeHub/static/js/651.a6fb8682.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/runtime-main.e33a9e41.js",
-    "static/css/2.fabbef47.chunk.css",
-    "static/js/2.7b47e6bc.chunk.js",
-    "static/css/main.2b71fc9f.chunk.css",
-    "static/js/main.7b520617.chunk.js"
+    "static/css/main.fb9b3a46.css",
+    "static/js/main.3cb256cd.js"
   ]
 }
