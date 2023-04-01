@@ -29,7 +29,6 @@ import { handleStraightLineMouseDown, handleStraightLineMouseMove, handleStraigh
 import { handleRectangleMouseDown, handleRectangleMouseMove, handleRectangleMouseUp } from './EditorComponents/ToolShapes/Rectangle';
 import { handleEllipseMouseDown, handleEllipseMouseMove, handleEllipseMouseUp } from './EditorComponents/ToolShapes/Ellipse';
 
-import LineaCentrado from './EditorComponents/LineasdeCentrado/LineaCentrado'
 
 //Colors for the Mui
 const theme = createMuiTheme({
@@ -512,16 +511,34 @@ class Editor extends React.Component{
 
     handleTransformerMove(e){
         let tipoSeleccionado = this.transformerRef.current.nodes()[0].className
-        if(this.stageRef != null && ( tipoSeleccionado == 'Text' || tipoSeleccionado == 'Rect')){
+        if(this.stageRef != null && ( tipoSeleccionado == 'Text' || tipoSeleccionado == 'Rect' || tipoSeleccionado == 'Image')){
 
             let transformerRect = this.transformerRef.current
             let stage = this.stageRef.current
             //let lineaCentralRect = this.lineaCentradoVerticalRef.current
 
             // Obtiene la coordenada x del centro del transformer
-            const centroTransformer = transformerRect.getAttr("x") + transformerRect.getAttr("width") / 2;
-            const centroNodoX = transformerRect.nodes()[0].getAttr("x") + transformerRect.nodes()[0].getAttr("width") / 2;
-            const centroNodoY = transformerRect.nodes()[0].getAttr("y") + transformerRect.nodes()[0].getAttr("height") / 2;
+            //const centroTransformerX = transformerRect.getAttr("x") + transformerRect.getAttr("width") / 2;
+            //const centroTransformerY = transformerRect.getAttr("y") + transformerRect.getAttr("height") / 2;
+            
+            const scaleX = transformerRect.nodes()[0].getAttr("scaleX");
+            const scaleY = transformerRect.nodes()[0].getAttr("scaleY");
+
+            let centroNodoX = transformerRect.nodes()[0].getAttr("x") + transformerRect.nodes()[0].getAttr("width") / 2 * scaleX;
+            let centroNodoY = transformerRect.nodes()[0].getAttr("y") + transformerRect.nodes()[0].getAttr("height") / 2 * scaleY;
+
+            console.log(transformerRect.nodes()[0].getAttr("x"), transformerRect.nodes()[0].getAttr("y"))
+            console.log(centroNodoX, centroNodoY)
+
+            //Excepción para las imágenes que funcionan con escalado
+            //if( tipoSeleccionado == 'Image'){
+            //    centroNodoX = transformerRect.nodes()[0].getAttr("x") + transformerRect.nodes()[0].getAttr("width") * scaleX / 2;
+            //    centroNodoY = transformerRect.nodes()[0].getAttr("y") + transformerRect.nodes()[0].getAttr("height") * scaleY / 2;
+            //}
+
+            console.log(centroNodoX, centroNodoY)
+
+            console.log(transformerRect.nodes()[0].getAttrs())
 
             const centroLienzoX = stage.getAttr("width") / 2;
             const centroLienzoY = stage.getAttr("height") / 2;
@@ -544,26 +561,26 @@ class Editor extends React.Component{
             const distanciaCentroY = Math.abs(centroNodoY - centroLienzoY)
 
             if(distanciaCentroX < 40){
-                this.centrarTransformerALineaX(transformerRect, centroLienzoX)
+                this.centrarTransformerALineaX(transformerRect, centroLienzoX, scaleX)
                 this.lineaCentradoVerticalRef.current.style.display = 'block'
             } else {
                 this.lineaCentradoVerticalRef.current.style.display = 'none'
             }
             if(distanciaMitadIzquierdaX < 40){
-                this.centrarTransformerALineaX(transformerRect, mitadIzquierdaX)
+                this.centrarTransformerALineaX(transformerRect, mitadIzquierdaX, scaleX)
                 this.lineaCentradoVerticalMitadIzquierda.current.style.display = 'block'
             } else {
                 this.lineaCentradoVerticalMitadIzquierda.current.style.display = 'none'
             }
             if(distanciaMitadDerechaX < 40){
-                this.centrarTransformerALineaX(transformerRect, mitadDerechaX)
+                this.centrarTransformerALineaX(transformerRect, mitadDerechaX, scaleX)
                 this.lineaCentradoVerticalMitadDerecha.current.style.display = 'block'
             } else {
                 this.lineaCentradoVerticalMitadDerecha.current.style.display = 'none'
             }
 
             if(distanciaCentroY < 40){
-                this.centrarTransformerALineaY(transformerRect, centroLienzoY)
+                this.centrarTransformerALineaY(transformerRect, centroLienzoY, scaleY)
                 this.lineaCentradoHorizontalRef.current.style.display = 'block'
             } else {
                 this.lineaCentradoHorizontalRef.current.style.display = 'none'
@@ -572,12 +589,12 @@ class Editor extends React.Component{
         }   
     }
 
-    centrarTransformerALineaX(transformer, coordLineaX){
-        transformer.nodes()[0].setAttrs({x: coordLineaX - transformer.nodes()[0].getAttr("width") / 2 })
+    centrarTransformerALineaX(transformer, coordLineaX, scaleX = 1){
+        transformer.nodes()[0].setAttrs({x: coordLineaX - (transformer.nodes()[0].getAttr("width") / 2 * scaleX) })
     }
 
-    centrarTransformerALineaY(transformer, coordLineaY){
-        transformer.nodes()[0].setAttrs({y: coordLineaY - transformer.nodes()[0].getAttr("height") / 2 })
+    centrarTransformerALineaY(transformer, coordLineaY, scaleY = 1){
+        transformer.nodes()[0].setAttrs({y: coordLineaY - (transformer.nodes()[0].getAttr("height") / 2 * scaleY) })
     }
 
     ocultarTodasLasLineasdeCentrado(){
