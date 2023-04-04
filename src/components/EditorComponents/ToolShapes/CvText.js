@@ -1,11 +1,16 @@
 
 import React, {createRef, useEffect} from 'react';
+import { createColor } from 'material-ui-color'
 import {Text} from 'react-konva'
 
-export function handleTextDblClick(e){
+export function handleTextDblClick(e, bottomToolbarRef){
     //CAMBIAR ESTO PARA QUE COMPRUEBE SI LA IMAGEN ES LA IMAGEN BASE
     if( e.target.className == "Image" ){
         console.log("CREANDO NUEVO TEXTO")
+
+        let toolbarState = bottomToolbarRef.current.bottomToolbarRef.current.state
+        console.log(toolbarState)
+
         let new_text = <CvText
                           key={this.state.itemArray.length}
                           stage={this.stageRef}
@@ -15,12 +20,12 @@ export function handleTextDblClick(e){
                           //so it spawns on the center
                           x={e.evt.offsetX - 70 * 3}
                           y={e.evt.offsetY - 35}
-                          align={'center'}
-                          fontFamily={'Impact'}
-                          fontSize={70}
-                          fill={'white'}
-                          stroke={'black'}
-                          strokeWidth={2}
+                          align={toolbarState.alignment}
+                          fontFamily={toolbarState.font}
+                          fontSize={toolbarState.fontSize}
+                          fill={'#' + toolbarState.fontColor.hex}
+                          stroke={'#' + toolbarState.strokeColor.hex}
+                          strokeWidth={toolbarState.strokeWidth}
 
                           draggable
                        />

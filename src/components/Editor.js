@@ -505,7 +505,9 @@ class Editor extends React.Component{
     handleCanvasDblClick(e){
         if(this.state.selectedTool == 'SelectorAndText'){
             console.log("dobleclick")
-            handleTextDblClick.bind(this)(e)
+            //pasar por aquí una ref al bottomtoolbarRef para crear el texto partiendo
+            //de lo que hay en el toolbar
+            handleTextDblClick.bind(this)(e, this.bottomToolbarRef)
         }
     }
 
